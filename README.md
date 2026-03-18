@@ -338,7 +338,7 @@ The application is deployed and live:
 
 | Service | Platform | Live URL |
 |---------|----------|----------|
-| **Frontend** | Netlify | [https://lms-frontend-tom.netlify.app](https://lms-frontend-tom.netlify.app) |
+| **Frontend** | Netlify | [https://thelearnhub.netlify.app](https://thelearnhub.netlify.app) |
 | **Backend API** | Heroku | [https://lms-backend-tom-25f123572e9b.herokuapp.com](https://lms-backend-tom-25f123572e9b.herokuapp.com) |
 
 ### Deployment Stack

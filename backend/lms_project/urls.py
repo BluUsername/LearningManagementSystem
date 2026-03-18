@@ -15,7 +15,7 @@ def api_root(request):
             'users': '/api/users/',
             'admin': '/admin/',
         },
-        'frontend': 'https://lms-frontend-tom.netlify.app',
+        'frontend': 'https://thelearnhub.netlify.app',
     })
 
 
