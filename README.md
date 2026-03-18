@@ -333,9 +333,17 @@ Full API documentation is available in [docs/API.md](docs/API.md).
 
 ## Deployment
 
-The application can be deployed with the backend on **Heroku** and the frontend on **Netlify**, or both together on Heroku.
+The application is deployed and live:
 
-See the deployment configuration files in the repository root for details.
+| Service | Platform | Live URL |
+|---------|----------|----------|
+| **Frontend** | Netlify | [https://lms-frontend-tom.netlify.app](https://lms-frontend-tom.netlify.app) |
+| **Backend API** | Heroku | [https://lms-backend-tom-25f123572e9b.herokuapp.com](https://lms-backend-tom-25f123572e9b.herokuapp.com) |
+
+### Deployment Stack
+
+- **Backend (Heroku):** Gunicorn WSGI server, WhiteNoise for static files, SQLite database, environment-based configuration for secrets and CORS
+- **Frontend (Netlify):** Production React build served via Netlify CDN, `netlify.toml` handles SPA routing redirects, `REACT_APP_API_URL` env var points to the Heroku backend
 
 ---
 
