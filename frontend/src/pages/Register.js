@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
-  Container, Paper, Typography, TextField, Button, Alert, Box, Link,
-  FormControl, InputLabel, Select, MenuItem,
+  Typography, TextField, Button, Alert, Box, Link,
+  FormControl, Select, MenuItem,
 } from '@mui/material';
-import { PersonAdd as PersonAddIcon } from '@mui/icons-material';
+import {
+  PersonAdd as PersonAddIcon, School as SchoolIcon,
+  Rocket as RocketIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 function Register() {
@@ -57,95 +60,252 @@ function Register() {
     }
   };
 
+  const inputSx = {
+    mb: 2.5,
+    '& .MuiOutlinedInput-root': {
+      backgroundColor: 'rgba(255,255,255,0.06)',
+      borderRadius: 2,
+      color: '#fff',
+      '& fieldset': { borderColor: 'rgba(255,255,255,0.12)' },
+      '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
+      '&.Mui-focused fieldset': { borderColor: '#7b1fa2' },
+    },
+    '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)' },
+    '& .MuiFormHelperText-root': { color: 'rgba(255,255,255,0.35)' },
+  };
+
   return (
-    <Container maxWidth="sm" sx={{ mt: 8 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 1 }}>
-          <PersonAddIcon color="primary" />
-          <Typography variant="h5" component="h1">
-            Register
+    <Box sx={{
+      display: 'flex',
+      minHeight: '100vh',
+      margin: '-64px 0 0 0',
+    }}>
+      {/* Left Panel - Branding */}
+      <Box sx={{
+        flex: '1 1 50%',
+        background: 'linear-gradient(160deg, #0a0e27 0%, #1a1f4e 40%, #2d1b69 70%, #1a237e 100%)',
+        display: { xs: 'none', md: 'flex' },
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        p: 8,
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Decorative circles */}
+        <Box sx={{
+          position: 'absolute', width: 350, height: 350, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(245, 124, 0, 0.2) 0%, transparent 70%)',
+          top: -80, right: -80,
+        }} />
+        <Box sx={{
+          position: 'absolute', width: 250, height: 250, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(123, 31, 162, 0.3) 0%, transparent 70%)',
+          bottom: 60, left: -40,
+        }} />
+        <Box sx={{
+          position: 'absolute', width: 180, height: 180, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(21, 101, 192, 0.25) 0%, transparent 70%)',
+          top: '40%', right: 100,
+        }} />
+
+        {/* Logo */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 6 }}>
+          <SchoolIcon sx={{ color: '#fff', fontSize: 32 }} />
+          <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
+            LearnHub
           </Typography>
         </Box>
 
-        {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
-
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <TextField
-            label="Username"
-            name="username"
-            fullWidth
-            required
-            margin="normal"
-            value={formData.username}
-            onChange={handleChange}
-            autoComplete="username"
-            autoFocus
-          />
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            fullWidth
-            required
-            margin="normal"
-            value={formData.email}
-            onChange={handleChange}
-            autoComplete="email"
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            fullWidth
-            required
-            margin="normal"
-            value={formData.password}
-            onChange={handleChange}
-            autoComplete="new-password"
-            helperText="Must be at least 8 characters"
-          />
-          <TextField
-            label="Confirm Password"
-            name="password2"
-            type="password"
-            fullWidth
-            required
-            margin="normal"
-            value={formData.password2}
-            onChange={handleChange}
-            autoComplete="new-password"
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="role-label">Role</InputLabel>
-            <Select
-              labelId="role-label"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              label="Role"
-            >
-              <MenuItem value="student">Student</MenuItem>
-              <MenuItem value="teacher">Teacher</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            size="large"
-            disabled={loading}
-            sx={{ mt: 2, mb: 2 }}
-          >
-            {loading ? 'Registering...' : 'Register'}
-          </Button>
-        </Box>
-
-        <Typography variant="body2" align="center">
-          Already have an account?{' '}
-          <Link component={RouterLink} to="/login">Log in here</Link>
+        {/* Tagline */}
+        <Typography variant="h2" sx={{
+          color: '#fff',
+          fontWeight: 800,
+          lineHeight: 1.15,
+          mb: 3,
+          fontSize: { md: '2.8rem', lg: '3.5rem' },
+        }}>
+          Start your{' '}
+          <Box component="span" sx={{
+            background: 'linear-gradient(135deg, #ffb74d, #f57c00, #ab47bc)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            journey.
+          </Box>
         </Typography>
-      </Paper>
-    </Container>
+
+        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
+          Join thousands of learners and educators. Create your free account today.
+        </Typography>
+
+        {/* Feature highlights */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {[
+            'Access courses from any device',
+            'Track your learning progress',
+            'Connect with expert teachers',
+          ].map((feature) => (
+            <Box key={feature} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box sx={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: 'linear-gradient(135deg, #42a5f5, #ab47bc)',
+              }} />
+              <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem' }}>
+                {feature}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Right Panel - Register Form */}
+      <Box sx={{
+        flex: '1 1 50%',
+        background: 'linear-gradient(160deg, #121228 0%, #1a1a2e 50%, #16213e 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        p: { xs: 4, md: 6 },
+        overflowY: 'auto',
+      }}>
+        <Box sx={{ width: '100%', maxWidth: 420 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+            <RocketIcon sx={{ color: '#f57c00', fontSize: 28 }} />
+            <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700 }}>
+              Get started
+            </Typography>
+          </Box>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)', mb: 3.5 }}>
+            Create your free account
+          </Typography>
+
+          {error && <Alert severity="error" role="alert" sx={{ mb: 2.5 }}>{error}</Alert>}
+
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+              Username
+            </Typography>
+            <TextField
+              placeholder="Choose a username"
+              name="username"
+              fullWidth
+              required
+              value={formData.username}
+              onChange={handleChange}
+              autoComplete="username"
+              autoFocus
+              sx={inputSx}
+            />
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+              Email
+            </Typography>
+            <TextField
+              placeholder="you@example.com"
+              name="email"
+              type="email"
+              fullWidth
+              required
+              value={formData.email}
+              onChange={handleChange}
+              autoComplete="email"
+              sx={inputSx}
+            />
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+              Password
+            </Typography>
+            <TextField
+              placeholder="Minimum 8 characters"
+              name="password"
+              type="password"
+              fullWidth
+              required
+              value={formData.password}
+              onChange={handleChange}
+              autoComplete="new-password"
+              helperText="Must be at least 8 characters"
+              sx={inputSx}
+            />
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+              Confirm Password
+            </Typography>
+            <TextField
+              placeholder="Re-enter your password"
+              name="password2"
+              type="password"
+              fullWidth
+              required
+              value={formData.password2}
+              onChange={handleChange}
+              autoComplete="new-password"
+              sx={inputSx}
+            />
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+              I want to join as a...
+            </Typography>
+            <FormControl fullWidth sx={{ mb: 3 }}>
+              <Select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                sx={{
+                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  borderRadius: 2,
+                  color: '#fff',
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
+                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#7b1fa2' },
+                  '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.5)' },
+                }}
+              >
+                <MenuItem value="student">Student</MenuItem>
+                <MenuItem value="teacher">Teacher</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              size="large"
+              disabled={loading}
+              startIcon={<PersonAddIcon />}
+              sx={{
+                py: 1.5,
+                mb: 3,
+                fontWeight: 600,
+                fontSize: '1rem',
+                background: 'linear-gradient(135deg, #f57c00 0%, #ff9800 50%, #ffb74d 100%)',
+                color: '#1a1a2e',
+                borderRadius: 2,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #e65100 0%, #f57c00 50%, #ff9800 100%)',
+                  boxShadow: '0 4px 20px rgba(245, 124, 0, 0.4)',
+                },
+              }}
+            >
+              {loading ? 'Creating account...' : 'Create account'}
+            </Button>
+          </Box>
+
+          <Typography variant="body2" align="center" sx={{ color: 'rgba(255,255,255,0.5)' }}>
+            Already have an account?{' '}
+            <Link
+              component={RouterLink}
+              to="/login"
+              sx={{
+                color: '#42a5f5',
+                fontWeight: 600,
+                textDecoration: 'none',
+                '&:hover': { color: '#90caf9', textDecoration: 'underline' },
+              }}
+            >
+              Sign in
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
