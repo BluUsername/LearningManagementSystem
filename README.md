@@ -48,7 +48,7 @@ A full-stack Learning Management System built with Django, Django Rest Framework
 |------------|-----------------------------------|
 | Backend    | Python, Django 6, Django REST Framework |
 | Frontend   | JavaScript, React 19, Material UI |
-| Database   | SQLite                            |
+| Database   | PostgreSQL (Heroku) / SQLite (local) |
 | Auth       | Token Authentication (DRF)        |
 | Testing    | Django TestCase, React Testing Library |
 | HTTP Client| Axios                             |
@@ -342,7 +342,7 @@ The application is deployed and live:
 
 ### Deployment Stack
 
-- **Backend (Heroku):** Gunicorn WSGI server, WhiteNoise for static files, SQLite database, environment-based configuration for secrets and CORS
+- **Backend (Heroku):** Gunicorn WSGI server, WhiteNoise for static files, PostgreSQL database (via Heroku Postgres), dj-database-url for config, environment-based configuration for secrets and CORS
 - **Frontend (Netlify):** Production React build served via Netlify CDN, `netlify.toml` handles SPA routing redirects, `REACT_APP_API_URL` env var points to the Heroku backend
 
 ---
