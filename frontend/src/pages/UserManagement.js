@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Container, Typography, Box, CircularProgress, Alert, Button,
+  Container, Typography, Box, CircularProgress, Alert, Button, Paper,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Select, MenuItem, IconButton,
+  Select, MenuItem, IconButton,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon, Delete as DeleteIcon,
@@ -64,14 +64,23 @@ function UserManagement() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/admin')} sx={{ mb: 2 }}>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/admin')} sx={{ mb: 2, color: '#90caf9' }}>
         Back to Dashboard
       </Button>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 1 }}>
-        <PeopleIcon color="primary" fontSize="large" />
-        <Typography variant="h4" component="h1">User Management</Typography>
-      </Box>
+      <Paper elevation={0} sx={{
+        p: 4, mb: 4, borderRadius: 3,
+        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        color: 'white',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <PeopleIcon sx={{ fontSize: 36 }} />
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>User Management</Typography>
+        </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
+          Manage roles and permissions for {users.length} user{users.length !== 1 ? 's' : ''}
+        </Typography>
+      </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 

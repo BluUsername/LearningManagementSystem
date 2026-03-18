@@ -90,36 +90,61 @@ function AdminDashboard() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1 }}>
-        <AdminIcon color="primary" fontSize="large" />
-        <Typography variant="h4" component="h1">Admin Dashboard</Typography>
-      </Box>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
-        Welcome back, {user.username}!
-      </Typography>
+      <Paper elevation={0} sx={{
+        p: 4, mb: 4, borderRadius: 3,
+        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        color: 'white',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
+          <AdminIcon sx={{ fontSize: 36 }} />
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Admin Dashboard</Typography>
+        </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+          Welcome back, {user.username}! System overview at a glance.
+        </Typography>
+      </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
-            <PeopleIcon color="primary" fontSize="large" />
-            <Typography variant="h4">{userCount}</Typography>
-            <Typography color="text.secondary">Total Users</Typography>
+          <Paper elevation={0} sx={{
+            p: 3, textAlign: 'center',
+            background: 'linear-gradient(135deg, rgba(21, 101, 192, 0.15), rgba(66, 165, 245, 0.08))',
+            borderLeft: '4px solid #42a5f5',
+            border: '1px solid rgba(66, 165, 245, 0.2)',
+            borderLeftWidth: 4,
+            borderLeftColor: '#42a5f5',
+          }}>
+            <PeopleIcon sx={{ fontSize: 40, color: '#42a5f5' }} />
+            <Typography variant="h3" sx={{ fontWeight: 700, color: '#90caf9' }}>{userCount}</Typography>
+            <Typography sx={{ color: '#42a5f5', fontWeight: 500 }}>Total Users</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
-            <LibraryBooksIcon color="primary" fontSize="large" />
-            <Typography variant="h4">{courses.length}</Typography>
-            <Typography color="text.secondary">Total Courses</Typography>
+          <Paper elevation={0} sx={{
+            p: 3, textAlign: 'center',
+            background: 'linear-gradient(135deg, rgba(123, 31, 162, 0.15), rgba(171, 71, 188, 0.08))',
+            border: '1px solid rgba(171, 71, 188, 0.2)',
+            borderLeftWidth: 4,
+            borderLeftColor: '#ab47bc',
+          }}>
+            <LibraryBooksIcon sx={{ fontSize: 40, color: '#ab47bc' }} />
+            <Typography variant="h3" sx={{ fontWeight: 700, color: '#ce93d8' }}>{courses.length}</Typography>
+            <Typography sx={{ color: '#ab47bc', fontWeight: 500 }}>Total Courses</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
-            <PeopleIcon color="secondary" fontSize="large" />
-            <Typography variant="h4">{totalEnrollments}</Typography>
-            <Typography color="text.secondary">Total Enrollments</Typography>
+          <Paper elevation={0} sx={{
+            p: 3, textAlign: 'center',
+            background: 'linear-gradient(135deg, rgba(245, 124, 0, 0.15), rgba(255, 183, 77, 0.08))',
+            border: '1px solid rgba(245, 124, 0, 0.2)',
+            borderLeftWidth: 4,
+            borderLeftColor: '#f57c00',
+          }}>
+            <PeopleIcon sx={{ fontSize: 40, color: '#f57c00' }} />
+            <Typography variant="h3" sx={{ fontWeight: 700, color: '#ffb74d' }}>{totalEnrollments}</Typography>
+            <Typography sx={{ color: '#f57c00', fontWeight: 500 }}>Total Enrollments</Typography>
           </Paper>
         </Grid>
       </Grid>
@@ -142,7 +167,7 @@ function AdminDashboard() {
       </Box>
 
       {courses.length === 0 ? (
-        <Typography color="text.secondary">No courses yet.</Typography>
+        <Typography sx={{ color: '#9fa8da' }}>No courses yet.</Typography>
       ) : (
         <Grid container spacing={3}>
           {courses.map((course) => (

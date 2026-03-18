@@ -67,8 +67,8 @@ function Navbar() {
   );
 
   return (
-    <AppBar position="static">
-      <Toolbar>
+    <AppBar position="sticky" elevation={0} sx={{ boxShadow: '0 2px 20px rgba(0, 0, 0, 0.4)' }}>
+      <Toolbar sx={{ py: 0.5 }}>
         {isMobile && (
           <IconButton
             color="inherit"
@@ -81,14 +81,20 @@ function Navbar() {
           </IconButton>
         )}
 
-        <SchoolIcon sx={{ mr: 1 }} />
+        <SchoolIcon sx={{ mr: 1, fontSize: 28 }} />
         <Typography
           variant="h6"
           component={RouterLink}
           to={user ? getDashboardPath() : '/login'}
-          sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
+          sx={{
+            flexGrow: 1,
+            textDecoration: 'none',
+            color: 'inherit',
+            fontWeight: 700,
+            letterSpacing: '0.5px',
+          }}
         >
-          LMS
+          LearnHub
         </Typography>
 
         {!isMobile && (
@@ -108,9 +114,15 @@ function Navbar() {
               <>
                 <Chip
                   label={`${user.username} (${user.role})`}
-                  color="secondary"
                   size="small"
-                  sx={{ ml: 1 }}
+                  sx={{
+                    ml: 1,
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    backdropFilter: 'blur(4px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                  }}
                 />
                 <Button color="inherit" onClick={handleLogout} startIcon={<LogoutIcon />}>
                   Logout
