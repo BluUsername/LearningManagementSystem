@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Container, Typography, Grid, Box, CircularProgress, Alert, Button,
+  Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
 } from '@mui/material';
 import { Add as AddIcon, School as SchoolIcon } from '@mui/icons-material';
@@ -79,13 +79,19 @@ function TeacherDashboard() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1 }}>
-        <SchoolIcon color="primary" fontSize="large" />
-        <Typography variant="h4" component="h1">Teacher Dashboard</Typography>
-      </Box>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
-        Welcome back, {user.username}!
-      </Typography>
+      <Paper elevation={0} sx={{
+        p: 4, mb: 4, borderRadius: 3,
+        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        color: 'white',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
+          <SchoolIcon sx={{ fontSize: 36 }} />
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Teacher Dashboard</Typography>
+        </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+          Welcome back, {user.username}! You have {courses.length} course{courses.length !== 1 ? 's' : ''}.
+        </Typography>
+      </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
@@ -93,7 +99,15 @@ function TeacherDashboard() {
         <Typography variant="h5" component="h2">
           My Courses ({courses.length})
         </Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreate}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenCreate}
+          sx={{
+            background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+            '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+          }}
+        >
           Create Course
         </Button>
       </Box>

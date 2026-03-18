@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Container, Typography, Grid, Box, CircularProgress, Alert, Button,
+  Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
 } from '@mui/material';
 import { School as SchoolIcon, LibraryBooks as LibraryBooksIcon } from '@mui/icons-material';
 import api from '../api/axiosConfig';
@@ -38,13 +38,19 @@ function StudentDashboard() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1 }}>
-        <SchoolIcon color="primary" fontSize="large" />
-        <Typography variant="h4" component="h1">Student Dashboard</Typography>
-      </Box>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
-        Welcome back, {user.username}!
-      </Typography>
+      <Paper elevation={0} sx={{
+        p: 4, mb: 4, borderRadius: 3,
+        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        color: 'white',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
+          <SchoolIcon sx={{ fontSize: 36 }} />
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Student Dashboard</Typography>
+        </Box>
+        <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+          Welcome back, {user.username}! You are enrolled in {enrollments.length} course{enrollments.length !== 1 ? 's' : ''}.
+        </Typography>
+      </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
@@ -57,6 +63,10 @@ function StudentDashboard() {
           component={RouterLink}
           to="/courses"
           startIcon={<LibraryBooksIcon />}
+          sx={{
+            background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+            '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+          }}
         >
           Browse Courses
         </Button>
