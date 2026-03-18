@@ -20,31 +20,31 @@ function renderLogin() {
   );
 }
 
-test('renders login form with username and password fields', () => {
+test('renders Welcome back heading', () => {
   renderLogin();
-  expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
-  expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+  expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
 });
 
-test('renders Log In heading', () => {
+test('renders sign in button', () => {
   renderLogin();
-  expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
-});
-
-test('renders submit button', () => {
-  renderLogin();
-  expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
 });
 
 test('renders link to register page', () => {
   renderLogin();
-  expect(screen.getByText(/register here/i)).toBeInTheDocument();
+  expect(screen.getByText(/register/i)).toBeInTheDocument();
+});
+
+test('renders username and password inputs', () => {
+  renderLogin();
+  expect(screen.getByPlaceholderText(/enter your username/i)).toBeInTheDocument();
+  expect(screen.getByPlaceholderText(/enter your password/i)).toBeInTheDocument();
 });
 
 test('allows typing in form fields', () => {
   renderLogin();
-  const usernameInput = screen.getByLabelText(/username/i);
-  const passwordInput = screen.getByLabelText(/password/i);
+  const usernameInput = screen.getByPlaceholderText(/enter your username/i);
+  const passwordInput = screen.getByPlaceholderText(/enter your password/i);
 
   fireEvent.change(usernameInput, { target: { value: 'testuser' } });
   fireEvent.change(passwordInput, { target: { value: 'password123' } });

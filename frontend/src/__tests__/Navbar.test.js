@@ -23,9 +23,9 @@ function renderNavbar() {
   );
 }
 
-test('renders LMS title', () => {
+test('renders LearnHub title', () => {
   renderNavbar();
-  expect(screen.getByText('LMS')).toBeInTheDocument();
+  expect(screen.getByText('LearnHub')).toBeInTheDocument();
 });
 
 test('shows login and register links when logged out', async () => {

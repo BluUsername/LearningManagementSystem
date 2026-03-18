@@ -14,6 +14,7 @@ A full-stack Learning Management System built with Django, Django Rest Framework
 - [Running Tests](#running-tests)
 - [API Reference](#api-reference)
 - [Deployment](#deployment)
+- [Technologies & Libraries](#technologies--libraries)
 
 ---
 
