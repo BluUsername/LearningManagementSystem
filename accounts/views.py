@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
@@ -14,9 +15,11 @@ logger = logging.getLogger(__name__)
 
 
 class RegisterView(APIView):
+    """Register a new user and return an auth token."""
+
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -29,9 +32,11 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
+    """Authenticate a user and return an auth token."""
+
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -44,28 +49,36 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """Log out the current user by deleting their auth token."""
+
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         request.user.auth_token.delete()
         logger.info(f"User logged out: {request.user.username}")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CurrentUserView(generics.RetrieveAPIView):
+    """Return the currently authenticated user's profile."""
+
     serializer_class = UserSerializer
 
-    def get_object(self):
+    def get_object(self) -> User:
         return self.request.user
 
 
 class UserListView(generics.ListAPIView):
+    """List all users (admin only)."""
+
     permission_classes = [IsAdmin]
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, update, or delete a user (admin only)."""
+
     permission_classes = [IsAdmin]
     serializer_class = UserSerializer
     queryset = User.objects.all()

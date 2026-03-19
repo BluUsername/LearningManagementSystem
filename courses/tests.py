@@ -124,10 +124,13 @@ class CourseUpdateDeleteTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_course_admin(self):
+        """Admin can soft-delete a course (is_active set to False)."""
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.admin_token.key}')
         response = self.client.delete(f'/api/courses/{self.course.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Course.objects.filter(id=self.course.id).exists())
+        # Soft delete: course still exists but is inactive
+        self.course.refresh_from_db()
+        self.assertFalse(self.course.is_active)
 
 
 class EnrollmentTests(TestCase):
