@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -7,18 +9,21 @@ from .models import Course, Enrollment
 from .permissions import IsTeacherOrAdmin, IsCourseOwnerOrAdmin, IsStudent
 from .serializers import CourseSerializer, EnrollmentSerializer
 
+logger = logging.getLogger(__name__)
+
 
 class CourseListCreateView(generics.ListCreateAPIView):
-    queryset = Course.objects.all()
+    queryset = Course.objects.select_related('teacher').all()
     serializer_class = CourseSerializer
     permission_classes = [IsTeacherOrAdmin]
 
     def perform_create(self, serializer):
-        serializer.save(teacher=self.request.user)
+        course = serializer.save(teacher=self.request.user)
+        logger.info(f"Course created: '{course.title}' by {self.request.user.username}")
 
 
 class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Course.objects.all()
+    queryset = Course.objects.select_related('teacher').all()
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsCourseOwnerOrAdmin]
 
@@ -42,6 +47,7 @@ class EnrollView(APIView):
             )
 
         enrollment = Enrollment.objects.create(student=request.user, course=course)
+        logger.info(f"Student {request.user.username} enrolled in '{course.title}'")
         return Response(
             EnrollmentSerializer(enrollment).data,
             status=status.HTTP_201_CREATED,
@@ -60,6 +66,7 @@ class UnenrollView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        logger.info(f"Student {request.user.username} unenrolled from course {pk}")
         enrollment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -69,4 +76,6 @@ class MyEnrollmentsView(generics.ListAPIView):
     permission_classes = [IsStudent]
 
     def get_queryset(self):
-        return Enrollment.objects.filter(student=self.request.user)
+        return Enrollment.objects.select_related(
+            'course', 'course__teacher'
+        ).filter(student=self.request.user)

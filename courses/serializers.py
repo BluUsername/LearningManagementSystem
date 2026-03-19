@@ -4,6 +4,8 @@ from .models import Course, Enrollment
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=200, min_length=3)
+    description = serializers.CharField(max_length=5000, min_length=10)
     teacher_name = serializers.CharField(source='teacher.username', read_only=True)
     enrollment_count = serializers.SerializerMethodField()
 

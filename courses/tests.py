@@ -29,7 +29,9 @@ class CourseListTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
         response = self.client.get('/api/courses/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        # Paginated response: results are in response.data['results']
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 1)
 
     def test_list_courses_unauthenticated(self):
         response = self.client.get('/api/courses/')
@@ -59,7 +61,7 @@ class CourseCreateTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
         response = self.client.post('/api/courses/', {
             'title': 'New Course',
-            'description': 'Course description',
+            'description': 'A comprehensive course on the subject matter',
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['teacher'], self.teacher.id)
@@ -68,7 +70,7 @@ class CourseCreateTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.admin_token.key}')
         response = self.client.post('/api/courses/', {
             'title': 'Admin Course',
-            'description': 'Created by admin',
+            'description': 'A course created by the admin user',
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -76,7 +78,7 @@ class CourseCreateTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
         response = self.client.post('/api/courses/', {
             'title': 'Student Course',
-            'description': 'Should not work',
+            'description': 'This course should not be created',
         })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -101,14 +103,14 @@ class CourseUpdateDeleteTests(TestCase):
         self.admin_token = Token.objects.create(user=self.admin)
 
         self.course = Course.objects.create(
-            title='Course 1', description='Desc', teacher=self.teacher1,
+            title='Course 1', description='A test course description', teacher=self.teacher1,
         )
 
     def test_update_course_owner(self):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.t1_token.key}')
         response = self.client.put(f'/api/courses/{self.course.id}/', {
             'title': 'Updated Title',
-            'description': 'Updated desc',
+            'description': 'An updated course description',
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], 'Updated Title')
@@ -117,7 +119,7 @@ class CourseUpdateDeleteTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.t2_token.key}')
         response = self.client.put(f'/api/courses/{self.course.id}/', {
             'title': 'Hacked Title',
-            'description': 'Hacked',
+            'description': 'This should not be allowed',
         })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -143,7 +145,7 @@ class EnrollmentTests(TestCase):
         self.student_token = Token.objects.create(user=self.student)
 
         self.course = Course.objects.create(
-            title='Test Course', description='Desc', teacher=self.teacher,
+            title='Test Course', description='A test course description', teacher=self.teacher,
         )
 
     def test_enroll_student(self):
@@ -179,4 +181,6 @@ class EnrollmentTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
         response = self.client.get('/api/enrollments/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        # Paginated response: results are in response.data['results']
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 1)
