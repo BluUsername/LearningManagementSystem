@@ -20,7 +20,7 @@ function CourseList() {
       const coursesRes = await api.get('courses/', { params });
       setCourses(getResults(coursesRes.data));
 
-      if (user.role === 'student') {
+      if (user?.role === 'student') {
         const enrollRes = await api.get('enrollments/');
         setEnrolledIds(getResults(enrollRes.data).map((e) => e.course.id));
         }
@@ -29,7 +29,7 @@ function CourseList() {
       } finally {
         setLoading(false);
       }
-    }, [user.role]);
+    }, [user?.role]);
 
   useEffect(() => {
     fetchData();
@@ -112,7 +112,7 @@ function CourseList() {
             <Grid item xs={12} sm={6} md={4} key={course.id}>
               <CourseCard
                 course={course}
-                showEnroll={user.role === 'student' && !enrolledIds.includes(course.id)}
+                showEnroll={user?.role === 'student' && !enrolledIds.includes(course.id)}
                 onEnroll={() => handleEnroll(course.id)}
                 enrolled={enrolledIds.includes(course.id)}
               />
