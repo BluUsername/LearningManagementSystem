@@ -9,6 +9,10 @@ jest.mock('../api/axiosConfig', () => ({
   interceptors: { request: { use: jest.fn() } },
 }));
 
+jest.mock('../contexts/ThemeContext', () => ({
+  useThemeMode: () => ({ mode: 'dark', toggleTheme: jest.fn() }),
+}));
+
 beforeEach(() => {
   localStorage.clear();
 });

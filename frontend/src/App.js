@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -12,180 +12,7 @@ import TeacherDashboard from './pages/TeacherDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import UserManagement from './pages/UserManagement';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#42a5f5',
-      dark: '#1565c0',
-      light: '#90caf9',
-    },
-    secondary: {
-      main: '#ab47bc',
-      light: '#ce93d8',
-      dark: '#7b1fa2',
-    },
-    warning: {
-      main: '#f57c00',
-      light: '#ffb74d',
-    },
-    background: {
-      default: '#0a0e1a',
-      paper: '#131829',
-    },
-    text: {
-      primary: '#e8eaf6',
-      secondary: '#9fa8da',
-    },
-  },
-  typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    h4: { fontWeight: 700 },
-    h5: { fontWeight: 600 },
-    h6: { fontWeight: 600 },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 600,
-          borderRadius: 8,
-        },
-        containedPrimary: {
-          background: 'linear-gradient(135deg, #1565c0 0%, #7b1fa2 100%)',
-          '&:hover': {
-            background: 'linear-gradient(135deg, #1976d2 0%, #9c27b0 100%)',
-          },
-        },
-        outlinedPrimary: {
-          borderColor: 'rgba(66, 165, 245, 0.5)',
-          '&:hover': {
-            borderColor: '#42a5f5',
-            backgroundColor: 'rgba(66, 165, 245, 0.08)',
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-          backgroundColor: '#131829',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
-          transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out',
-          '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 8px 32px rgba(21, 101, 192, 0.2)',
-            borderColor: 'rgba(66, 165, 245, 0.3)',
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-          backgroundImage: 'none',
-        },
-      },
-    },
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          background: 'linear-gradient(135deg, #0d1b3e 0%, #1a237e 50%, #4a148c 100%)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          fontWeight: 500,
-        },
-      },
-    },
-    MuiTableHead: {
-      styleOverrides: {
-        root: {
-          '& .MuiTableCell-head': {
-            backgroundColor: '#0d1b3e',
-            color: '#90caf9',
-            fontWeight: 700,
-            borderBottom: '2px solid rgba(66, 165, 245, 0.3)',
-          },
-        },
-      },
-    },
-    MuiTableBody: {
-      styleOverrides: {
-        root: {
-          '& .MuiTableRow-root': {
-            '&:hover': {
-              backgroundColor: 'rgba(66, 165, 245, 0.04)',
-            },
-          },
-          '& .MuiTableCell-root': {
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-          },
-        },
-      },
-    },
-    MuiTableContainer: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#131829',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
-        },
-      },
-    },
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#1a2035',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'rgba(255, 255, 255, 0.15)',
-            },
-            '&:hover fieldset': {
-              borderColor: 'rgba(66, 165, 245, 0.5)',
-            },
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(255, 255, 255, 0.15)',
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(66, 165, 245, 0.5)',
-          },
-        },
-      },
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#131829',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
-        },
-      },
-    },
-  },
-});
+// Theme configuration has been moved to contexts/ThemeContext.js
 
 function DashboardRedirect() {
   const { user } = useAuth();
@@ -204,8 +31,42 @@ function AppLayout() {
 
   return (
     <>
+      {/* #35 - Skip to main content link for accessibility */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+        onFocus={(e) => {
+          e.target.style.position = 'fixed';
+          e.target.style.left = '16px';
+          e.target.style.top = '16px';
+          e.target.style.width = 'auto';
+          e.target.style.height = 'auto';
+          e.target.style.zIndex = 9999;
+          e.target.style.padding = '12px 24px';
+          e.target.style.background = '#1565c0';
+          e.target.style.color = '#fff';
+          e.target.style.borderRadius = '8px';
+          e.target.style.textDecoration = 'none';
+          e.target.style.fontWeight = '600';
+        }}
+        onBlur={(e) => {
+          e.target.style.position = 'absolute';
+          e.target.style.left = '-9999px';
+          e.target.style.width = '1px';
+          e.target.style.height = '1px';
+        }}
+      >
+        Skip to main content
+      </a>
       {!isAuthPage && <Navbar />}
-      <main>
+      <main id="main-content" role="main">
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -238,14 +99,13 @@ function AppLayout() {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeContextProvider>
       <BrowserRouter>
         <AuthProvider>
           <AppLayout />
         </AuthProvider>
       </BrowserRouter>
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }
 

@@ -9,13 +9,16 @@ import {
   Menu as MenuIcon, School as SchoolIcon, Dashboard as DashboardIcon,
   Login as LoginIcon, PersonAdd as PersonAddIcon, Logout as LogoutIcon,
   People as PeopleIcon, LibraryBooks as LibraryBooksIcon,
+  DarkMode as DarkModeIcon, LightMode as LightModeIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { useThemeMode } from '../contexts/ThemeContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { mode, toggleTheme } = useThemeMode();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -110,6 +113,14 @@ function Navbar() {
                 {item.label}
               </Button>
             ))}
+            <IconButton
+              color="inherit"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+              sx={{ ml: 0.5 }}
+            >
+              {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
             {user && (
               <>
                 <Chip
