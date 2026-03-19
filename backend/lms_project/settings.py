@@ -175,7 +175,9 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 ).split(',')
 
 # #2 - CSRF and security cookie settings for production
-if not DEBUG:
+# Only enable HTTPS enforcement when DJANGO_ENV is explicitly set to 'production'
+# (avoids breaking tests which run with DEBUG=False but over HTTP)
+if os.environ.get('DJANGO_ENV') == 'production':
     CSRF_COOKIE_HTTPONLY = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True

@@ -3,6 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
+    """Custom user model with role-based access and profile information."""
+
     ROLE_CHOICES = [
         ('student', 'Student'),
         ('teacher', 'Teacher'),
@@ -11,6 +13,8 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    # #13 - Extended profile fields
+    bio = models.TextField(blank=True, default='')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.username} ({self.get_role_display()})"
