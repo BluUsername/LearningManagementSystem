@@ -16,6 +16,11 @@ class CourseListCreateView(generics.ListCreateAPIView):
     queryset = Course.objects.select_related('teacher').all()
     serializer_class = CourseSerializer
     permission_classes = [IsTeacherOrAdmin]
+    # #10 - Search and filtering
+    filterset_fields = ['teacher']
+    search_fields = ['title', 'description', 'teacher__username']
+    ordering_fields = ['title', 'created_at', 'updated_at']
+    ordering = ['-created_at']
 
     def perform_create(self, serializer):
         course = serializer.save(teacher=self.request.user)
