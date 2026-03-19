@@ -166,6 +166,12 @@ REST_FRAMEWORK = {
     # #5 - Pagination for scalable list endpoints
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    # #21 - Consistent error response format
+    'EXCEPTION_HANDLER': 'lms_project.exceptions.custom_exception_handler',
+    # #23 - API versioning via Accept header (e.g. Accept: application/json; version=1.0)
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_VERSION': '1.0',
+    'ALLOWED_VERSIONS': ['1.0'],
 }
 
 # CORS settings
