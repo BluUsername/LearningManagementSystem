@@ -1,6 +1,11 @@
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
+)
 
 
 def api_root(request):
@@ -14,6 +19,8 @@ def api_root(request):
             'enrollments': '/api/enrollments/',
             'users': '/api/users/',
             'admin': '/admin/',
+            'docs': '/api/docs/',
+            'redoc': '/api/redoc/',
         },
         'frontend': 'https://thelearnhub.netlify.app',
     })
@@ -24,4 +31,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include('courses.urls')),
+    # #18 - Interactive API documentation
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
