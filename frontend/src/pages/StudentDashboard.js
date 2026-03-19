@@ -4,7 +4,7 @@ import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
 } from '@mui/material';
 import { School as SchoolIcon, LibraryBooks as LibraryBooksIcon } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -18,7 +18,7 @@ function StudentDashboard() {
     const fetchEnrollments = async () => {
       try {
         const res = await api.get('enrollments/');
-        setEnrollments(res.data);
+        setEnrollments(getResults(res.data));
       } catch {
         setError('Failed to load enrollments.');
       } finally {

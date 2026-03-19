@@ -4,7 +4,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
 } from '@mui/material';
 import { Add as AddIcon, School as SchoolIcon } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -20,7 +20,7 @@ function TeacherDashboard() {
   const fetchCourses = async () => {
     try {
       const res = await api.get('courses/');
-      setCourses(res.data.filter((c) => c.teacher === user.id));
+      setCourses(getResults(res.data).filter((c) => c.teacher === user.id));
     } catch {
       setError('Failed to load courses.');
     } finally {

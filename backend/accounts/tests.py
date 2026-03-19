@@ -120,7 +120,9 @@ class UserManagementTests(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.admin_token.key}')
         response = self.client.get('/api/users/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        # Paginated response: results are in response.data['results']
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 2)
 
     def test_user_list_student_forbidden(self):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')

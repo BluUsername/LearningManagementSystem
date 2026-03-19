@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper } from '@mui/material';
 import { LibraryBooks as LibraryBooksIcon } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -16,11 +16,11 @@ function CourseList() {
     const fetchData = async () => {
       try {
         const coursesRes = await api.get('courses/');
-        setCourses(coursesRes.data);
+        setCourses(getResults(coursesRes.data));
 
         if (user.role === 'student') {
           const enrollRes = await api.get('enrollments/');
-          setEnrolledIds(enrollRes.data.map((e) => e.course.id));
+          setEnrolledIds(getResults(enrollRes.data).map((e) => e.course.id));
         }
       } catch {
         setError('Failed to load courses.');

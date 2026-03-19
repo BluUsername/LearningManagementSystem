@@ -12,4 +12,19 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+/**
+ * Helper to extract results from paginated or non-paginated API responses.
+ * DRF pagination wraps results in { count, next, previous, results }.
+ * This helper returns the array regardless of format.
+ */
+export function getResults(responseData) {
+  if (Array.isArray(responseData)) {
+    return responseData;
+  }
+  if (responseData && Array.isArray(responseData.results)) {
+    return responseData.results;
+  }
+  return [];
+}
+
 export default api;

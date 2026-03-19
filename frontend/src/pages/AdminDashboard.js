@@ -8,7 +8,7 @@ import {
   AdminPanelSettings as AdminIcon, People as PeopleIcon,
   LibraryBooks as LibraryBooksIcon, Add as AddIcon,
 } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -28,8 +28,8 @@ function AdminDashboard() {
         api.get('courses/'),
         api.get('users/'),
       ]);
-      setCourses(coursesRes.data);
-      setUserCount(usersRes.data.length);
+      setCourses(getResults(coursesRes.data));
+      setUserCount(getResults(usersRes.data).length);
     } catch {
       setError('Failed to load data.');
     } finally {

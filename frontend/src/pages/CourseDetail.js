@@ -7,7 +7,7 @@ import {
   ArrowBack as ArrowBackIcon, Person as PersonIcon,
   CalendarToday as CalendarIcon,
 } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import { useAuth } from '../contexts/AuthContext';
 
 function CourseDetail() {
@@ -27,7 +27,7 @@ function CourseDetail() {
 
         if (user.role === 'student') {
           const enrollRes = await api.get('enrollments/');
-          setEnrolled(enrollRes.data.some((e) => e.course.id === parseInt(id)));
+          setEnrolled(getResults(enrollRes.data).some((e) => e.course.id === parseInt(id)));
         }
       } catch {
         setError('Failed to load course.');

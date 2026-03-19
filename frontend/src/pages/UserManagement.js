@@ -9,7 +9,7 @@ import {
   ArrowBack as ArrowBackIcon, Delete as DeleteIcon,
   People as PeopleIcon,
 } from '@mui/icons-material';
-import api from '../api/axiosConfig';
+import api, { getResults } from '../api/axiosConfig';
 import { useAuth } from '../contexts/AuthContext';
 
 function UserManagement() {
@@ -23,7 +23,7 @@ function UserManagement() {
     const fetchUsers = async () => {
       try {
         const res = await api.get('users/');
-        setUsers(res.data);
+        setUsers(getResults(res.data));
       } catch {
         setError('Failed to load users.');
       } finally {
