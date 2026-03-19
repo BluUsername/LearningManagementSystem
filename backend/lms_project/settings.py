@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
+    'drf_spectacular',
     'accounts',
     'courses',
 ]
@@ -172,6 +173,23 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
     'DEFAULT_VERSION': '1.0',
     'ALLOWED_VERSIONS': ['1.0'],
+    # #18 - OpenAPI schema generation
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# #18 - Swagger/OpenAPI documentation settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LearnHub LMS API',
+    'DESCRIPTION': 'A comprehensive Learning Management System API supporting '
+                   'student enrollment, course management, and user administration.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'TAGS': [
+        {'name': 'Auth', 'description': 'Authentication endpoints'},
+        {'name': 'Courses', 'description': 'Course management endpoints'},
+        {'name': 'Enrollments', 'description': 'Student enrollment endpoints'},
+        {'name': 'Users', 'description': 'User management endpoints (admin only)'},
+    ],
 }
 
 # CORS settings
