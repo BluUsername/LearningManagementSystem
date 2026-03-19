@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper } from '@mui/material';
-import { LibraryBooks as LibraryBooksIcon } from '@mui/icons-material';
+import { useState, useEffect, useCallback } from 'react';
+import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper, TextField, InputAdornment } from '@mui/material';
+import { LibraryBooks as LibraryBooksIcon, Search as SearchIcon } from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,26 +10,38 @@ function CourseList() {
   const [enrolledIds, setEnrolledIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const coursesRes = await api.get('courses/');
-        setCourses(getResults(coursesRes.data));
+  const fetchData = useCallback(async (search = '') => {
+    try {
+      setLoading(true);
+      const params = search ? { search } : {};
+      const coursesRes = await api.get('courses/', { params });
+      setCourses(getResults(coursesRes.data));
 
-        if (user.role === 'student') {
-          const enrollRes = await api.get('enrollments/');
-          setEnrolledIds(getResults(enrollRes.data).map((e) => e.course.id));
+      if (user.role === 'student') {
+        const enrollRes = await api.get('enrollments/');
+        setEnrolledIds(getResults(enrollRes.data).map((e) => e.course.id));
         }
       } catch {
         setError('Failed to load courses.');
       } finally {
         setLoading(false);
       }
-    };
+    }, [user.role]);
+
+  useEffect(() => {
     fetchData();
-  }, [user.role]);
+  }, [fetchData]);
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchData(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery, fetchData]);
 
   const handleEnroll = async (courseId) => {
     try {
@@ -63,6 +75,32 @@ function CourseList() {
           Browse and enroll in {courses.length} available course{courses.length !== 1 ? 's' : ''}
         </Typography>
       </Paper>
+
+      <TextField
+        fullWidth
+        placeholder="Search courses by title, description, or teacher..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)' }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          mb: 3,
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: 'rgba(255,255,255,0.06)',
+            borderRadius: 2,
+            color: '#fff',
+            '& fieldset': { borderColor: 'rgba(255,255,255,0.12)' },
+            '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
+            '&.Mui-focused fieldset': { borderColor: '#42a5f5' },
+          },
+          '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.4)' },
+        }}
+      />
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
