@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Card, CardContent, CardActions, Typography, Button, Chip, Box,
@@ -84,5 +85,30 @@ function CourseCard({ course, showEnroll, onEnroll, enrolled, showActions, onEdi
     </Card>
   );
 }
+
+CourseCard.propTypes = {
+  course: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    teacher_name: PropTypes.string,
+    enrollment_count: PropTypes.number,
+  }).isRequired,
+  showEnroll: PropTypes.bool,
+  onEnroll: PropTypes.func,
+  enrolled: PropTypes.bool,
+  showActions: PropTypes.bool,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+};
+
+CourseCard.defaultProps = {
+  showEnroll: false,
+  onEnroll: undefined,
+  enrolled: false,
+  showActions: false,
+  onEdit: undefined,
+  onDelete: undefined,
+};
 
 export default CourseCard;
