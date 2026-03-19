@@ -68,18 +68,26 @@ function UserManagement() {
         Back to Dashboard
       </Button>
 
+      {/* Hero Banner */}
       <Paper elevation={0} sx={{
-        p: 4, mb: 4, borderRadius: 3,
-        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
+        backgroundImage: `
+          linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%),
+          url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1400&q=80')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'white',
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <PeopleIcon sx={{ fontSize: 36 }} />
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>User Management</Typography>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <PeopleIcon sx={{ fontSize: 36 }} />
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>User Management</Typography>
+          </Box>
+          <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
+            Manage roles and permissions for {users.length} user{users.length !== 1 ? 's' : ''}
+          </Typography>
         </Box>
-        <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
-          Manage roles and permissions for {users.length} user{users.length !== 1 ? 's' : ''}
-        </Typography>
       </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}

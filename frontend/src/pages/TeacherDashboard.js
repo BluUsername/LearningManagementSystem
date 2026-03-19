@@ -3,7 +3,10 @@ import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
 } from '@mui/material';
-import { Add as AddIcon, School as SchoolIcon } from '@mui/icons-material';
+import {
+  Add as AddIcon, School as SchoolIcon,
+  Groups as GroupsIcon, AutoStories as AutoStoriesIcon,
+} from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
@@ -79,18 +82,42 @@ function TeacherDashboard() {
 
   return (
     <Container sx={{ mt: 4 }}>
+      {/* Hero Banner */}
       <Paper elevation={0} sx={{
-        p: 4, mb: 4, borderRadius: 3,
-        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
+        backgroundImage: `
+          linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%),
+          url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&q=80')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'white',
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
-          <SchoolIcon sx={{ fontSize: 36 }} />
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Teacher Dashboard</Typography>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
+            <SchoolIcon sx={{ fontSize: 36 }} />
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Teacher Dashboard</Typography>
+          </Box>
+          <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 3 }}>
+            Welcome back, {user.username}! Inspire minds and shape the future.
+          </Typography>
+
+          {/* Stats Row */}
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 2, px: 2, py: 1, backdropFilter: 'blur(8px)' }}>
+              <AutoStoriesIcon sx={{ fontSize: 20 }} />
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {courses.length} Course{courses.length !== 1 ? 's' : ''} Created
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 2, px: 2, py: 1, backdropFilter: 'blur(8px)' }}>
+              <GroupsIcon sx={{ fontSize: 20 }} />
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {courses.reduce((sum, c) => sum + (c.enrollment_count || 0), 0)} Students Enrolled
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-        <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
-          Welcome back, {user.username}! You have {courses.length} course{courses.length !== 1 ? 's' : ''}.
-        </Typography>
       </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
@@ -113,9 +140,35 @@ function TeacherDashboard() {
       </Box>
 
       {courses.length === 0 ? (
-        <Typography color="text.secondary">
-          You haven't created any courses yet. Click "Create Course" to get started!
-        </Typography>
+        <Paper elevation={0} sx={{
+          p: 6, textAlign: 'center', borderRadius: 3,
+          border: '1px dashed rgba(171, 71, 188, 0.3)',
+          background: 'rgba(171, 71, 188, 0.03)',
+        }}>
+          <Box
+            component="img"
+            src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80"
+            alt="Start teaching"
+            sx={{ width: 200, height: 140, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
+          />
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+            Ready to share your knowledge?
+          </Typography>
+          <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 400, mx: 'auto' }}>
+            Create your first course and start making an impact. Great teachers change lives — yours will too.
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleOpenCreate}
+            sx={{
+              background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+              '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+            }}
+          >
+            Create Your First Course
+          </Button>
+        </Paper>
       ) : (
         <Grid container spacing={3}>
           {courses.map((course) => (

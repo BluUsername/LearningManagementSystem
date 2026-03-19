@@ -47,10 +47,15 @@ function Login() {
       margin: '-64px 0 0 0',
       paddingTop: 0,
     }}>
-      {/* Left Panel - Branding */}
+      {/* Left Panel - Branding with Hero Image */}
       <Box sx={{
         flex: '1 1 50%',
-        background: 'linear-gradient(160deg, #0a0e27 0%, #1a1f4e 40%, #2d1b69 70%, #1a237e 100%)',
+        backgroundImage: `
+          linear-gradient(160deg, rgba(10, 14, 39, 0.85) 0%, rgba(26, 31, 78, 0.75) 40%, rgba(45, 27, 105, 0.8) 70%, rgba(26, 35, 126, 0.85) 100%),
+          url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: { xs: 'none', md: 'flex' },
         flexDirection: 'column',
         justifyContent: 'center',

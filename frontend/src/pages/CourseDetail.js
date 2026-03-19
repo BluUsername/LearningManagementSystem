@@ -94,16 +94,28 @@ function CourseDetail() {
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Paper elevation={0} sx={{
-        p: 4, overflow: 'hidden', position: 'relative',
+        overflow: 'hidden', position: 'relative',
         border: '1px solid rgba(255, 255, 255, 0.06)',
       }}>
+        {/* Course Hero Image */}
         <Box sx={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 4,
-          background: 'linear-gradient(135deg, #42a5f5, #ab47bc, #f57c00)',
-        }} />
-        <Typography variant="h4" component="h1" gutterBottom sx={{ color: '#e8eaf6', mt: 1 }}>
-          {course.title}
-        </Typography>
+          height: 200,
+          backgroundImage: `
+            linear-gradient(135deg, rgba(26, 35, 126, 0.85) 0%, rgba(21, 101, 192, 0.7) 50%, rgba(123, 31, 162, 0.8) 100%),
+            url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=80')
+          `,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          display: 'flex',
+          alignItems: 'flex-end',
+          p: 4,
+        }}>
+          <Typography variant="h4" component="h1" sx={{ color: '#fff', fontWeight: 700, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+            {course.title}
+          </Typography>
+        </Box>
+
+        <Box sx={{ p: 4 }}>
 
         <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
           <Chip icon={<PersonIcon sx={{ color: '#42a5f5 !important' }} />} label={`Teacher: ${course.teacher_name}`}
@@ -131,6 +143,7 @@ function CourseDetail() {
           {(isOwner || isAdmin) && (
             <Button variant="outlined" color="error" onClick={handleDelete}>Delete Course</Button>
           )}
+        </Box>
         </Box>
       </Paper>
     </Container>

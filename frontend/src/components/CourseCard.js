@@ -5,20 +5,50 @@ import {
 } from '@mui/material';
 import { Person as PersonIcon, Groups as GroupsIcon } from '@mui/icons-material';
 
+// Rotating course header images for visual variety
+const courseImages = [
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=600&q=80',
+  'https://images.unsplash.com/photo-1523050854058-8df90110c8f1?auto=format&fit=crop&w=600&q=80',
+];
+
 function CourseCard({ course, showEnroll, onEnroll, enrolled, showActions, onEdit, onDelete }) {
+  const imageUrl = courseImages[(course.id || 0) % courseImages.length];
+
   return (
     <Card elevation={0} sx={{
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      borderTop: '3px solid transparent',
-      borderImage: 'linear-gradient(135deg, #42a5f5, #ab47bc, #f57c00) 1',
-      overflow: 'visible',
+      overflow: 'hidden',
     }}>
-      <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
-        <Typography variant="h6" component="h2" gutterBottom sx={{ color: '#e8eaf6' }}>
+      {/* Course Image Header */}
+      <Box sx={{
+        height: 120,
+        backgroundImage: `
+          linear-gradient(135deg, rgba(21, 101, 192, 0.7) 0%, rgba(123, 31, 162, 0.6) 100%),
+          url('${imageUrl}')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'flex-end',
+        p: 2,
+      }}>
+        <Typography variant="h6" component="h2" sx={{
+          color: '#fff',
+          fontWeight: 700,
+          textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+          lineHeight: 1.3,
+        }}>
           {course.title}
         </Typography>
+      </Box>
+
+      <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
         <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6, color: '#9fa8da' }}>
           {course.description.length > 150
             ? `${course.description.substring(0, 150)}...`

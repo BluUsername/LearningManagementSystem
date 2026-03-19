@@ -90,18 +90,26 @@ function AdminDashboard() {
 
   return (
     <Container sx={{ mt: 4 }}>
+      {/* Hero Banner */}
       <Paper elevation={0} sx={{
-        p: 4, mb: 4, borderRadius: 3,
-        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
+        backgroundImage: `
+          linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%),
+          url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'white',
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
-          <AdminIcon sx={{ fontSize: 36 }} />
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Admin Dashboard</Typography>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
+            <AdminIcon sx={{ fontSize: 36 }} />
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Admin Dashboard</Typography>
+          </Box>
+          <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+            Welcome back, {user.username}! Here's your platform overview at a glance.
+          </Typography>
         </Box>
-        <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
-          Welcome back, {user.username}! System overview at a glance.
-        </Typography>
       </Paper>
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}

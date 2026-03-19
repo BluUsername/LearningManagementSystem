@@ -62,18 +62,26 @@ function CourseList() {
 
   return (
     <Container sx={{ mt: 4 }}>
+      {/* Hero Banner */}
       <Paper elevation={0} sx={{
-        p: 4, mb: 4, borderRadius: 3,
-        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #7b1fa2 100%)',
+        p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
+        backgroundImage: `
+          linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%),
+          url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1400&q=80')
+        `,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'white',
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <LibraryBooksIcon sx={{ fontSize: 36 }} />
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>All Courses</Typography>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <LibraryBooksIcon sx={{ fontSize: 36 }} />
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>All Courses</Typography>
+          </Box>
+          <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
+            Browse and enrol in {courses.length} available course{courses.length !== 1 ? 's' : ''}
+          </Typography>
         </Box>
-        <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
-          Browse and enroll in {courses.length} available course{courses.length !== 1 ? 's' : ''}
-        </Typography>
       </Paper>
 
       <TextField
@@ -105,7 +113,24 @@ function CourseList() {
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
       {courses.length === 0 ? (
-        <Typography color="text.secondary">No courses available yet.</Typography>
+        <Paper elevation={0} sx={{
+          p: 6, textAlign: 'center', borderRadius: 3,
+          border: '1px dashed rgba(66, 165, 245, 0.3)',
+          background: 'rgba(66, 165, 245, 0.03)',
+        }}>
+          <Box
+            component="img"
+            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=400&q=80"
+            alt="No courses yet"
+            sx={{ width: 200, height: 140, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
+          />
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+            No courses available yet
+          </Typography>
+          <Typography color="text.secondary" sx={{ maxWidth: 400, mx: 'auto' }}>
+            Check back soon — new courses are added regularly by our amazing teachers!
+          </Typography>
+        </Paper>
       ) : (
         <Grid container spacing={3}>
           {courses.map((course) => (
