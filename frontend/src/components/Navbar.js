@@ -9,20 +9,17 @@ import {
   Menu as MenuIcon, School as SchoolIcon, Dashboard as DashboardIcon,
   Login as LoginIcon, PersonAdd as PersonAddIcon, Logout as LogoutIcon,
   People as PeopleIcon, LibraryBooks as LibraryBooksIcon,
-  DarkMode as DarkModeIcon, LightMode as LightModeIcon,
   Leaderboard as LeaderboardIcon, EmojiEvents as EmojiEventsIcon,
   Info as InfoIcon, HelpOutline as HelpOutlineIcon,
   Settings as SettingsIcon, Notifications as NotificationsIcon,
   Person as PersonIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
-import { useThemeMode } from '../contexts/ThemeContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
-  const { mode, toggleTheme } = useThemeMode();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -132,14 +129,6 @@ function Navbar() {
         >
           LearnHub
         </Typography>
-
-        <IconButton
-          color="inherit"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
-        >
-          {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-        </IconButton>
 
         <Box sx={{ flexGrow: 1 }} />
 
