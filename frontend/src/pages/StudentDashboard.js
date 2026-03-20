@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
+  Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper, ToggleButtonGroup, ToggleButton,
 } from '@mui/material';
 import {
   School as SchoolIcon, LibraryBooks as LibraryBooksIcon,
   TrendingUp as TrendingUpIcon, EmojiEvents as TrophyIcon,
-  AutoStories as AutoStoriesIcon,
+  AutoStories as AutoStoriesIcon, AccessTime as AccessTimeIcon,
+  SortByAlpha as SortByAlphaIcon,
 } from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
@@ -16,6 +17,7 @@ function StudentDashboard() {
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sortOrder, setSortOrder] = useState('recent');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -84,22 +86,39 @@ function StudentDashboard() {
 
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="h5" component="h2">
           My Enrolled Courses ({enrollments.length})
         </Typography>
-        <Button
-          variant="contained"
-          component={RouterLink}
-          to="/courses"
-          startIcon={<LibraryBooksIcon />}
-          sx={{
-            background: 'linear-gradient(135deg, #f57c00, #ff9800)',
-            '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
-          }}
-        >
-          Browse Courses
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          {enrollments.length > 1 && (
+            <ToggleButtonGroup
+              value={sortOrder}
+              exclusive
+              onChange={(e, value) => { if (value) setSortOrder(value); }}
+              size="small"
+            >
+              <ToggleButton value="recent" aria-label="sort by most recent">
+                <AccessTimeIcon sx={{ mr: 0.5, fontSize: 18 }} /> Recent
+              </ToggleButton>
+              <ToggleButton value="az" aria-label="sort alphabetically">
+                <SortByAlphaIcon sx={{ mr: 0.5, fontSize: 18 }} /> A–Z
+              </ToggleButton>
+            </ToggleButtonGroup>
+          )}
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/courses"
+            startIcon={<LibraryBooksIcon />}
+            sx={{
+              background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+              '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+            }}
+          >
+            Browse Courses
+          </Button>
+        </Box>
       </Box>
 
       {enrollments.length === 0 ? (
@@ -135,7 +154,15 @@ function StudentDashboard() {
         </Paper>
       ) : (
         <Grid container spacing={3}>
-          {enrollments.map((enrollment) => (
+          {[...enrollments]
+            .sort((a, b) => {
+              if (sortOrder === 'az') {
+                return a.course.title.localeCompare(b.course.title);
+              }
+              // 'recent' — most recently enrolled first
+              return new Date(b.enrolled_at) - new Date(a.enrolled_at);
+            })
+            .map((enrollment) => (
             <Grid item xs={12} sm={6} md={4} key={enrollment.id}>
               <CourseCard course={enrollment.course} enrolled />
             </Grid>

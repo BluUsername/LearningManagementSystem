@@ -40,7 +40,7 @@ function Navbar() {
 
   const navItems = user ? [
     { label: 'Dashboard', path: getDashboardPath(), icon: <DashboardIcon /> },
-    { label: 'Courses', path: '/courses', icon: <LibraryBooksIcon /> },
+    { label: 'All Courses', path: '/courses', icon: <LibraryBooksIcon /> },
     { label: 'Leaderboard', path: '/leaderboard', icon: <LeaderboardIcon /> },
     { label: 'Achievements', path: '/achievements', icon: <EmojiEventsIcon /> },
     ...(user.role === 'admin' ? [{ label: 'Users', path: '/admin/users', icon: <PeopleIcon /> }] : []),

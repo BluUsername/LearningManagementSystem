@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper, TextField, InputAdornment } from '@mui/material';
-import { LibraryBooks as LibraryBooksIcon, Search as SearchIcon } from '@mui/icons-material';
+import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper, TextField, InputAdornment, Chip } from '@mui/material';
+import { LibraryBooks as LibraryBooksIcon, Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
 import CourseCard from '../components/CourseCard';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,6 +11,7 @@ function CourseList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [creatorFilter, setCreatorFilter] = useState('All');
   const { user } = useAuth();
 
   const fetchData = useCallback(async (search = '') => {
@@ -52,6 +53,14 @@ function CourseList() {
     }
   };
 
+  // Derive unique teacher names for the filter chips
+  const teacherNames = [...new Set(courses.map((c) => c.teacher_name).filter(Boolean))].sort();
+
+  // Apply creator filter
+  const filteredCourses = creatorFilter === 'All'
+    ? courses
+    : courses.filter((c) => c.teacher_name === creatorFilter);
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={8}>
@@ -79,7 +88,7 @@ function CourseList() {
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>All Courses</Typography>
           </Box>
           <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
-            Browse and enrol in {courses.length} available course{courses.length !== 1 ? 's' : ''}
+            Browse and enrol in {filteredCourses.length} available course{filteredCourses.length !== 1 ? 's' : ''}
           </Typography>
         </Box>
       </Paper>
@@ -110,9 +119,41 @@ function CourseList() {
         }}
       />
 
+      {/* Creator filter chips */}
+      {teacherNames.length > 1 && (
+        <Box sx={{ display: 'flex', gap: 1, mb: 3, flexWrap: 'wrap' }}>
+          <Chip
+            label="All"
+            onClick={() => setCreatorFilter('All')}
+            variant={creatorFilter === 'All' ? 'filled' : 'outlined'}
+            sx={{
+              fontWeight: creatorFilter === 'All' ? 700 : 400,
+              backgroundColor: creatorFilter === 'All' ? 'rgba(66, 165, 245, 0.2)' : 'transparent',
+              color: creatorFilter === 'All' ? '#42a5f5' : 'rgba(255,255,255,0.6)',
+              borderColor: 'rgba(66, 165, 245, 0.3)',
+            }}
+          />
+          {teacherNames.map((name) => (
+            <Chip
+              key={name}
+              icon={<PersonIcon sx={{ color: creatorFilter === name ? '#42a5f5 !important' : 'rgba(255,255,255,0.4) !important' }} />}
+              label={name}
+              onClick={() => setCreatorFilter(name)}
+              variant={creatorFilter === name ? 'filled' : 'outlined'}
+              sx={{
+                fontWeight: creatorFilter === name ? 700 : 400,
+                backgroundColor: creatorFilter === name ? 'rgba(66, 165, 245, 0.2)' : 'transparent',
+                color: creatorFilter === name ? '#42a5f5' : 'rgba(255,255,255,0.6)',
+                borderColor: 'rgba(66, 165, 245, 0.3)',
+              }}
+            />
+          ))}
+        </Box>
+      )}
+
       {error && <Alert severity="error" role="alert" sx={{ mb: 2 }}>{error}</Alert>}
 
-      {courses.length === 0 ? (
+      {filteredCourses.length === 0 ? (
         <Paper elevation={0} sx={{
           p: 6, textAlign: 'center', borderRadius: 3,
           border: '1px dashed rgba(66, 165, 245, 0.3)',
@@ -133,7 +174,7 @@ function CourseList() {
         </Paper>
       ) : (
         <Grid container spacing={3}>
-          {courses.map((course) => (
+          {filteredCourses.map((course) => (
             <Grid item xs={12} sm={6} md={4} key={course.id}>
               <CourseCard
                 course={course}
