@@ -11,6 +11,12 @@ import StudentDashboard from './pages/StudentDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import UserManagement from './pages/UserManagement';
+import Profile from './pages/Profile';
+import Leaderboard from './pages/Leaderboard';
+import About from './pages/About';
+import Achievements from './pages/Achievements';
+import HelpFAQ from './pages/HelpFAQ';
+import Settings from './pages/Settings';
 
 // Theme configuration has been moved to contexts/ThemeContext.js
 
@@ -89,6 +95,22 @@ function AppLayout() {
               <Route path="/admin/users" element={
                 <ProtectedRoute allowedRoles={['admin']}><UserManagement /></ProtectedRoute>
               } />
+              <Route path="/profile" element={
+                <ProtectedRoute><Profile /></ProtectedRoute>
+              } />
+              <Route path="/leaderboard" element={
+                <ProtectedRoute><Leaderboard /></ProtectedRoute>
+              } />
+              <Route path="/achievements" element={
+                <ProtectedRoute><Achievements /></ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute><Settings /></ProtectedRoute>
+              } />
+              <Route path="/help" element={
+                <ProtectedRoute><HelpFAQ /></ProtectedRoute>
+              } />
+              <Route path="/about" element={<About />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>

@@ -59,8 +59,8 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CurrentUserView(generics.RetrieveAPIView):
-    """Return the currently authenticated user's profile."""
+class CurrentUserView(generics.RetrieveUpdateAPIView):
+    """Return or update the currently authenticated user's profile."""
 
     serializer_class = UserSerializer
 

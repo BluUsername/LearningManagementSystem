@@ -3,13 +3,17 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Button, IconButton, Drawer,
   List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Box, Chip, useMediaQuery, useTheme,
+  Box, Chip, useMediaQuery, useTheme, Badge, Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon, School as SchoolIcon, Dashboard as DashboardIcon,
   Login as LoginIcon, PersonAdd as PersonAddIcon, Logout as LogoutIcon,
   People as PeopleIcon, LibraryBooks as LibraryBooksIcon,
   DarkMode as DarkModeIcon, LightMode as LightModeIcon,
+  Leaderboard as LeaderboardIcon, EmojiEvents as EmojiEventsIcon,
+  Info as InfoIcon, HelpOutline as HelpOutlineIcon,
+  Settings as SettingsIcon, Notifications as NotificationsIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useThemeMode } from '../contexts/ThemeContext';
@@ -40,10 +44,13 @@ function Navbar() {
   const navItems = user ? [
     { label: 'Dashboard', path: getDashboardPath(), icon: <DashboardIcon /> },
     { label: 'Courses', path: '/courses', icon: <LibraryBooksIcon /> },
+    { label: 'Leaderboard', path: '/leaderboard', icon: <LeaderboardIcon /> },
+    { label: 'Achievements', path: '/achievements', icon: <EmojiEventsIcon /> },
     ...(user.role === 'admin' ? [{ label: 'Users', path: '/admin/users', icon: <PeopleIcon /> }] : []),
   ] : [
     { label: 'Login', path: '/login', icon: <LoginIcon /> },
     { label: 'Register', path: '/register', icon: <PersonAddIcon /> },
+    { label: 'About', path: '/about', icon: <InfoIcon /> },
   ];
 
   const drawer = (
@@ -58,12 +65,38 @@ function Navbar() {
           </ListItem>
         ))}
         {user && (
-          <ListItem disablePadding>
-            <ListItemButton onClick={handleLogout}>
-              <ListItemIcon><LogoutIcon /></ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
-          </ListItem>
+          <>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/profile">
+                <ListItemIcon><PersonIcon /></ListItemIcon>
+                <ListItemText primary="My Profile" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/help">
+                <ListItemIcon><HelpOutlineIcon /></ListItemIcon>
+                <ListItemText primary="Help & FAQ" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/settings">
+                <ListItemIcon><SettingsIcon /></ListItemIcon>
+                <ListItemText primary="Settings" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/about">
+                <ListItemIcon><InfoIcon /></ListItemIcon>
+                <ListItemText primary="About" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemIcon><LogoutIcon /></ListItemIcon>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>
+          </>
         )}
       </List>
     </Box>
@@ -123,6 +156,28 @@ function Navbar() {
             </IconButton>
             {user && (
               <>
+                <Tooltip title="Notifications">
+                  <IconButton color="inherit" sx={{ ml: 0.5 }}>
+                    <Badge badgeContent={3} color="error" max={9}>
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="My Profile">
+                  <IconButton color="inherit" component={RouterLink} to="/profile">
+                    <PersonIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Help & FAQ">
+                  <IconButton color="inherit" component={RouterLink} to="/help">
+                    <HelpOutlineIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Settings">
+                  <IconButton color="inherit" component={RouterLink} to="/settings">
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
                 <Chip
                   label={`${user.username} (${user.role})`}
                   size="small"
