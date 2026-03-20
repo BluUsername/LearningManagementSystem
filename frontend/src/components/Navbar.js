@@ -123,15 +123,25 @@ function Navbar() {
           component={RouterLink}
           to={user ? getDashboardPath() : '/login'}
           sx={{
-            flexGrow: 1,
             textDecoration: 'none',
             color: 'inherit',
             fontWeight: 700,
             letterSpacing: '0.5px',
+            mr: 1,
           }}
         >
           LearnHub
         </Typography>
+
+        <IconButton
+          color="inherit"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+        </IconButton>
+
+        <Box sx={{ flexGrow: 1 }} />
 
         {!isMobile && (
           <Box component="nav" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -146,14 +156,6 @@ function Navbar() {
                 {item.label}
               </Button>
             ))}
-            <IconButton
-              color="inherit"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
-              sx={{ ml: 0.5 }}
-            >
-              {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-            </IconButton>
             {user && (
               <>
                 <Tooltip title="Notifications">
