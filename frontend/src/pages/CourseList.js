@@ -70,7 +70,7 @@ function CourseList() {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 6 }}>
       {/* Hero Banner */}
       <Paper elevation={0} sx={{
         p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
@@ -163,7 +163,7 @@ function CourseList() {
             component="img"
             src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=400&q=80"
             alt="No courses yet"
-            sx={{ width: 200, height: 140, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
+            sx={{ width: { xs: 160, sm: 200 }, height: { xs: 110, sm: 140 }, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
           />
           <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
             No courses available yet

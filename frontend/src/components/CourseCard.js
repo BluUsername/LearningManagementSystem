@@ -27,7 +27,7 @@ function CourseCard({ course, showEnroll, onEnroll, enrolled, showActions, onEdi
     }}>
       {/* Course Image Header */}
       <Box sx={{
-        height: 120,
+        height: { xs: 100, sm: 120, md: 140 },
         backgroundImage: `
           linear-gradient(135deg, rgba(21, 101, 192, 0.7) 0%, rgba(123, 31, 162, 0.6) 100%),
           url('${imageUrl}')

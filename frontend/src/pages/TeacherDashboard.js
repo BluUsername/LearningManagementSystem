@@ -81,7 +81,7 @@ function TeacherDashboard() {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 6 }}>
       {/* Hero Banner */}
       <Paper elevation={0} sx={{
         p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
@@ -149,7 +149,7 @@ function TeacherDashboard() {
             component="img"
             src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80"
             alt="Start teaching"
-            sx={{ width: 200, height: 140, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
+            sx={{ width: { xs: 160, sm: 200 }, height: { xs: 110, sm: 140 }, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
           />
           <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
             Ready to share your knowledge?

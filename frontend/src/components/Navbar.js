@@ -3,7 +3,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Button, IconButton, Drawer,
   List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Box, Chip, useMediaQuery, useTheme, Badge, Tooltip,
+  Box, Chip, useMediaQuery, useTheme, Badge, Tooltip, Divider,
 } from '@mui/material';
 import {
   Menu as MenuIcon, School as SchoolIcon, Dashboard as DashboardIcon,
@@ -51,7 +51,32 @@ function Navbar() {
   ];
 
   const drawer = (
-    <Box sx={{ width: 250 }} role="navigation" onClick={() => setDrawerOpen(false)}>
+    <Box sx={{ width: 270 }} role="navigation" onClick={() => setDrawerOpen(false)}>
+      {/* Drawer Header */}
+      <Box sx={{
+        p: 2.5, display: 'flex', alignItems: 'center', gap: 1.5,
+        background: 'linear-gradient(135deg, rgba(21, 101, 192, 0.15), rgba(123, 31, 162, 0.1))',
+      }}>
+        <SchoolIcon sx={{ fontSize: 28, color: '#42a5f5' }} />
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>LearnHub</Typography>
+      </Box>
+      {user && (
+        <Box sx={{ px: 2.5, py: 1.5 }}>
+          <Chip
+            label={`${user.username} (${user.role})`}
+            size="small"
+            sx={{
+              backgroundColor: 'rgba(66, 165, 245, 0.15)',
+              color: '#90caf9',
+              fontWeight: 600,
+              border: '1px solid rgba(66, 165, 245, 0.25)',
+            }}
+          />
+        </Box>
+      )}
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+
+      {/* Main Navigation */}
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
@@ -61,8 +86,12 @@ function Navbar() {
             </ListItemButton>
           </ListItem>
         ))}
-        {user && (
-          <>
+      </List>
+
+      {user && (
+        <>
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+          <List>
             <ListItem disablePadding>
               <ListItemButton component={RouterLink} to="/profile">
                 <ListItemIcon><PersonIcon /></ListItemIcon>
@@ -87,15 +116,18 @@ function Navbar() {
                 <ListItemText primary="About" />
               </ListItemButton>
             </ListItem>
+          </List>
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+          <List>
             <ListItem disablePadding>
               <ListItemButton onClick={handleLogout}>
                 <ListItemIcon><LogoutIcon /></ListItemIcon>
                 <ListItemText primary="Logout" />
               </ListItemButton>
             </ListItem>
-          </>
-        )}
-      </List>
+          </List>
+        </>
+      )}
     </Box>
   );
 

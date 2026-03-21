@@ -72,49 +72,49 @@ function AppLayout() {
         Skip to main content
       </a>
       {!isAuthPage && <Navbar />}
-      <main id="main-content" role="main">
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={<DashboardRedirect />} />
-              <Route path="/courses" element={
-                <ProtectedRoute><CourseList /></ProtectedRoute>
-              } />
-              <Route path="/courses/:id" element={
-                <ProtectedRoute><CourseDetail /></ProtectedRoute>
-              } />
-              <Route path="/student" element={
-                <ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>
-              } />
-              <Route path="/teacher" element={
-                <ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>
-              } />
-              <Route path="/admin" element={
-                <ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>
-              } />
-              <Route path="/admin/users" element={
-                <ProtectedRoute allowedRoles={['admin']}><UserManagement /></ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute><Profile /></ProtectedRoute>
-              } />
-              <Route path="/leaderboard" element={
-                <ProtectedRoute><Leaderboard /></ProtectedRoute>
-              } />
-              <Route path="/achievements" element={
-                <ProtectedRoute><Achievements /></ProtectedRoute>
-              } />
-              <Route path="/settings" element={
-                <ProtectedRoute><Settings /></ProtectedRoute>
-              } />
-              <Route path="/help" element={
-                <ProtectedRoute><HelpFAQ /></ProtectedRoute>
-              } />
-              <Route path="/about" element={<About />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </main>
+      <main id="main-content" role="main" style={{ paddingBottom: '2rem' }}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/courses" element={
+            <ProtectedRoute><CourseList /></ProtectedRoute>
+          } />
+          <Route path="/courses/:id" element={
+            <ProtectedRoute><CourseDetail /></ProtectedRoute>
+          } />
+          <Route path="/student" element={
+            <ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>
+          } />
+          <Route path="/teacher" element={
+            <ProtectedRoute allowedRoles={['teacher']}><TeacherDashboard /></ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={['admin']}><UserManagement /></ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute><Profile /></ProtectedRoute>
+          } />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute><Leaderboard /></ProtectedRoute>
+          } />
+          <Route path="/achievements" element={
+            <ProtectedRoute><Achievements /></ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute><Settings /></ProtectedRoute>
+          } />
+          <Route path="/help" element={
+            <ProtectedRoute><HelpFAQ /></ProtectedRoute>
+          } />
+          <Route path="/about" element={<About />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </main>
     </>
   );
 }

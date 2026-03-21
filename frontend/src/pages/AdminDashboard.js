@@ -89,7 +89,7 @@ function AdminDashboard() {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4, mb: 6 }}>
       {/* Hero Banner */}
       <Paper elevation={0} sx={{
         p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
