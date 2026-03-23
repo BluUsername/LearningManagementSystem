@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import CourseCard from '../components/CourseCard';
 
@@ -59,4 +59,20 @@ test('truncates long descriptions', () => {
     </BrowserRouter>
   );
   expect(screen.getByText(/\.\.\.$/)).toBeInTheDocument();
+});
+
+// --- INTERACTION TEST ---
+// This tests that clicking the Enroll button actually calls
+// the onEnroll callback. We use jest.fn() to create a "spy"
+// function that records whether it was called.
+
+test('calls onEnroll when Enroll button is clicked', () => {
+  const handleEnroll = jest.fn();
+  render(
+    <BrowserRouter>
+      <CourseCard course={mockCourse} showEnroll={true} onEnroll={handleEnroll} />
+    </BrowserRouter>
+  );
+  fireEvent.click(screen.getByText('Enroll'));
+  expect(handleEnroll).toHaveBeenCalledTimes(1);
 });
