@@ -17,6 +17,7 @@ import About from './pages/About';
 import Achievements from './pages/Achievements';
 import HelpFAQ from './pages/HelpFAQ';
 import Settings from './pages/Settings';
+import Chat from './pages/Chat';
 
 // Theme configuration has been moved to contexts/ThemeContext.js
 
@@ -106,6 +107,9 @@ function AppLayout() {
           } />
           <Route path="/settings" element={
             <ProtectedRoute><Settings /></ProtectedRoute>
+          } />
+          <Route path="/chat" element={
+            <ProtectedRoute><Chat /></ProtectedRoute>
           } />
           <Route path="/help" element={
             <ProtectedRoute><HelpFAQ /></ProtectedRoute>
