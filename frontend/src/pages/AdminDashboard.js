@@ -125,7 +125,7 @@ function AdminDashboard() {
             borderLeftColor: '#42a5f5',
           }}>
             <PeopleIcon sx={{ fontSize: 40, color: '#42a5f5' }} />
-            <Typography variant="h3" sx={{ fontWeight: 700, color: '#90caf9' }}>{userCount}</Typography>
+            <Typography variant="h3" component="p" sx={{ fontWeight: 700, color: '#90caf9' }}>{userCount}</Typography>
             <Typography sx={{ color: '#42a5f5', fontWeight: 500 }}>Total Users</Typography>
           </Paper>
         </Grid>
@@ -138,7 +138,7 @@ function AdminDashboard() {
             borderLeftColor: '#ab47bc',
           }}>
             <LibraryBooksIcon sx={{ fontSize: 40, color: '#ab47bc' }} />
-            <Typography variant="h3" sx={{ fontWeight: 700, color: '#ce93d8' }}>{courses.length}</Typography>
+            <Typography variant="h3" component="p" sx={{ fontWeight: 700, color: '#ce93d8' }}>{courses.length}</Typography>
             <Typography sx={{ color: '#ab47bc', fontWeight: 500 }}>Total Courses</Typography>
           </Paper>
         </Grid>
@@ -151,7 +151,7 @@ function AdminDashboard() {
             borderLeftColor: '#f57c00',
           }}>
             <PeopleIcon sx={{ fontSize: 40, color: '#f57c00' }} />
-            <Typography variant="h3" sx={{ fontWeight: 700, color: '#ffb74d' }}>{totalEnrollments}</Typography>
+            <Typography variant="h3" component="p" sx={{ fontWeight: 700, color: '#ffb74d' }}>{totalEnrollments}</Typography>
             <Typography sx={{ color: '#f57c00', fontWeight: 500 }}>Total Enrollments</Typography>
           </Paper>
         </Grid>

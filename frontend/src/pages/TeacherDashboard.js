@@ -151,7 +151,7 @@ function TeacherDashboard() {
             alt="Start teaching"
             sx={{ width: { xs: 160, sm: 200 }, height: { xs: 110, sm: 140 }, objectFit: 'cover', borderRadius: 3, mb: 3, opacity: 0.85 }}
           />
-          <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+          <Typography variant="h6" component="p" sx={{ mb: 1, fontWeight: 600 }}>
             Ready to share your knowledge?
           </Typography>
           <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 400, mx: 'auto' }}>

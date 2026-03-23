@@ -117,7 +117,7 @@ function Register() {
         {/* Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 6 }}>
           <SchoolIcon sx={{ color: '#fff', fontSize: 32 }} />
-          <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
+          <Typography variant="h5" component="p" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
             LearnHub
           </Typography>
         </Box>
@@ -140,7 +140,7 @@ function Register() {
           </Box>
         </Typography>
 
-        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
+        <Typography variant="h6" component="p" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
           Join thousands of learners and educators. Create your free account today.
         </Typography>
 
@@ -178,7 +178,7 @@ function Register() {
         <Box sx={{ width: '100%', maxWidth: 420 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
             <RocketIcon sx={{ color: '#f57c00', fontSize: 28 }} />
-            <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700 }}>
+            <Typography variant="h4" component="h1" sx={{ color: '#fff', fontWeight: 700 }}>
               Get started
             </Typography>
           </Box>

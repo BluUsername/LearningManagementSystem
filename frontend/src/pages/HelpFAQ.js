@@ -156,7 +156,7 @@ function HelpFAQ() {
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <TipIcon sx={{ color: '#66bb6a' }} />
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>Quick Tips</Typography>
+          <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>Quick Tips</Typography>
         </Box>
         <Grid container spacing={2}>
           {tips.map((tip, index) => (
@@ -238,7 +238,7 @@ function HelpFAQ() {
         border: '1px solid rgba(66, 165, 245, 0.15)',
       }}>
         <SupportIcon sx={{ fontSize: 48, color: '#42a5f5', mb: 2 }} />
-        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+        <Typography variant="h5" component="h2" sx={{ fontWeight: 700, mb: 1 }}>
           Still Have Questions?
         </Typography>
         <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: 500, mx: 'auto' }}>

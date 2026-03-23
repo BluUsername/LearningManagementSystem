@@ -368,7 +368,7 @@ export default function Chat() {
               height: '100%', gap: 2, px: 3, textAlign: 'center',
             }}>
               <AssistantIcon sx={{ fontSize: 56, color: 'rgba(66,165,245,0.4)' }} />
-              <Typography variant="h6" color="text.secondary">
+              <Typography variant="h6" component="p" color="text.secondary">
                 Your chat history is saved
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 360 }}>

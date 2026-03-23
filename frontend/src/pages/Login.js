@@ -84,7 +84,7 @@ function Login() {
         {/* Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 6 }}>
           <SchoolIcon sx={{ color: '#fff', fontSize: 32 }} />
-          <Typography variant="h5" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
+          <Typography variant="h5" component="p" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
             LearnHub
           </Typography>
         </Box>
@@ -107,7 +107,7 @@ function Login() {
           </Box>
         </Typography>
 
-        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
+        <Typography variant="h6" component="p" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
           A platform built for students, teachers, and the curious.
         </Typography>
 
@@ -162,7 +162,7 @@ function Login() {
         p: { xs: 4, md: 8 },
       }}>
         <Box sx={{ width: '100%', maxWidth: 400 }}>
-          <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, mb: 1 }}>
+          <Typography variant="h4" component="h1" sx={{ color: '#fff', fontWeight: 700, mb: 1 }}>
             Welcome back
           </Typography>
           <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.75)', mb: 4 }}>

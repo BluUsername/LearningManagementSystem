@@ -129,7 +129,7 @@ function Settings() {
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
               <PaletteIcon sx={{ color: '#42a5f5' }} />
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>Appearance</Typography>
+              <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>Appearance</Typography>
             </Box>
             <Divider sx={{ mb: 2.5, borderColor: 'rgba(66, 165, 245, 0.12)' }} />
 
@@ -190,7 +190,7 @@ function Settings() {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
                   <Icon sx={{ color: section.color }} />
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>{section.title}</Typography>
+                  <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>{section.title}</Typography>
                 </Box>
                 <Divider sx={{ mb: 2.5, borderColor: `${section.color}15` }} />
 
@@ -230,7 +230,7 @@ function Settings() {
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
               <InfoIcon sx={{ color: '#ff9800' }} />
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>About LearnHub</Typography>
+              <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>About LearnHub</Typography>
             </Box>
             <Divider sx={{ mb: 2.5, borderColor: 'rgba(245, 124, 0, 0.12)' }} />
 
