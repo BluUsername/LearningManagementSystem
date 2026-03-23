@@ -12,7 +12,7 @@ import {
   Leaderboard as LeaderboardIcon, EmojiEvents as EmojiEventsIcon,
   Info as InfoIcon, HelpOutline as HelpOutlineIcon,
   Settings as SettingsIcon, Notifications as NotificationsIcon,
-  Person as PersonIcon,
+  Person as PersonIcon, Chat as ChatIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -41,6 +41,7 @@ function Navbar() {
   const navItems = user ? [
     { label: 'Dashboard', path: getDashboardPath(), icon: <DashboardIcon /> },
     { label: 'All Courses', path: '/courses', icon: <LibraryBooksIcon /> },
+    { label: 'Chat', path: '/chat', icon: <ChatIcon /> },
     { label: 'Leaderboard', path: '/leaderboard', icon: <LeaderboardIcon /> },
     { label: 'Achievements', path: '/achievements', icon: <EmojiEventsIcon /> },
     ...(user.role === 'admin' ? [{ label: 'Users', path: '/admin/users', icon: <PeopleIcon /> }] : []),
