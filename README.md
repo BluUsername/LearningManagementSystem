@@ -1,17 +1,22 @@
-# Learning Management System (LMS)
+# LearnHub — Learning Management System
 
-A full-stack Learning Management System built with Django, Django Rest Framework, React, and SQLite. The platform supports three user roles — **Students**, **Teachers**, and **Admins** — each with tailored dashboards and functionality.
+A full-stack Learning Management System built with **Django**, **Django REST Framework**, **React 19**, and **Material UI**. The platform supports three user roles — **Students**, **Teachers**, and **Admins** — each with tailored dashboards and functionality.
+
+**Live Demo:** [https://thelearnhub.netlify.app](https://thelearnhub.netlify.app)
+
+---
 
 ## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Wireframes](#wireframes)
+- [Screenshots](#screenshots)
 - [How It Works](#how-it-works)
 - [Setup & Installation](#setup--installation)
 - [Running the Application](#running-the-application)
 - [Running Tests](#running-tests)
+- [Lighthouse Scores](#lighthouse-scores)
 - [API Reference](#api-reference)
 - [Deployment](#deployment)
 - [Technologies & Libraries](#technologies--libraries)
@@ -21,46 +26,54 @@ A full-stack Learning Management System built with Django, Django Rest Framework
 ## Features
 
 ### Student
-- Browse all available courses
+- Browse all available courses with search, filter by teacher, and sort options
 - Enroll and unenroll from courses
-- View a personal dashboard showing enrolled courses
+- View a personal dashboard showing enrolled courses with sorting (Recent / A–Z)
 
 ### Teacher
 - Create new courses with a title and description
 - Edit and delete their own courses
-- View a dashboard showing only their courses
+- View a dashboard with course and student enrollment stats
 
 ### Admin
 - Create, edit, and delete any course
-- View summary statistics (total users, courses, enrollments)
-- Manage all users — change roles or delete accounts
+- View platform-wide statistics (total users, courses, enrollments)
+- Manage all users — change roles or delete accounts via a dedicated User Management page
+
+### Chat & AI Assistant
+- Real-time chat interface with conversation history
+- Rule-based chatbot that responds to questions about courses, enrolments, profile, leaderboard, and more
+- Personalised responses using real user data (e.g. enrolled courses, created courses)
+- Designed with a single-function swap point for future AI integration
 
 ### General
 - User registration with role selection (Student or Teacher)
-- Secure token-based authentication
-- Responsive design that works on mobile, tablet, and desktop
-- Role-based access control on both frontend and backend
+- Secure token-based authentication (DRF TokenAuthentication)
+- Fully responsive design — mobile, tablet, and desktop
+- Role-based access control enforced on both frontend and backend
 - Dark/light theme toggle with localStorage persistence
+- Functional settings page with toggleable notification and appearance preferences
+- Notification bell with real-time badge count
 - Editable user profile with avatar and bio
 - Leaderboard with top courses and teachers
 - Achievements & badges system with progress tracking
-- Searchable Help/FAQ page
-- About page with mission, values, and platform stats
-- Notification bell with dropdown panel
+- Searchable Help/FAQ page with accordion categories
+- About page with mission, values, and platform statistics
 
 ---
 
 ## Tech Stack
 
-| Layer      | Technology                        |
-|------------|-----------------------------------|
-| Backend    | Python, Django 6, Django REST Framework |
-| Frontend   | JavaScript, React 19, Material UI |
-| Database   | PostgreSQL (Heroku) / SQLite (local) |
-| Auth       | Token Authentication (DRF)        |
-| Testing    | Django TestCase, React Testing Library |
-| HTTP Client| Axios                             |
-| Routing    | React Router v6                   |
+| Layer       | Technology                                |
+|-------------|-------------------------------------------|
+| Backend     | Python 3, Django 6, Django REST Framework |
+| Frontend    | JavaScript, React 19, Material UI 7       |
+| Database    | PostgreSQL (production) / SQLite (local)  |
+| Auth        | Token Authentication (DRF)                |
+| Testing     | Django TestCase, Jest, React Testing Library |
+| HTTP Client | Axios                                     |
+| Routing     | React Router v6                           |
+| Deployment  | Heroku (backend), Netlify (frontend)      |
 
 ---
 
@@ -70,58 +83,70 @@ A full-stack Learning Management System built with Django, Django Rest Framework
 LearningManagementSystem/
 ├── README.md
 ├── docs/
-│   └── API.md                    # Full API endpoint documentation
+│   ├── API.md                       # Full API endpoint documentation
+│   └── wireframes/                  # Application screenshots
 │
 ├── backend/
-│   ├── requirements.txt          # Python dependencies
-│   ├── manage.py                 # Django management script
+│   ├── requirements.txt             # Python dependencies
+│   ├── manage.py                    # Django management script
+│   ├── Procfile                     # Heroku process configuration
 │   ├── lms_project/
-│   │   ├── settings.py           # Django configuration
-│   │   ├── urls.py               # Root URL routing
-│   │   └── wsgi.py               # WSGI entry point
+│   │   ├── settings.py              # Django configuration
+│   │   ├── urls.py                  # Root URL routing
+│   │   └── wsgi.py                  # WSGI entry point
 │   ├── accounts/
-│   │   ├── models.py             # Custom User model with roles
-│   │   ├── serializers.py        # User/Auth serializers
-│   │   ├── views.py              # Auth & user management views
-│   │   ├── permissions.py        # IsAdmin permission class
-│   │   ├── urls.py               # Auth & user URL routes
-│   │   └── tests.py              # Auth API tests (12 tests)
-│   └── courses/
-│       ├── models.py             # Course & Enrollment models
-│       ├── serializers.py        # Course/Enrollment serializers
-│       ├── views.py              # Course CRUD & enrollment views
-│       ├── permissions.py        # Role-based permission classes
-│       ├── urls.py               # Course URL routes
-│       └── tests.py              # Course API tests (13 tests)
+│   │   ├── models.py                # Custom User model with roles
+│   │   ├── serializers.py           # User/Auth serializers
+│   │   ├── views.py                 # Auth & user management views
+│   │   ├── permissions.py           # IsAdmin permission class
+│   │   ├── urls.py                  # Auth & user URL routes
+│   │   └── tests.py                 # Auth API tests (12 tests)
+│   ├── courses/
+│   │   ├── models.py                # Course & Enrollment models
+│   │   ├── serializers.py           # Course/Enrollment serializers
+│   │   ├── views.py                 # Course CRUD & enrollment views
+│   │   ├── permissions.py           # Role-based permission classes
+│   │   ├── urls.py                  # Course URL routes
+│   │   └── tests.py                 # Course API tests (13 tests)
+│   └── chat/
+│       ├── models.py                # ChatConversation & ChatMessage models
+│       ├── serializers.py           # Chat serializers
+│       ├── views.py                 # Chat API views + chatbot logic
+│       ├── urls.py                  # Chat URL routes
+│       └── migrations/              # Chat database migrations
 │
 └── frontend/
-    ├── package.json              # Node dependencies
+    ├── package.json                 # Node dependencies
+    ├── netlify.toml                 # Netlify deployment config
     └── src/
-        ├── App.js                # Root component with routing & theme
+        ├── App.js                   # Root component with routing & theme
+        ├── index.css                # Global styles
         ├── api/
-        │   └── axiosConfig.js    # Axios instance with auth interceptor
+        │   └── axiosConfig.js       # Axios instance with auth interceptor
         ├── contexts/
-        │   └── AuthContext.js    # Global authentication state
+        │   ├── AuthContext.js        # Global authentication state
+        │   └── ThemeContext.js       # Dark/light theme provider
         ├── components/
-        │   ├── Navbar.js         # Responsive navigation bar
-        │   ├── ProtectedRoute.js # Route guard with role checking
-        │   └── CourseCard.js     # Reusable course display card
-        ├── pages/
-        │   ├── Login.js          # Login form
-        │   ├── Register.js       # Registration form with role selector
-        │   ├── CourseList.js     # Browse all courses with filters & sorting
-        │   ├── CourseDetail.js   # Single course view with hero image
+        │   ├── Navbar.js            # Responsive navigation with drawer
+        │   ├── ProtectedRoute.js    # Route guard with role checking
+        │   └── CourseCard.js        # Reusable course display card
+        ├── pages/ (15 pages)
+        │   ├── Login.js             # Split-screen login form
+        │   ├── Register.js          # Registration with role selector
+        │   ├── CourseList.js        # Browse courses with search & filters
+        │   ├── CourseDetail.js      # Single course view with hero image
         │   ├── StudentDashboard.js  # Student enrolled courses & stats
         │   ├── TeacherDashboard.js  # Teacher course management & stats
         │   ├── AdminDashboard.js    # Platform overview & management
-        │   ├── UserManagement.js    # Admin user table
-        │   ├── Profile.js          # Editable user profile
-        │   ├── Leaderboard.js      # Top courses & teachers ranking
-        │   ├── About.js            # Our mission & values page
-        │   ├── Achievements.js     # Badges & gamification
-        │   ├── HelpFAQ.js          # Searchable FAQ & contact form
-        │   └── Settings.js         # Theme toggle & preferences
-        └── __tests__/            # React component tests (29 tests)
+        │   ├── UserManagement.js    # Admin user role & account management
+        │   ├── Profile.js           # Editable user profile with avatar
+        │   ├── Leaderboard.js       # Top courses & teachers ranking
+        │   ├── About.js             # Mission, values & platform stats
+        │   ├── Achievements.js      # Badges & gamification system
+        │   ├── HelpFAQ.js           # Searchable FAQ & contact form
+        │   ├── Settings.js          # Theme, notifications & preferences
+        │   └── Chat.js             # AI chat assistant interface
+        └── __tests__/               # React component & interaction tests (34 tests)
 ```
 
 ---
@@ -139,7 +164,7 @@ Similar split-screen layout with a different hero image. The right panel include
 ![Register](docs/wireframes/register.png)
 
 ### Student Dashboard
-Hero banner with welcome message and stats badges (Courses Enrolled, Active Learner). A grid of course cards with Unsplash header images showing the student's enrolled courses. Sort and filter controls with a "Browse Courses" button.
+Hero banner with welcome message and stats badges (Courses Enrolled, Active Learner). A grid of course cards with Unsplash header images showing the student's enrolled courses. Sort controls for Recent or A–Z ordering with a "Browse Courses" button.
 
 ![Student Dashboard](docs/wireframes/student-dashboard.png)
 
@@ -149,52 +174,52 @@ Hero banner with course and student stats. A "Create Course" button opens a dial
 ![Teacher Dashboard](docs/wireframes/teacher-dashboard.png)
 
 ### Admin Dashboard
-Hero banner with platform overview stats (Total Users, Total Courses, Total Enrollments). Course grid with full management actions. Links to User Management and course creation.
+Hero banner with platform overview stats (Total Users, Total Courses, Total Enrollments). Course grid with full CRUD management actions. Links to User Management and course creation.
 
 ![Admin Dashboard](docs/wireframes/admin-dashboard.png)
 
 ### Course List Page
-Hero banner with search bar, teacher filter chips, and sort controls (Recent/A-Z). Responsive grid of course cards with rotating Unsplash header images, teacher badges, and enrollment counts.
+Hero banner with search bar, teacher filter chips, and sort controls (Recent / A–Z). Responsive grid of course cards with rotating Unsplash header images, teacher badges, and enrollment counts.
 
 ![Course List](docs/wireframes/course-list.png)
 
 ### Course Detail Page
-Hero image banner with the course title overlaid. Full course information including teacher name, creation date, enrollment count, and description. Action buttons vary by role.
+Hero image banner with the course title overlaid. Full course information including teacher name, creation date, enrollment count, and description. Action buttons vary by user role (Enroll, Edit, Delete).
 
 ![Course Detail](docs/wireframes/course-detail.png)
 
 ### User Management Page (Admin)
-Hero banner with a data table listing all users. Columns: Username, Email, Role (editable dropdown), Date Joined, and a Delete button. Admins cannot modify or delete their own account.
+Data table listing all platform users. Columns include Username, Email, Role (editable dropdown), Date Joined, and a Delete button. Admins cannot modify or delete their own account for safety.
 
 ![User Management](docs/wireframes/user-management.png)
 
 ### About / Our Mission
-Full marketing-style page with hero banner, mission statement, feature cards (Learn Together, Grow Your Skills, Build Community), how-it-works steps, values section, platform stats, and a call-to-action.
+Marketing-style page with hero banner, mission statement, feature cards (Learn Together, Grow Your Skills, Build Community), how-it-works steps, values section, platform stats, and a call-to-action.
 
 ![About](docs/wireframes/about.png)
 
 ### Leaderboard
-Gamified ranking page showing Most Popular Courses (with gold/silver/bronze medals) and Top Teachers, aggregated from enrollment data.
+Gamified ranking page showing Most Popular Courses (with gold, silver, and bronze medals) and Top Teachers, aggregated from real enrollment data.
 
 ![Leaderboard](docs/wireframes/leaderboard.png)
 
 ### Achievements
-Badge/achievement system with 10 unlockable achievements. Progress bar, unlocked achievements with coloured cards, and locked achievements shown in greyscale.
+Badge and achievement system with 10 unlockable achievements. Progress bar tracks overall completion. Unlocked achievements display with coloured cards, while locked achievements appear in greyscale.
 
 ![Achievements](docs/wireframes/achievements.png)
 
 ### Profile
-Editable user profile with avatar (initials), stats sidebar, form fields for name and bio, and read-only account information section.
+Editable user profile with avatar (generated from initials), stats sidebar showing account age and role, form fields for display name and bio, and a read-only account information section.
 
 ![Profile](docs/wireframes/profile.png)
 
 ### Settings
-Appearance settings with dark/light mode toggle, notification preferences, and account management options.
+Functional settings page with toggleable preferences for appearance (dark/light mode), notification settings (email, push, in-app), and account management options. All toggles persist to localStorage with toast feedback.
 
 ![Settings](docs/wireframes/settings.png)
 
 ### Help / FAQ
-Searchable accordion FAQ with categorised questions, and a contact/support form at the bottom.
+Searchable accordion FAQ with categorised questions covering Getting Started, Courses, and Account topics. Includes a contact/support form at the bottom.
 
 ![Help & FAQ](docs/wireframes/help-faq.png)
 
@@ -206,29 +231,67 @@ Searchable accordion FAQ with categorised questions, and a contact/support form 
 
 The application follows a **client-server architecture** with a clear separation between the frontend and backend:
 
-1. **React Frontend** (port 3000) sends HTTP requests to the Django API
-2. **Django Backend** (port 8000) processes requests, enforces permissions, and interacts with the SQLite database
+```
+┌─────────────────┐         HTTP/JSON          ┌──────────────────┐
+│   React App     │ ◄──────────────────────►   │   Django API     │
+│   (Netlify)     │     Token Auth Header       │   (Heroku)       │
+│   Port 3000     │                             │   Port 8000      │
+└─────────────────┘                             └──────────────────┘
+        │                                               │
+        ▼                                               ▼
+   localStorage                                   PostgreSQL
+   (token, theme,                                 (Users, Courses,
+    settings)                                   Enrollments, Chat)
+```
+
+1. **React Frontend** sends HTTP requests to the Django API via Axios
+2. **Django Backend** processes requests, enforces permissions, and interacts with the database
 3. **Token Authentication** secures the API — the frontend stores the token in `localStorage` and attaches it to every request via an Axios interceptor
 
 ### Authentication Flow
 
-1. User submits credentials on the Login/Register page
+1. User submits credentials on the Login or Register page
 2. Django validates and returns a **Token** + user data
 3. React stores the token in `localStorage` and the user object in `AuthContext`
-4. All subsequent API requests include the token in the `Authorization` header
+4. All subsequent API requests include the token in the `Authorization: Token <key>` header
 5. On page refresh, the app calls `/api/auth/me/` to rehydrate the user from the stored token
 
 ### Role-Based Access Control
 
-**Backend:** Custom DRF permission classes (`IsAdmin`, `IsTeacherOrAdmin`, `IsCourseOwnerOrAdmin`, `IsStudent`) enforce access rules at the API level. Even if the frontend is bypassed, the backend will reject unauthorized requests.
+**Backend:** Custom DRF permission classes (`IsAdmin`, `IsTeacherOrAdmin`, `IsCourseOwnerOrAdmin`, `IsStudent`) enforce access rules at the API level. Even if the frontend is bypassed, the backend rejects unauthorised requests.
 
-**Frontend:** The `ProtectedRoute` component checks the user's role before rendering a page. The `Navbar` dynamically shows different links based on the user's role.
+**Frontend:** The `ProtectedRoute` component checks the user's role before rendering a page. The `Navbar` dynamically shows different navigation links based on the logged-in user's role.
 
 ### Data Models
 
-- **User** — extends Django's `AbstractUser` with a `role` field (student, teacher, or admin)
+```
+┌──────────────┐       ┌──────────────┐       ┌──────────────┐
+│     User     │       │    Course    │       │  Enrollment  │
+├──────────────┤       ├──────────────┤       ├──────────────┤
+│ username     │       │ title        │       │ student (FK) │
+│ email        │       │ description  │       │ course  (FK) │
+│ role         │──────►│ teacher (FK) │◄──────│ enrolled_at  │
+│ display_name │       │ created_at   │       └──────────────┘
+│ bio          │       └──────────────┘        unique_together
+│ avatar_url   │
+└──────────────┘
+        │
+        ▼
+┌──────────────────┐       ┌──────────────┐
+│ ChatConversation │       │  ChatMessage  │
+├──────────────────┤       ├──────────────┤
+│ user (FK)        │──────►│ conversation │
+│ title            │       │ role         │
+│ created_at       │       │ content      │
+│ updated_at       │       │ timestamp    │
+└──────────────────┘       └──────────────┘
+```
+
+- **User** — extends Django's `AbstractUser` with a `role` field (student, teacher, or admin), plus profile fields (display_name, bio, avatar_url)
 - **Course** — has a title, description, and a foreign key to the teacher who created it
-- **Enrollment** — a join table linking students to courses (unique together constraint prevents duplicate enrollments)
+- **Enrollment** — a join table linking students to courses (unique_together constraint prevents duplicate enrollments)
+- **ChatConversation** — groups chat messages per user session
+- **ChatMessage** — stores individual messages with a `role` field (user or assistant)
 
 ---
 
@@ -322,14 +385,12 @@ source venv/Scripts/activate
 python manage.py test --verbosity=2
 ```
 
-**25 tests** covering:
-- User registration (valid, password mismatch, duplicate username)
-- Login (valid and invalid credentials)
-- Current user endpoint and unauthenticated access
-- Admin user management permissions
-- Course CRUD with role-based permissions
-- Student enrollment and unenrollment
-- Duplicate enrollment prevention
+**25 tests** across 2 test modules:
+
+| Module | Tests | What's Covered |
+|--------|-------|----------------|
+| `accounts` | 12 | Registration (valid, password mismatch, duplicate username), login (valid/invalid credentials), current user endpoint, unauthenticated access, admin user management permissions |
+| `courses` | 13 | Course CRUD with role-based permissions, student enrollment/unenrollment, duplicate enrollment prevention, teacher-only course creation, owner-only editing |
 
 ### Frontend Tests (React)
 
@@ -338,17 +399,43 @@ cd frontend
 npm test
 ```
 
-**34 tests** covering:
-- CourseCard rendering and truncation
-- Login form rendering and interaction
-- Register form rendering and password validation
-- Navbar logged-in vs logged-out states
-- ProtectedRoute authentication redirect
-- CourseList rendering, search, and API integration
-- AuthContext token management and error handling
-- Login form submission, error handling, and API integration
-- Register form validation, error display, and API integration
-- CourseCard enroll button click interaction
+**34 tests** across 7 test suites:
+
+| Test Suite | Tests | What's Covered |
+|------------|-------|----------------|
+| `CourseCard` | 4 | Renders course details, truncates long descriptions, shows enrollment count, enroll button click fires callback |
+| `Login` | 5 | Form rendering, placeholder text, sign-in button, failed login error display, successful API call with credentials |
+| `Register` | 6 | Form rendering, role selector, password mismatch blocks API call, API error display, successful registration |
+| `Navbar` | 5 | Logged-out vs logged-in states, role-specific navigation links |
+| `ProtectedRoute` | 3 | Redirects when unauthenticated, renders when authenticated |
+| `CourseList` | 5 | Loading state, renders courses from API, search filtering |
+| `AuthContext` | 6 | Token persistence, login/logout, API error handling |
+
+### Test Philosophy
+
+Tests are written using **React Testing Library** which encourages testing components the way users interact with them — querying by role, placeholder text, and visible content rather than implementation details. This approach:
+
+- Ensures tests remain valid even if internal implementation changes
+- Catches real user-facing bugs (broken forms, missing error messages)
+- Uses `fireEvent` and `waitFor` to simulate realistic user interactions
+- Mocks API calls with `jest.fn()` to test components in isolation
+
+**Total: 59 tests (25 backend + 34 frontend)**
+
+---
+
+## Lighthouse Scores
+
+The deployed application achieves excellent Lighthouse scores:
+
+| Category | Score |
+|----------|-------|
+| Accessibility | 100 |
+| Best Practices | 100 |
+| SEO | 100 |
+| Performance | 75 |
+
+> **Note on Performance:** The Performance score is affected by external dependencies outside the application's control — third-party image CDN (Unsplash), Google Fonts, and Heroku cold-start latency. Optimisations applied include non-render-blocking font loading (`display=optional`), `fetchpriority="high"` on hero images, preconnect hints, and Netlify asset caching headers.
 
 ---
 
@@ -361,9 +448,10 @@ Full API documentation is available in [docs/API.md](docs/API.md).
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|--------|
 | POST | `/api/auth/register/` | Register a new user | Public |
-| POST | `/api/auth/login/` | Log in and get token | Public |
+| POST | `/api/auth/login/` | Log in and receive token | Public |
 | POST | `/api/auth/logout/` | Log out (delete token) | Authenticated |
 | GET | `/api/auth/me/` | Get current user info | Authenticated |
+| PATCH | `/api/auth/me/` | Update profile | Authenticated |
 | GET | `/api/courses/` | List all courses | Authenticated |
 | POST | `/api/courses/` | Create a course | Teacher, Admin |
 | GET | `/api/courses/:id/` | Get course details | Authenticated |
@@ -373,8 +461,13 @@ Full API documentation is available in [docs/API.md](docs/API.md).
 | DELETE | `/api/courses/:id/unenroll/` | Unenroll from a course | Student |
 | GET | `/api/enrollments/` | List my enrollments | Student |
 | GET | `/api/users/` | List all users | Admin |
-| PATCH | `/api/users/:id/` | Update a user | Admin |
+| PATCH | `/api/users/:id/` | Update a user's role | Admin |
 | DELETE | `/api/users/:id/` | Delete a user | Admin |
+| GET | `/api/conversations/` | List chat conversations | Authenticated |
+| POST | `/api/conversations/` | Create a conversation | Authenticated |
+| GET | `/api/conversations/:id/` | Get conversation detail | Owner |
+| GET | `/api/conversations/:id/messages/` | List messages | Owner |
+| POST | `/api/conversations/:id/messages/` | Send message (returns bot reply) | Owner |
 
 ---
 
@@ -385,25 +478,33 @@ The application is deployed and live:
 | Service | Platform | Live URL |
 |---------|----------|----------|
 | **Frontend** | Netlify | [https://thelearnhub.netlify.app](https://thelearnhub.netlify.app) |
-| **Backend API** | Heroku | [https://lms-backend-tom-25f123572e9b.herokuapp.com](https://lms-backend-tom-25f123572e9b.herokuapp.com) |
+| **Backend API** | Heroku | [https://lms-backend-tom-25f123572e9b.herokuapp.com/api/](https://lms-backend-tom-25f123572e9b.herokuapp.com/api/) |
 
 ### Deployment Stack
 
-- **Backend (Heroku):** Gunicorn WSGI server, WhiteNoise for static files, PostgreSQL database (via Heroku Postgres), dj-database-url for config, environment-based configuration for secrets and CORS
-- **Frontend (Netlify):** Production React build served via Netlify CDN, `netlify.toml` handles SPA routing redirects, `REACT_APP_API_URL` env var points to the Heroku backend
+- **Backend (Heroku):** Gunicorn WSGI server, WhiteNoise for static files, PostgreSQL database (via Heroku Postgres), `dj-database-url` for database configuration, environment variables for secrets and CORS origins
+- **Frontend (Netlify):** Production React build served via Netlify CDN, `netlify.toml` handles SPA routing redirects and cache headers, `REACT_APP_API_URL` environment variable points to the Heroku backend
 
 ---
 
 ## Technologies & Libraries
 
 ### Backend
-- [Django](https://www.djangoproject.com/) — Web framework
-- [Django REST Framework](https://www.django-rest-framework.org/) — REST API toolkit
-- [django-cors-headers](https://github.com/adamchainz/django-cors-headers) — Cross-origin request handling
+| Package | Purpose |
+|---------|---------|
+| [Django 6](https://www.djangoproject.com/) | Web framework |
+| [Django REST Framework](https://www.django-rest-framework.org/) | REST API toolkit |
+| [django-cors-headers](https://github.com/adamchainz/django-cors-headers) | Cross-origin request handling |
+| [Gunicorn](https://gunicorn.org/) | Production WSGI server |
+| [WhiteNoise](http://whitenoise.evans.io/) | Static file serving |
+| [dj-database-url](https://github.com/jazzband/dj-database-url) | Database URL configuration |
 
 ### Frontend
-- [React](https://react.dev/) — UI library
-- [Material UI](https://mui.com/) — Component library
-- [Axios](https://axios-http.com/) — HTTP client
-- [React Router](https://reactrouter.com/) — Client-side routing
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) — Component testing
+| Package | Purpose |
+|---------|---------|
+| [React 19](https://react.dev/) | UI library |
+| [Material UI 7](https://mui.com/) | Component library & theming |
+| [Axios](https://axios-http.com/) | HTTP client with interceptors |
+| [React Router v6](https://reactrouter.com/) | Client-side routing |
+| [Jest](https://jestjs.io/) | Test runner |
+| [React Testing Library](https://testing-library.com/) | Component testing |
