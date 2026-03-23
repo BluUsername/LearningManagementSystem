@@ -87,7 +87,7 @@ function CourseList() {
             <LibraryBooksIcon sx={{ fontSize: 36 }} />
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>All Courses</Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mt: 1 }}>
             Browse and enrol in {filteredCourses.length} available course{filteredCourses.length !== 1 ? 's' : ''}
           </Typography>
         </Box>

@@ -98,7 +98,7 @@ function TeacherDashboard() {
             <SchoolIcon sx={{ fontSize: 36 }} />
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Teacher Dashboard</Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 3 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mb: 3 }}>
             Welcome back, {user.username}! Inspire minds and shape the future.
           </Typography>
 

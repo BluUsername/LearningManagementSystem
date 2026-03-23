@@ -132,7 +132,7 @@ function Profile() {
                   : user.username}
               </Typography>
             </Box>
-            <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 1.5 }}>
+            <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mb: 1.5 }}>
               @{user.username}
             </Typography>
 

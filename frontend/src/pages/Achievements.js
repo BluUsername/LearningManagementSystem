@@ -164,7 +164,7 @@ function Achievements() {
             <TrophyIcon sx={{ fontSize: 36 }} />
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Achievements</Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 2 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mb: 2 }}>
             Track your milestones and celebrate your progress!
           </Typography>
           <Chip
@@ -233,7 +233,7 @@ function Achievements() {
                     <Icon sx={{ color: '#fff', fontSize: 24 }} />
                   </Box>
                   <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                    <Typography variant="subtitle1" component="p" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
                       {achievement.title}
                     </Typography>
                     <Chip label="Unlocked" size="small" sx={{
@@ -281,7 +281,7 @@ function Achievements() {
                         <Icon sx={{ color: 'rgba(255,255,255,0.65)', fontSize: 24 }} />
                       </Box>
                       <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                        <Typography variant="subtitle1" component="p" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
                           {achievement.title}
                         </Typography>
                         <Chip label="Locked" size="small" sx={{

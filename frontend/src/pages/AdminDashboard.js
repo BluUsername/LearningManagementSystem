@@ -106,7 +106,7 @@ function AdminDashboard() {
             <AdminIcon sx={{ fontSize: 36 }} />
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>Admin Dashboard</Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85 }}>
             Welcome back, {user.username}! Here's your platform overview at a glance.
           </Typography>
         </Box>

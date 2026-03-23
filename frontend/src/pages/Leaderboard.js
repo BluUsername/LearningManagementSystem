@@ -84,7 +84,7 @@ function Leaderboard() {
               Leaderboard
             </Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 3 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mb: 3 }}>
             See who is leading the way on LearnHub — top courses & top teachers!
           </Typography>
 
@@ -176,7 +176,7 @@ function Leaderboard() {
 
                 {/* Course Info */}
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography variant="subtitle1" sx={{
+                  <Typography variant="subtitle1" component="p" sx={{
                     fontWeight: 700, lineHeight: 1.3,
                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                   }}>
@@ -256,7 +256,7 @@ function Leaderboard() {
 
                 {/* Teacher Info */}
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography variant="subtitle1" sx={{
+                  <Typography variant="subtitle1" component="p" sx={{
                     fontWeight: 700, lineHeight: 1.3,
                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                   }}>

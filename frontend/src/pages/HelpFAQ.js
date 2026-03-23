@@ -131,7 +131,7 @@ function HelpFAQ() {
               Help & FAQ
             </Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mb: 2 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mb: 2 }}>
             Find answers to common questions and get the most out of LearnHub.
           </Typography>
           <Chip

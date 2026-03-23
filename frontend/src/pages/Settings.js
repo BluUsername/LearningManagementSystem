@@ -113,7 +113,7 @@ function Settings() {
               Settings
             </Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85 }}>
             Customise your LearnHub experience.
           </Typography>
         </Box>

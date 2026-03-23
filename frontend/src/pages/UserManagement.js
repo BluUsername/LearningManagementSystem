@@ -84,7 +84,7 @@ function UserManagement() {
             <PeopleIcon sx={{ fontSize: 36 }} />
             <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>User Management</Typography>
           </Box>
-          <Typography variant="subtitle1" sx={{ opacity: 0.85, mt: 1 }}>
+          <Typography variant="subtitle1" component="p" sx={{ opacity: 0.85, mt: 1 }}>
             Manage roles and permissions for {users.length} user{users.length !== 1 ? 's' : ''}
           </Typography>
         </Box>

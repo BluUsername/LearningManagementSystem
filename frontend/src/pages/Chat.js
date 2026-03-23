@@ -29,7 +29,7 @@ function ConversationList({ conversations, activeId, onSelect, onNew, onDelete, 
         display: 'flex', alignItems: 'center', gap: 1,
       }}>
         <HistoryIcon sx={{ color: '#42a5f5' }} />
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, flexGrow: 1 }}>
+        <Typography variant="subtitle1" component="p" sx={{ fontWeight: 700, flexGrow: 1 }}>
           Chat History
         </Typography>
       </Box>
@@ -341,7 +341,7 @@ export default function Chat() {
               </IconButton>
             )}
             <ChatIcon sx={{ color: '#42a5f5', fontSize: 20 }} />
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, flexGrow: 1 }} noWrap>
+            <Typography variant="subtitle1" component="p" sx={{ fontWeight: 600, flexGrow: 1 }} noWrap>
               {activeConversation
                 ? (conversations.find((c) => c.id === activeConversation)?.title ?? 'Chat')
                 : 'LearnHub Assistant'}
