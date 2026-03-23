@@ -1,5 +1,6 @@
+import { useState, useEffect, useCallback } from 'react';
 import {
-  Container, Typography, Box, Paper, Switch, Divider, Chip,
+  Container, Typography, Box, Paper, Switch, Divider, Snackbar, Alert,
   FormControlLabel, Grid,
 } from '@mui/material';
 import {
@@ -15,48 +16,82 @@ import {
 } from '@mui/icons-material';
 import { useThemeMode } from '../contexts/ThemeContext';
 
-const settingsSections = [
-  {
-    title: 'Notifications',
-    icon: NotificationsIcon,
-    color: '#f57c00',
-    settings: [
-      { label: 'Email notifications for new courses', defaultChecked: true, disabled: true },
-      { label: 'Enrolment confirmation emails', defaultChecked: true, disabled: true },
-      { label: 'Weekly learning digest', defaultChecked: false, disabled: true },
-    ],
-  },
-  {
-    title: 'Privacy & Security',
-    icon: SecurityIcon,
-    color: '#66bb6a',
-    settings: [
-      { label: 'Show my profile on the leaderboard', defaultChecked: true, disabled: true },
-      { label: 'Allow teachers to see my enrolment status', defaultChecked: true, disabled: true },
-    ],
-  },
-  {
-    title: 'Language & Region',
-    icon: LanguageIcon,
-    color: '#ab47bc',
-    settings: [
-      { label: 'Use 24-hour time format', defaultChecked: false, disabled: true },
-      { label: 'Show dates in DD/MM/YYYY format', defaultChecked: true, disabled: true },
-    ],
-  },
-  {
-    title: 'Performance',
-    icon: PerformanceIcon,
-    color: '#42a5f5',
-    settings: [
-      { label: 'Enable animations and transitions', defaultChecked: true, disabled: true },
-      { label: 'Load images on scroll (lazy loading)', defaultChecked: true, disabled: true },
-    ],
-  },
-];
+const SETTINGS_KEY = 'learnhub_settings';
+
+const defaultSettings = {
+  emailNewCourses: true,
+  enrolmentConfirmation: true,
+  weeklyDigest: false,
+  showOnLeaderboard: true,
+  teacherSeeEnrolment: true,
+  use24Hour: false,
+  ddmmyyyy: true,
+  animations: true,
+  lazyLoading: true,
+};
+
+function loadSettings() {
+  try {
+    const saved = localStorage.getItem(SETTINGS_KEY);
+    return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+  } catch {
+    return defaultSettings;
+  }
+}
 
 function Settings() {
   const { mode, toggleTheme } = useThemeMode();
+  const [settings, setSettings] = useState(loadSettings);
+  const [toast, setToast] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }, [settings]);
+
+  const handleToggle = useCallback((key, label) => {
+    setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+    setToast(`${label} ${settings[key] ? 'disabled' : 'enabled'}`);
+  }, [settings]);
+
+  const settingsSections = [
+    {
+      title: 'Notifications',
+      icon: NotificationsIcon,
+      color: '#f57c00',
+      settings: [
+        { key: 'emailNewCourses', label: 'Email notifications for new courses' },
+        { key: 'enrolmentConfirmation', label: 'Enrolment confirmation emails' },
+        { key: 'weeklyDigest', label: 'Weekly learning digest' },
+      ],
+    },
+    {
+      title: 'Privacy & Security',
+      icon: SecurityIcon,
+      color: '#66bb6a',
+      settings: [
+        { key: 'showOnLeaderboard', label: 'Show my profile on the leaderboard' },
+        { key: 'teacherSeeEnrolment', label: 'Allow teachers to see my enrolment status' },
+      ],
+    },
+    {
+      title: 'Language & Region',
+      icon: LanguageIcon,
+      color: '#ab47bc',
+      settings: [
+        { key: 'use24Hour', label: 'Use 24-hour time format' },
+        { key: 'ddmmyyyy', label: 'Show dates in DD/MM/YYYY format' },
+      ],
+    },
+    {
+      title: 'Performance',
+      icon: PerformanceIcon,
+      color: '#42a5f5',
+      settings: [
+        { key: 'animations', label: 'Enable animations and transitions' },
+        { key: 'lazyLoading', label: 'Load images on scroll (lazy loading)' },
+      ],
+    },
+  ];
 
   return (
     <Container sx={{ mt: 4, mb: 6 }}>
@@ -156,29 +191,20 @@ function Settings() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
                   <Icon sx={{ color: section.color }} />
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>{section.title}</Typography>
-                  <Chip label="Coming Soon" size="small" sx={{
-                    ml: 'auto',
-                    backgroundColor: `${section.color}20`,
-                    color: section.color,
-                    fontWeight: 600,
-                    fontSize: '0.7rem',
-                    height: 22,
-                  }} />
                 </Box>
                 <Divider sx={{ mb: 2.5, borderColor: `${section.color}15` }} />
 
-                {section.settings.map((setting, index) => (
-                  <Box key={index} sx={{
+                {section.settings.map((setting) => (
+                  <Box key={setting.key} sx={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     p: 1.5, borderRadius: 2, mb: 1,
                     backgroundColor: 'rgba(255,255,255,0.02)',
-                    opacity: 0.75,
                   }}>
                     <FormControlLabel
                       control={
                         <Switch
-                          defaultChecked={setting.defaultChecked}
-                          disabled={setting.disabled}
+                          checked={settings[setting.key]}
+                          onChange={() => handleToggle(setting.key, setting.label)}
                           size="small"
                         />
                       }
@@ -231,6 +257,17 @@ function Settings() {
           </Paper>
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={!!toast}
+        autoHideDuration={2000}
+        onClose={() => setToast('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setToast('')} severity="success" variant="filled" sx={{ width: '100%' }}>
+          {toast}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

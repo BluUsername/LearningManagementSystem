@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Button, IconButton, Drawer,
   List, ListItem, ListItemButton, ListItemIcon, ListItemText,
   Box, Chip, useMediaQuery, useTheme, Badge, Tooltip, Divider,
+  Popover,
 } from '@mui/material';
+import {
+  Close as CloseIcon,
+  Circle as CircleIcon,
+} from '@mui/icons-material';
 import {
   Menu as MenuIcon, School as SchoolIcon, Dashboard as DashboardIcon,
   Login as LoginIcon, PersonAdd as PersonAddIcon, Logout as LogoutIcon,
@@ -22,6 +27,35 @@ function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [notifAnchor, setNotifAnchor] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  const buildNotifications = useCallback(() => {
+    if (!user) return [];
+    const NOTIF_KEY = `learnhub_dismissed_${user.id}`;
+    const dismissed = JSON.parse(localStorage.getItem(NOTIF_KEY) || '[]');
+
+    const all = [
+      { id: 'welcome', text: `Welcome to LearnHub, ${user.first_name || user.username}!`, time: 'Just now', color: '#42a5f5' },
+      { id: 'chat', text: 'Chat with the LearnHub Assistant is now available.', time: 'New feature', color: '#66bb6a' },
+      { id: 'achievements', text: 'Check out the Achievements page to earn badges!', time: 'Tip', color: '#ffb74d' },
+      { id: 'settings', text: 'Customise your experience in Settings.', time: 'Tip', color: '#ab47bc' },
+    ];
+
+    return all.filter((n) => !dismissed.includes(n.id));
+  }, [user]);
+
+  useEffect(() => {
+    setNotifications(buildNotifications());
+  }, [buildNotifications]);
+
+  const dismissNotification = (id) => {
+    if (!user) return;
+    const NOTIF_KEY = `learnhub_dismissed_${user.id}`;
+    const dismissed = JSON.parse(localStorage.getItem(NOTIF_KEY) || '[]');
+    localStorage.setItem(NOTIF_KEY, JSON.stringify([...dismissed, id]));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -181,8 +215,12 @@ function Navbar() {
             {user && (
               <>
                 <Tooltip title="Notifications">
-                  <IconButton color="inherit" sx={{ ml: 0.5 }}>
-                    <Badge badgeContent={3} color="error" max={9}>
+                  <IconButton
+                    color="inherit"
+                    sx={{ ml: 0.5 }}
+                    onClick={(e) => setNotifAnchor(e.currentTarget)}
+                  >
+                    <Badge badgeContent={notifications.length} color="error" max={9}>
                       <NotificationsIcon />
                     </Badge>
                   </IconButton>
@@ -229,6 +267,55 @@ function Navbar() {
         >
           {drawer}
         </Drawer>
+
+        <Popover
+          open={!!notifAnchor}
+          anchorEl={notifAnchor}
+          onClose={() => setNotifAnchor(null)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          slotProps={{ paper: { sx: { width: 340, maxHeight: 400, borderRadius: 2 } } }}
+        >
+          <Box sx={{
+            p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'linear-gradient(135deg, rgba(21,101,192,0.15), rgba(123,31,162,0.1))',
+          }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Notifications</Typography>
+            <Chip label={notifications.length} size="small" color="primary" sx={{ height: 22, fontSize: '0.75rem' }} />
+          </Box>
+          <Divider />
+          {notifications.length === 0 ? (
+            <Box sx={{ p: 3, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                All caught up! No new notifications.
+              </Typography>
+            </Box>
+          ) : (
+            <List dense sx={{ py: 0 }}>
+              {notifications.map((notif) => (
+                <ListItem
+                  key={notif.id}
+                  secondaryAction={
+                    <IconButton edge="end" size="small" onClick={() => dismissNotification(notif.id)}>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  }
+                  sx={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                >
+                  <ListItemIcon sx={{ minWidth: 28 }}>
+                    <CircleIcon sx={{ fontSize: 10, color: notif.color }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={notif.text}
+                    secondary={notif.time}
+                    primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 500 }}
+                    secondaryTypographyProps={{ fontSize: '0.7rem' }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Popover>
       </Toolbar>
     </AppBar>
   );
