@@ -17,6 +17,7 @@ def api_root(request):
             'auth': '/api/auth/',
             'courses': '/api/courses/',
             'enrollments': '/api/enrollments/',
+            'chat': '/api/chat/conversations/',
             'users': '/api/users/',
             'admin': '/admin/',
             'docs': '/api/docs/',
@@ -31,6 +32,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include('courses.urls')),
+    path('api/', include('chat.urls')),
     # #18 - Interactive API documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

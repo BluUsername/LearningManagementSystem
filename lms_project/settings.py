@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'accounts',
     'courses',
-    'chat',
 ]
 
 MIDDLEWARE = [
