@@ -99,7 +99,7 @@ function CourseDetail() {
       }}>
         {/* Course Hero Image */}
         <Box sx={{
-          height: 200,
+          height: { xs: 150, sm: 175, md: 200 },
           backgroundImage: `
             linear-gradient(135deg, rgba(26, 35, 126, 0.85) 0%, rgba(21, 101, 192, 0.7) 50%, rgba(123, 31, 162, 0.8) 100%),
             url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1400&q=80')
