@@ -147,7 +147,7 @@ function About() {
               <SchoolIcon sx={{ fontSize: 36, color: '#fff' }} />
             </Box>
           </Box>
-          <Typography variant="h2" sx={{
+          <Typography variant="h2" component="h1" sx={{
             fontWeight: 800, mb: 3,
             fontSize: { xs: '2rem', sm: '2.8rem', md: '3.5rem' },
             lineHeight: 1.15,
@@ -161,7 +161,7 @@ function About() {
               LearnHub
             </Box>
           </Typography>
-          <Typography variant="h5" sx={{
+          <Typography variant="h5" component="p" sx={{
             fontWeight: 400,
             color: 'rgba(255,255,255,0.8)',
             maxWidth: 650,
@@ -178,11 +178,11 @@ function About() {
       <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="overline" sx={{
-            color: '#ab47bc', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+            color: '#ce93d8', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
           }}>
             Our Mission
           </Typography>
-          <Typography variant="h3" sx={{
+          <Typography variant="h3" component="h2" sx={{
             fontWeight: 700, mt: 1, mb: 2,
             fontSize: { xs: '1.8rem', md: '2.4rem' },
           }}>
@@ -221,7 +221,7 @@ function About() {
                   }}>
                     <Icon sx={{ fontSize: 28, color: card.color }} />
                   </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 1.5 }}>
+                  <Typography variant="h5" component="h3" sx={{ fontWeight: 700, mb: 1.5 }}>
                     {card.title}
                   </Typography>
                   <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.7 }}>
@@ -242,11 +242,11 @@ function About() {
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: 6 }}>
             <Typography variant="overline" sx={{
-              color: '#42a5f5', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+              color: '#64b5f6', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
             }}>
               How It Works
             </Typography>
-            <Typography variant="h3" sx={{
+            <Typography variant="h3" component="h2" sx={{
               fontWeight: 700, mt: 1, mb: 2,
               fontSize: { xs: '1.8rem', md: '2.4rem' },
             }}>
@@ -284,7 +284,7 @@ function About() {
                       position: 'relative', zIndex: 1,
                       boxShadow: '0 4px 24px rgba(123, 31, 162, 0.3)',
                     }}>
-                      <Typography variant="h4" sx={{ fontWeight: 800, color: '#fff' }}>
+                      <Typography variant="h4" component="span" sx={{ fontWeight: 800, color: '#fff' }}>
                         {step.number}
                       </Typography>
                     </Box>
@@ -294,7 +294,7 @@ function About() {
                       gap: 1, mb: 1.5,
                     }}>
                       <StepIcon sx={{ fontSize: 24, color: '#42a5f5' }} />
-                      <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
                         {step.title}
                       </Typography>
                     </Box>
@@ -315,11 +315,11 @@ function About() {
       <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="overline" sx={{
-            color: '#f57c00', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+            color: '#ffb74d', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
           }}>
             Our Values
           </Typography>
-          <Typography variant="h3" sx={{
+          <Typography variant="h3" component="h2" sx={{
             fontWeight: 700, mt: 1, mb: 2,
             fontSize: { xs: '1.8rem', md: '2.4rem' },
           }}>
@@ -351,7 +351,7 @@ function About() {
                     fontSize: 40, mb: 2,
                     color: value.borderColor.replace('0.3', '1'),
                   }} />
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                  <Typography variant="h6" component="h3" sx={{ fontWeight: 700, mb: 1 }}>
                     {value.title}
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.7 }}>
@@ -391,11 +391,11 @@ function About() {
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', mb: 6 }}>
             <Typography variant="overline" sx={{
-              color: '#ffb74d', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+              color: '#ffe0b2', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
             }}>
               Meet the Platform
             </Typography>
-            <Typography variant="h3" sx={{
+            <Typography variant="h3" component="h2" sx={{
               fontWeight: 700, mt: 1, color: '#fff',
               fontSize: { xs: '1.8rem', md: '2.4rem' },
             }}>
@@ -418,7 +418,7 @@ function About() {
                     }}>
                       <Icon sx={{ fontSize: 30, color: stat.color }} />
                     </Box>
-                    <Typography variant="h3" sx={{
+                    <Typography variant="h3" component="p" sx={{
                       fontWeight: 800, color: '#fff', mb: 0.5,
                       fontSize: { xs: '2rem', md: '2.5rem' },
                     }}>
@@ -453,7 +453,7 @@ function About() {
           }} />
 
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography variant="h3" sx={{
+            <Typography variant="h3" component="h2" sx={{
               fontWeight: 700, mb: 2,
               fontSize: { xs: '1.6rem', md: '2.2rem' },
             }}>

@@ -193,7 +193,7 @@ function Leaderboard() {
                   backgroundColor: 'rgba(245,124,0,0.15)', borderRadius: 2,
                   px: 2, py: 1, minWidth: 70,
                 }}>
-                  <Typography variant="h6" sx={{
+                  <Typography variant="h6" component="p" sx={{
                     fontWeight: 800, color: '#ff9800', lineHeight: 1,
                   }}>
                     {course.enrollment_count || 0}
@@ -273,7 +273,7 @@ function Leaderboard() {
                   backgroundColor: 'rgba(156,39,176,0.15)', borderRadius: 2,
                   px: 2, py: 1, minWidth: 70,
                 }}>
-                  <Typography variant="h6" sx={{
+                  <Typography variant="h6" component="p" sx={{
                     fontWeight: 800, color: '#ce93d8', lineHeight: 1,
                   }}>
                     {teacher.totalStudents}

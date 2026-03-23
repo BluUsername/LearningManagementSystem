@@ -193,7 +193,7 @@ function Profile() {
               {statsLoading ? (
                 <CircularProgress size={28} />
               ) : (
-                <Typography variant="h3" sx={{ fontWeight: 700, color: '#42a5f5' }}>
+                <Typography variant="h3" component="p" sx={{ fontWeight: 700, color: '#42a5f5' }}>
                   {stats.courses}
                 </Typography>
               )}
@@ -215,7 +215,7 @@ function Profile() {
               }}>
                 <BadgeIcon sx={{ color: 'white', fontSize: 28 }} />
               </Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff9800' }}>
+              <Typography variant="h6" component="p" sx={{ fontWeight: 700, color: '#ff9800' }}>
                 {roleLabel}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mt: 0.5 }}>
@@ -236,7 +236,7 @@ function Profile() {
               }}>
                 <TrophyIcon sx={{ color: 'white', fontSize: 28 }} />
               </Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#66bb6a' }}>
+              <Typography variant="h6" component="p" sx={{ fontWeight: 700, color: '#66bb6a' }}>
                 Active
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mt: 0.5 }}>

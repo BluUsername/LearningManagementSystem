@@ -254,6 +254,7 @@ function Register() {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
+                inputProps={{ 'aria-label': 'Select your role' }}
                 sx={{
                   backgroundColor: 'rgba(255,255,255,0.06)',
                   borderRadius: 2,

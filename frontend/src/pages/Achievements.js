@@ -204,7 +204,7 @@ function Achievements() {
       </Paper>
 
       {/* Unlocked */}
-      <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+      <Typography variant="h5" component="h2" sx={{ mb: 2, fontWeight: 600 }}>
         <StarIcon sx={{ verticalAlign: 'middle', mr: 1, color: '#ffd54f' }} />
         Unlocked
       </Typography>
@@ -257,7 +257,7 @@ function Achievements() {
       {/* Locked */}
       {lockedAchievements.length > 0 && (
         <>
-          <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, opacity: 0.75 }}>
+          <Typography variant="h5" component="h2" sx={{ mb: 2, fontWeight: 600, opacity: 0.75 }}>
             <BadgeIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
             Locked
           </Typography>
