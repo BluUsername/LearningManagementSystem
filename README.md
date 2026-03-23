@@ -40,6 +40,13 @@ A full-stack Learning Management System built with Django, Django Rest Framework
 - Secure token-based authentication
 - Responsive design that works on mobile, tablet, and desktop
 - Role-based access control on both frontend and backend
+- Dark/light theme toggle with localStorage persistence
+- Editable user profile with avatar and bio
+- Leaderboard with top courses and teachers
+- Achievements & badges system with progress tracking
+- Searchable Help/FAQ page
+- About page with mission, values, and platform stats
+- Notification bell with dropdown panel
 
 ---
 
@@ -102,60 +109,94 @@ LearningManagementSystem/
         ├── pages/
         │   ├── Login.js          # Login form
         │   ├── Register.js       # Registration form with role selector
-        │   ├── CourseList.js     # Browse all courses
-        │   ├── CourseDetail.js   # Single course view
-        │   ├── StudentDashboard.js
-        │   ├── TeacherDashboard.js
-        │   ├── AdminDashboard.js
-        │   └── UserManagement.js # Admin user table
-        └── __tests__/            # React component tests (21 tests)
+        │   ├── CourseList.js     # Browse all courses with filters & sorting
+        │   ├── CourseDetail.js   # Single course view with hero image
+        │   ├── StudentDashboard.js  # Student enrolled courses & stats
+        │   ├── TeacherDashboard.js  # Teacher course management & stats
+        │   ├── AdminDashboard.js    # Platform overview & management
+        │   ├── UserManagement.js    # Admin user table
+        │   ├── Profile.js          # Editable user profile
+        │   ├── Leaderboard.js      # Top courses & teachers ranking
+        │   ├── About.js            # Our mission & values page
+        │   ├── Achievements.js     # Badges & gamification
+        │   ├── HelpFAQ.js          # Searchable FAQ & contact form
+        │   └── Settings.js         # Theme toggle & preferences
+        └── __tests__/            # React component tests (29 tests)
 ```
 
 ---
 
-## Wireframes
+## Screenshots
 
 ### Login Page
-A centered card containing username and password fields, a "Log In" button, and a link to the registration page. Error messages appear at the top of the card when authentication fails.
+Split-screen layout with an Unsplash hero image on the left featuring the LearnHub brand and tagline. The right panel contains username and password fields, a gradient "Sign in" button, and a link to the registration page.
 
-![Login Wireframe](docs/wireframes/login.png)
+![Login](docs/wireframes/login.png)
 
 ### Registration Page
-Similar layout to login, with additional fields: email, confirm password, and a role dropdown (Student or Teacher). Client-side validation checks that passwords match before submitting.
+Similar split-screen layout with a different hero image. The right panel includes fields for username, email, password, confirm password, and a role selector (Student or Teacher). Client-side validation checks that passwords match before submitting.
 
-![Register Wireframe](docs/wireframes/register.png)
+![Register](docs/wireframes/register.png)
 
 ### Student Dashboard
-Header with welcome message and enrolled course count. A grid of course cards showing the student's enrolled courses. A prominent "Browse Courses" button links to the full course listing.
+Hero banner with welcome message and stats badges (Courses Enrolled, Active Learner). A grid of course cards with Unsplash header images showing the student's enrolled courses. Sort and filter controls with a "Browse Courses" button.
 
-![Student Dashboard Wireframe](docs/wireframes/student-dashboard.png)
+![Student Dashboard](docs/wireframes/student-dashboard.png)
 
 ### Teacher Dashboard
-Header with welcome message and course count. A "Create Course" button opens a dialog with title and description fields. Course cards display with Edit and Delete action buttons.
+Hero banner with course and student stats. A "Create Course" button opens a dialog with title and description fields. Course cards display with Edit and Delete action buttons.
 
-![Teacher Dashboard Wireframe](docs/wireframes/teacher-dashboard.png)
+![Teacher Dashboard](docs/wireframes/teacher-dashboard.png)
 
 ### Admin Dashboard
-Three summary stat cards at the top (Total Users, Total Courses, Total Enrollments). Below, a course grid with management actions. Navigation links to User Management page.
+Hero banner with platform overview stats (Total Users, Total Courses, Total Enrollments). Course grid with full management actions. Links to User Management and course creation.
 
-![Admin Dashboard Wireframe](docs/wireframes/admin-dashboard.png)
+![Admin Dashboard](docs/wireframes/admin-dashboard.png)
 
 ### Course List Page
-A responsive grid of course cards. Each card shows the title, truncated description, teacher name, and enrollment count. Students see an "Enroll" button on courses they haven't joined.
+Hero banner with search bar, teacher filter chips, and sort controls (Recent/A-Z). Responsive grid of course cards with rotating Unsplash header images, teacher badges, and enrollment counts.
 
-![Course List Wireframe](docs/wireframes/course-list.png)
+![Course List](docs/wireframes/course-list.png)
 
 ### Course Detail Page
-Full course information displayed in a paper card: title, teacher name, creation date, enrollment count, and full description. Action buttons vary by role (Enroll/Unenroll for students, Delete for owners/admins).
+Hero image banner with the course title overlaid. Full course information including teacher name, creation date, enrollment count, and description. Action buttons vary by role.
 
-![Course Detail Wireframe](docs/wireframes/course-detail.png)
+![Course Detail](docs/wireframes/course-detail.png)
 
 ### User Management Page (Admin)
-A data table listing all users with columns: Username, Email, Role (editable dropdown), Date Joined, and a Delete button. Admins cannot modify or delete their own account.
+Hero banner with a data table listing all users. Columns: Username, Email, Role (editable dropdown), Date Joined, and a Delete button. Admins cannot modify or delete their own account.
 
-![User Management Wireframe](docs/wireframes/user-management.png)
+![User Management](docs/wireframes/user-management.png)
 
-> **Note:** Wireframe images can be found in the `docs/wireframes/` directory. If images are not yet generated, the descriptions above serve as the design specification.
+### About / Our Mission
+Full marketing-style page with hero banner, mission statement, feature cards (Learn Together, Grow Your Skills, Build Community), how-it-works steps, values section, platform stats, and a call-to-action.
+
+![About](docs/wireframes/about.png)
+
+### Leaderboard
+Gamified ranking page showing Most Popular Courses (with gold/silver/bronze medals) and Top Teachers, aggregated from enrollment data.
+
+![Leaderboard](docs/wireframes/leaderboard.png)
+
+### Achievements
+Badge/achievement system with 10 unlockable achievements. Progress bar, unlocked achievements with coloured cards, and locked achievements shown in greyscale.
+
+![Achievements](docs/wireframes/achievements.png)
+
+### Profile
+Editable user profile with avatar (initials), stats sidebar, form fields for name and bio, and read-only account information section.
+
+![Profile](docs/wireframes/profile.png)
+
+### Settings
+Appearance settings with dark/light mode toggle, notification preferences, and account management options.
+
+![Settings](docs/wireframes/settings.png)
+
+### Help / FAQ
+Searchable accordion FAQ with categorised questions, and a contact/support form at the bottom.
+
+![Help & FAQ](docs/wireframes/help-faq.png)
 
 ---
 
@@ -297,12 +338,14 @@ cd frontend
 npm test
 ```
 
-**21 tests** covering:
+**29 tests** covering:
 - CourseCard rendering and truncation
 - Login form rendering and interaction
 - Register form rendering and password validation
 - Navbar logged-in vs logged-out states
 - ProtectedRoute authentication redirect
+- CourseList rendering, search, and API integration
+- AuthContext token management and error handling
 
 ---
 
