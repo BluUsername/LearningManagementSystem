@@ -101,7 +101,7 @@ function CourseList() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)' }} />
+              <SearchIcon sx={{ color: 'rgba(255,255,255,0.75)' }} />
             </InputAdornment>
           ),
         }}
@@ -115,7 +115,7 @@ function CourseList() {
             '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
             '&.Mui-focused fieldset': { borderColor: '#42a5f5' },
           },
-          '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.4)' },
+          '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.65)' },
         }}
       />
 
@@ -129,21 +129,21 @@ function CourseList() {
             sx={{
               fontWeight: creatorFilter === 'All' ? 700 : 400,
               backgroundColor: creatorFilter === 'All' ? 'rgba(66, 165, 245, 0.2)' : 'transparent',
-              color: creatorFilter === 'All' ? '#42a5f5' : 'rgba(255,255,255,0.6)',
+              color: creatorFilter === 'All' ? '#42a5f5' : 'rgba(255,255,255,0.75)',
               borderColor: 'rgba(66, 165, 245, 0.3)',
             }}
           />
           {teacherNames.map((name) => (
             <Chip
               key={name}
-              icon={<PersonIcon sx={{ color: creatorFilter === name ? '#42a5f5 !important' : 'rgba(255,255,255,0.4) !important' }} />}
+              icon={<PersonIcon sx={{ color: creatorFilter === name ? '#42a5f5 !important' : 'rgba(255,255,255,0.7) !important' }} />}
               label={name}
               onClick={() => setCreatorFilter(name)}
               variant={creatorFilter === name ? 'filled' : 'outlined'}
               sx={{
                 fontWeight: creatorFilter === name ? 700 : 400,
                 backgroundColor: creatorFilter === name ? 'rgba(66, 165, 245, 0.2)' : 'transparent',
-                color: creatorFilter === name ? '#42a5f5' : 'rgba(255,255,255,0.6)',
+                color: creatorFilter === name ? '#42a5f5' : 'rgba(255,255,255,0.75)',
                 borderColor: 'rgba(66, 165, 245, 0.3)',
               }}
             />

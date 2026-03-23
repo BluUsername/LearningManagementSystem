@@ -257,7 +257,7 @@ function Achievements() {
       {/* Locked */}
       {lockedAchievements.length > 0 && (
         <>
-          <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, opacity: 0.6 }}>
+          <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, opacity: 0.75 }}>
             <BadgeIcon sx={{ verticalAlign: 'middle', mr: 1 }} />
             Locked
           </Typography>
@@ -269,7 +269,7 @@ function Achievements() {
                   <Paper elevation={0} sx={{
                     p: 3, borderRadius: 3, height: '100%',
                     border: '1px solid rgba(255,255,255,0.06)',
-                    opacity: 0.5,
+                    opacity: 0.65,
                     filter: 'grayscale(0.5)',
                   }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
@@ -278,7 +278,7 @@ function Achievements() {
                         backgroundColor: 'rgba(255,255,255,0.08)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        <Icon sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 24 }} />
+                        <Icon sx={{ color: 'rgba(255,255,255,0.65)', fontSize: 24 }} />
                       </Box>
                       <Box>
                         <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
@@ -286,7 +286,7 @@ function Achievements() {
                         </Typography>
                         <Chip label="Locked" size="small" sx={{
                           backgroundColor: 'rgba(255,255,255,0.06)',
-                          color: 'rgba(255,255,255,0.4)',
+                          color: 'rgba(255,255,255,0.7)',
                           fontWeight: 600,
                           fontSize: '0.7rem',
                           height: 20,

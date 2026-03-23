@@ -189,7 +189,7 @@ function About() {
             Why LearnHub Exists
           </Typography>
           <Typography variant="body1" sx={{
-            color: 'rgba(255,255,255,0.6)', maxWidth: 600, mx: 'auto', fontSize: '1.05rem',
+            color: 'rgba(255,255,255,0.75)', maxWidth: 600, mx: 'auto', fontSize: '1.05rem',
           }}>
             We believe that great education changes lives. LearnHub was built to make learning
             accessible, collaborative, and genuinely enjoyable for everyone.
@@ -224,7 +224,7 @@ function About() {
                   <Typography variant="h5" sx={{ fontWeight: 700, mb: 1.5 }}>
                     {card.title}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+                  <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.7 }}>
                     {card.description}
                   </Typography>
                 </Paper>
@@ -253,7 +253,7 @@ function About() {
               Getting Started Is Easy
             </Typography>
             <Typography variant="body1" sx={{
-              color: 'rgba(255,255,255,0.6)', maxWidth: 500, mx: 'auto', fontSize: '1.05rem',
+              color: 'rgba(255,255,255,0.75)', maxWidth: 500, mx: 'auto', fontSize: '1.05rem',
             }}>
               Three simple steps to unlock a world of learning.
             </Typography>
@@ -299,7 +299,7 @@ function About() {
                       </Typography>
                     </Box>
                     <Typography variant="body1" sx={{
-                      color: 'rgba(255,255,255,0.6)', maxWidth: 300, mx: 'auto', lineHeight: 1.7,
+                      color: 'rgba(255,255,255,0.75)', maxWidth: 300, mx: 'auto', lineHeight: 1.7,
                     }}>
                       {step.description}
                     </Typography>
@@ -326,7 +326,7 @@ function About() {
             What We Stand For
           </Typography>
           <Typography variant="body1" sx={{
-            color: 'rgba(255,255,255,0.6)', maxWidth: 550, mx: 'auto', fontSize: '1.05rem',
+            color: 'rgba(255,255,255,0.75)', maxWidth: 550, mx: 'auto', fontSize: '1.05rem',
           }}>
             These principles guide every decision we make and every feature we build.
           </Typography>
@@ -354,7 +354,7 @@ function About() {
                   <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
                     {value.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.7 }}>
                     {value.description}
                   </Typography>
                 </Paper>
@@ -460,7 +460,7 @@ function About() {
               Ready to Start Your Learning Journey?
             </Typography>
             <Typography variant="body1" sx={{
-              color: 'rgba(255,255,255,0.6)', mb: 4, maxWidth: 480, mx: 'auto',
+              color: 'rgba(255,255,255,0.75)', mb: 4, maxWidth: 480, mx: 'auto',
               fontSize: '1.1rem', lineHeight: 1.7,
             }}>
               Join hundreds of learners and teachers who are already building something

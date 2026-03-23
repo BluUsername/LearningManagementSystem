@@ -70,8 +70,8 @@ function Register() {
       '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
       '&.Mui-focused fieldset': { borderColor: '#7b1fa2' },
     },
-    '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)' },
-    '& .MuiFormHelperText-root': { color: 'rgba(255,255,255,0.35)' },
+    '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.65)' },
+    '& .MuiFormHelperText-root': { color: 'rgba(255,255,255,0.65)' },
   };
 
   return (
@@ -140,7 +140,7 @@ function Register() {
           </Box>
         </Typography>
 
-        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
+        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
           Join thousands of learners and educators. Create your free account today.
         </Typography>
 
@@ -156,7 +156,7 @@ function Register() {
                 width: 8, height: 8, borderRadius: '50%',
                 background: 'linear-gradient(135deg, #42a5f5, #ab47bc)',
               }} />
-              <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem' }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem' }}>
                 {feature}
               </Typography>
             </Box>
@@ -182,14 +182,14 @@ function Register() {
               Get started
             </Typography>
           </Box>
-          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)', mb: 3.5 }}>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.75)', mb: 3.5 }}>
             Create your free account
           </Typography>
 
           {error && <Alert severity="error" role="alert" sx={{ mb: 2.5 }}>{error}</Alert>}
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Username
             </Typography>
             <TextField
@@ -203,7 +203,7 @@ function Register() {
               autoFocus
               sx={inputSx}
             />
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Email
             </Typography>
             <TextField
@@ -217,7 +217,7 @@ function Register() {
               autoComplete="email"
               sx={inputSx}
             />
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Password
             </Typography>
             <TextField
@@ -232,7 +232,7 @@ function Register() {
               helperText="Must be at least 8 characters"
               sx={inputSx}
             />
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Confirm Password
             </Typography>
             <TextField
@@ -246,7 +246,7 @@ function Register() {
               autoComplete="new-password"
               sx={inputSx}
             />
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               I want to join as a...
             </Typography>
             <FormControl fullWidth sx={{ mb: 3 }}>
@@ -261,7 +261,7 @@ function Register() {
                   '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
                   '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#7b1fa2' },
-                  '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.5)' },
+                  '& .MuiSvgIcon-root': { color: 'rgba(255,255,255,0.75)' },
                 }}
               >
                 <MenuItem value="student">Student</MenuItem>
@@ -293,7 +293,7 @@ function Register() {
             </Button>
           </Box>
 
-          <Typography variant="body2" align="center" sx={{ color: 'rgba(255,255,255,0.5)' }}>
+          <Typography variant="body2" align="center" sx={{ color: 'rgba(255,255,255,0.75)' }}>
             Already have an account?{' '}
             <Link
               component={RouterLink}

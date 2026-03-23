@@ -172,7 +172,7 @@ function Settings() {
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     p: 1.5, borderRadius: 2, mb: 1,
                     backgroundColor: 'rgba(255,255,255,0.02)',
-                    opacity: 0.6,
+                    opacity: 0.75,
                   }}>
                     <FormControlLabel
                       control={

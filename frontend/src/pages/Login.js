@@ -107,7 +107,7 @@ function Login() {
           </Box>
         </Typography>
 
-        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
+        <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400, mb: 5, maxWidth: 380 }}>
           A platform built for students, teachers, and the curious.
         </Typography>
 
@@ -146,7 +146,7 @@ function Login() {
               '50%': { transform: 'translateY(8px)' },
             },
           }}>
-            <ArrowDownIcon sx={{ color: 'rgba(255,255,255,0.4)', fontSize: 20 }} />
+            <ArrowDownIcon sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 20 }} />
           </Box>
         </Box>
       </Box>
@@ -165,14 +165,14 @@ function Login() {
           <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, mb: 1 }}>
             Welcome back
           </Typography>
-          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.5)', mb: 4 }}>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.75)', mb: 4 }}>
             Sign in to your account
           </Typography>
 
           {error && <Alert severity="error" role="alert" sx={{ mb: 3 }}>{error}</Alert>}
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Username
             </Typography>
             <TextField
@@ -193,10 +193,10 @@ function Login() {
                   '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
                   '&.Mui-focused fieldset': { borderColor: '#7b1fa2' },
                 },
-                '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)' },
+                '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.65)' },
               }}
             />
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', mb: 0.5 }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mb: 0.5 }}>
               Password
             </Typography>
             <TextField
@@ -217,7 +217,7 @@ function Login() {
                   '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
                   '&.Mui-focused fieldset': { borderColor: '#7b1fa2' },
                 },
-                '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)' },
+                '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.65)' },
               }}
             />
             <Button
@@ -244,7 +244,7 @@ function Login() {
             </Button>
           </Box>
 
-          <Typography variant="body2" align="center" sx={{ color: 'rgba(255,255,255,0.5)' }}>
+          <Typography variant="body2" align="center" sx={{ color: 'rgba(255,255,255,0.75)' }}>
             Don't have an account?{' '}
             <Link
               component={RouterLink}

@@ -270,7 +270,7 @@ function Profile() {
                   fullWidth
                   InputProps={{
                     startAdornment: (
-                      <PersonIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.4)', fontSize: 20 }} />
+                      <PersonIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.7)', fontSize: 20 }} />
                     ),
                   }}
                   sx={{
@@ -292,7 +292,7 @@ function Profile() {
                   fullWidth
                   InputProps={{
                     startAdornment: (
-                      <PersonIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.4)', fontSize: 20 }} />
+                      <PersonIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.7)', fontSize: 20 }} />
                     ),
                   }}
                   sx={{
@@ -317,7 +317,7 @@ function Profile() {
                   placeholder="Tell us a bit about yourself, your interests, and what you're learning..."
                   InputProps={{
                     startAdornment: (
-                      <MenuBookIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.4)', fontSize: 20, alignSelf: 'flex-start', mt: 1 }} />
+                      <MenuBookIcon sx={{ mr: 1, color: 'rgba(255,255,255,0.7)', fontSize: 20, alignSelf: 'flex-start', mt: 1 }} />
                     ),
                   }}
                   sx={{
@@ -328,7 +328,7 @@ function Profile() {
                       '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
                       '&.Mui-focused fieldset': { borderColor: '#42a5f5' },
                     },
-                    '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.3)' },
+                    '& .MuiInputBase-input::placeholder': { color: 'rgba(255,255,255,0.65)' },
                   }}
                 />
               </Grid>
@@ -380,7 +380,7 @@ function Profile() {
                     border: '1px solid rgba(255,255,255,0.06)',
                   }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                      <Box sx={{ color: 'rgba(255,255,255,0.4)' }}>{item.icon}</Box>
+                      <Box sx={{ color: 'rgba(255,255,255,0.7)' }}>{item.icon}</Box>
                       <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                         {item.label}
                       </Typography>
