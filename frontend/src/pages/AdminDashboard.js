@@ -93,14 +93,22 @@ function AdminDashboard() {
       {/* Hero Banner */}
       <Paper elevation={0} sx={{
         p: 4, mb: 4, borderRadius: 3, position: 'relative', overflow: 'hidden',
-        backgroundImage: `
-          linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%),
-          url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80')
-        `,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        minHeight: { xs: 120, sm: 140 },
+        background: 'linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(21, 101, 192, 0.85) 60%, rgba(123, 31, 162, 0.9) 100%)',
         color: 'white',
       }}>
+        {/* Hero background image with fetchpriority for LCP */}
+        <Box
+          component="img"
+          src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80"
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          sx={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            objectFit: 'cover', zIndex: 0, opacity: 0.15,
+          }}
+        />
         <Box sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1.5 }}>
             <AdminIcon sx={{ fontSize: 36 }} />
