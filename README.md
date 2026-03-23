@@ -338,7 +338,7 @@ cd frontend
 npm test
 ```
 
-**29 tests** covering:
+**34 tests** covering:
 - CourseCard rendering and truncation
 - Login form rendering and interaction
 - Register form rendering and password validation
@@ -346,6 +346,9 @@ npm test
 - ProtectedRoute authentication redirect
 - CourseList rendering, search, and API integration
 - AuthContext token management and error handling
+- Login form submission, error handling, and API integration
+- Register form validation, error display, and API integration
+- CourseCard enroll button click interaction
 
 ---
 
