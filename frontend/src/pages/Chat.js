@@ -141,13 +141,18 @@ function MessageBubble({ message }) {
           : 'rgba(255,255,255,0.06)',
         border: isUser ? 'none' : '1px solid rgba(255,255,255,0.08)',
       }}>
-        <Typography variant="body2" sx={{
+        <Typography variant="body2" component="div" sx={{
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
           lineHeight: 1.6,
-        }}>
-          {message.content}
-        </Typography>
+          '& strong': { fontWeight: 700, color: isUser ? '#fff' : '#90caf9' },
+        }}
+          dangerouslySetInnerHTML={{
+            __html: message.content
+              .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+              .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'),
+          }}
+        />
         <Typography variant="caption" sx={{
           display: 'block', mt: 0.5, opacity: 0.6, textAlign: 'right',
         }}>
@@ -246,10 +251,13 @@ export default function Chat() {
 
     try {
       const res = await api.post(`chat/conversations/${activeConversation}/messages/`, { content: text });
-      const saved = res.data;
+      const { user_message, assistant_message } = res.data;
 
-      // Replace optimistic message with the real one
-      setMessages((prev) => prev.map((m) => m.id === optimistic.id ? saved : m));
+      // Replace optimistic message with the real one, then add the bot reply
+      setMessages((prev) => [
+        ...prev.map((m) => m.id === optimistic.id ? user_message : m),
+        assistant_message,
+      ]);
 
       // Update conversation list (title may have changed, bump to top)
       fetchConversations();
