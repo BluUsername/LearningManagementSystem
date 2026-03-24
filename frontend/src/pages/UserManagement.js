@@ -112,6 +112,7 @@ function UserManagement() {
                   <Select
                     value={u.role}
                     size="small"
+                    aria-label={`Role for ${u.username}`}
                     onChange={(e) => handleRoleChange(u.id, e.target.value)}
                     disabled={u.id === currentUser.id}
                   >
