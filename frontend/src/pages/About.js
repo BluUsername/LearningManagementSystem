@@ -178,7 +178,7 @@ function About() {
       <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="overline" sx={{
-            color: '#ce93d8', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+            color: '#ab47bc', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
           }}>
             Our Mission
           </Typography>
@@ -242,7 +242,7 @@ function About() {
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: 6 }}>
             <Typography variant="overline" sx={{
-              color: '#64b5f6', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+              color: '#42a5f5', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
             }}>
               How It Works
             </Typography>
@@ -315,7 +315,7 @@ function About() {
       <Container maxWidth="lg" sx={{ py: { xs: 8, md: 10 } }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="overline" sx={{
-            color: '#ffb74d', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+            color: '#f57c00', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
           }}>
             Our Values
           </Typography>
@@ -391,7 +391,7 @@ function About() {
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', mb: 6 }}>
             <Typography variant="overline" sx={{
-              color: '#ffe0b2', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
+              color: '#ffb74d', fontWeight: 700, letterSpacing: 2, fontSize: '0.85rem',
             }}>
               Meet the Platform
             </Typography>
