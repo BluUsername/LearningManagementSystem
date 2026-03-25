@@ -25,3 +25,13 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Lighthouse reports
+lh-*.json
+lighthouse-report.json
+
+# Netlify
+frontend/.netlify/
+
+# Claude Code
+.claude/
