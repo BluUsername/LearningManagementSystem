@@ -400,17 +400,29 @@ cd frontend
 npm test
 ```
 
-**34 tests** across 7 test suites:
+**95 tests** across 19 test suites — every page and component is tested:
 
 | Test Suite | Tests | What's Covered |
 |------------|-------|----------------|
-| `CourseCard` | 4 | Renders course details, truncates long descriptions, shows enrollment count, enroll button click fires callback |
-| `Login` | 5 | Form rendering, placeholder text, sign-in button, failed login error display, successful API call with credentials |
-| `Register` | 6 | Form rendering, role selector, password mismatch blocks API call, API error display, successful registration |
+| `CourseCard` | 8 | Renders course details, truncates descriptions, enroll button callback |
+| `CourseDetail` | 5 | Course data rendering, enroll/unenroll API calls, error handling |
+| `CourseList` | 5 | Loading state, renders courses from API, search filtering |
+| `Login` | 5 | Form rendering, failed login error, successful API call with credentials |
+| `Register` | 6 | Form rendering, role selector, password mismatch, API error, registration |
 | `Navbar` | 5 | Logged-out vs logged-in states, role-specific navigation links |
 | `ProtectedRoute` | 3 | Redirects when unauthenticated, renders when authenticated |
-| `CourseList` | 5 | Loading state, renders courses from API, search filtering |
 | `AuthContext` | 6 | Token persistence, login/logout, API error handling |
+| `StudentDashboard` | 5 | Welcome message, course count, enrolled courses, empty state, sort |
+| `TeacherDashboard` | 7 | Welcome message, stats, course cards, create dialog, form submission |
+| `AdminDashboard` | 4 | Platform stats (users/courses/enrollments), admin buttons |
+| `UserManagement` | 5 | User table, emails, column headers, user count |
+| `Profile` | 5 | Username, full name, role display, save changes via API |
+| `Settings` | 6 | Theme toggle, settings sections, localStorage persistence |
+| `Achievements` | 5 | Badge unlock logic, enrollment-based achievements |
+| `Leaderboard` | 4 | Course ranking, teacher ranking, section headings |
+| `Chat` | 4 | New conversation, sidebar, empty state, create API call |
+| `HelpFAQ` | 5 | Categories, questions, accordion expand, question count |
+| `About` | 6 | Hero section, mission, values, how it works, CTA |
 
 ### Test Philosophy
 
@@ -421,7 +433,7 @@ Tests are written using **React Testing Library** which encourages testing compo
 - Uses `fireEvent` and `waitFor` to simulate realistic user interactions
 - Mocks API calls with `jest.fn()` to test components in isolation
 
-**Total: 59 tests (25 backend + 34 frontend)**
+**Total: 120 tests (25 backend + 95 frontend)**
 
 ---
 
@@ -449,6 +461,7 @@ The application has been validated against industry-standard tools:
 | [W3C HTML Validator](https://validator.w3.org/) | **0 errors** — only informational warnings about React's self-closing tag syntax |
 | [Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/) | **0 errors** — only warnings for Material UI's vendor-prefixed properties (`-webkit-font-smoothing`) |
 | ESLint (React) | 0 warnings — built-in Create React App linting |
+| flake8 (Python PEP 8) | **0 errors** — all Django code passes PEP 8 style checks (`--max-line-length=120`, migrations excluded) |
 | Python (Django check) | `python manage.py check` passes with no issues |
 
 ---
