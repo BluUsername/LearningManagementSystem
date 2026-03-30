@@ -17,6 +17,7 @@ A full-stack Learning Management System built with **Django**, **Django REST Fra
 - [Running the Application](#running-the-application)
 - [Running Tests](#running-tests)
 - [Lighthouse Scores](#lighthouse-scores)
+- [Code Validation](#code-validation)
 - [API Reference](#api-reference)
 - [Deployment](#deployment)
 - [Technologies & Libraries](#technologies--libraries)
@@ -436,6 +437,19 @@ The deployed application achieves excellent Lighthouse scores:
 | Performance | 75 |
 
 > **Note on Performance:** The Performance score is affected by external dependencies outside the application's control — third-party image CDN (Unsplash), Google Fonts, and Heroku cold-start latency. Optimisations applied include non-render-blocking font loading (`display=optional`), `fetchpriority="high"` on hero images, preconnect hints, and Netlify asset caching headers.
+
+---
+
+## Code Validation
+
+The application has been validated against industry-standard tools:
+
+| Validator | Result |
+|-----------|--------|
+| [W3C HTML Validator](https://validator.w3.org/) | **0 errors** — only informational warnings about React's self-closing tag syntax |
+| [Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/) | **0 errors** — only warnings for Material UI's vendor-prefixed properties (`-webkit-font-smoothing`) |
+| ESLint (React) | 0 warnings — built-in Create React App linting |
+| Python (Django check) | `python manage.py check` passes with no issues |
 
 ---
 
