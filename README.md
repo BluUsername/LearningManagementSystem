@@ -11,7 +11,7 @@ A full-stack Learning Management System built with **Django**, **Django REST Fra
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Screenshots](#screenshots)
+- [Front-End Wireframes & Screenshots](#front-end-wireframes--screenshots)
 - [How It Works](#how-it-works)
 - [Setup & Installation](#setup--installation)
 - [Running the Application](#running-the-application)
@@ -85,7 +85,7 @@ LearningManagementSystem/
 ├── README.md
 ├── docs/
 │   ├── API.md                       # Full API endpoint documentation
-│   └── wireframes/                  # Application screenshots
+│   └── wireframes/                  # Front-end wireframes and screenshots
 │
 ├── backend/
 │   ├── requirements.txt             # Python dependencies
@@ -152,7 +152,9 @@ LearningManagementSystem/
 
 ---
 
-## Screenshots
+## Front-End Wireframes & Screenshots
+
+The following wireframes represent the final implemented design of each page, captured from the deployed application. Each screenshot demonstrates the responsive layout, consistent colour palette, and role-based UI tailored to the user type.
 
 ### Login Page
 Split-screen layout with an Unsplash hero image on the left featuring the LearnHub brand and tagline. The right panel contains username and password fields, a gradient "Sign in" button, and a link to the registration page.
