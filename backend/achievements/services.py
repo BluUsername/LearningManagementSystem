@@ -95,13 +95,14 @@ def check_achievements(user) -> list:
     for definition in candidates:
         check_fn = ACHIEVEMENT_CHECKS.get(definition.key)
         if check_fn and check_fn(stats, user):
-            ua = UserAchievement.objects.create(
+            ua, created = UserAchievement.objects.get_or_create(
                 user=user, achievement=definition,
             )
-            newly_earned.append(ua)
-            logger.info(
-                f"Achievement unlocked: {user.username} earned "
-                f"'{definition.name}'"
-            )
+            if created:
+                newly_earned.append(ua)
+                logger.info(
+                    f"Achievement unlocked: {user.username} earned "
+                    f"'{definition.name}'"
+                )
 
     return newly_earned

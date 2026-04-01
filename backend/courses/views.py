@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Count
 from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -134,13 +135,15 @@ class AssignmentListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsEnrolledOrCourseStaff, IsAssignmentCourseOwnerOrAdmin]
 
     def get_queryset(self):
-        return Assignment.objects.select_related('course').filter(
+        return Assignment.objects.select_related('course').annotate(
+            _submission_count=Count('submissions'),
+        ).filter(
             course_id=self.kwargs['course_pk'],
             course__is_active=True,
         )
 
     def perform_create(self, serializer: AssignmentSerializer) -> None:
-        course = Course.objects.get(pk=self.kwargs['course_pk'])
+        course = Course.objects.get(pk=self.kwargs['course_pk'], is_active=True)
         assignment = serializer.save(course=course)
         logger.info(
             f"Assignment created: '{assignment.title}' for "
@@ -155,8 +158,11 @@ class AssignmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsEnrolledOrCourseStaff, IsAssignmentCourseOwnerOrAdmin]
 
     def get_queryset(self):
-        return Assignment.objects.select_related('course').filter(
+        return Assignment.objects.select_related('course').annotate(
+            _submission_count=Count('submissions'),
+        ).filter(
             course_id=self.kwargs['course_pk'],
+            course__is_active=True,
         )
 
 
@@ -235,6 +241,9 @@ class SubmissionListView(generics.ListAPIView):
         # Students can only see their own submission
         if self.request.user.role == 'student':
             qs = qs.filter(student=self.request.user)
+        # Teachers can only see submissions for their own courses
+        elif self.request.user.role == 'teacher':
+            qs = qs.filter(assignment__course__teacher=self.request.user)
         return qs
 
 
@@ -248,6 +257,8 @@ class SubmissionDetailView(generics.RetrieveAPIView):
         qs = Submission.objects.select_related('student', 'assignment')
         if self.request.user.role == 'student':
             qs = qs.filter(student=self.request.user)
+        elif self.request.user.role == 'teacher':
+            qs = qs.filter(assignment__course__teacher=self.request.user)
         return qs
 
 

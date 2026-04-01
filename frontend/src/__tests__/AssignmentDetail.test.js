@@ -111,10 +111,9 @@ test('clicking Submit sends POST with FormData to submit endpoint', async () => 
 
   await waitFor(() => {
     expect(api.post).toHaveBeenCalled();
-    const [url, formData, config] = api.post.mock.calls[0];
+    const [url, formData] = api.post.mock.calls[0];
     expect(url).toBe('assignments/1/submit/');
     expect(formData instanceof FormData).toBe(true);
-    expect(config.headers['Content-Type']).toBe('multipart/form-data');
   });
 });
 

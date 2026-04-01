@@ -76,9 +76,7 @@ function AssignmentDetail() {
       if (content.trim()) formData.append('content', content);
       if (file) formData.append('file', file);
 
-      const res = await api.post(`assignments/${assignmentId}/submit/`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await api.post(`assignments/${assignmentId}/submit/`, formData);
       setHasSubmitted(true);
       setMySubmission(res.data);
       setSuccess('Assignment submitted successfully!');

@@ -53,7 +53,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'course', 'created_at', 'updated_at']
 
     def get_submission_count(self, obj: Assignment) -> int:
-        return obj.submissions.count()
+        # Use annotated value from queryset if available, fallback to query
+        return getattr(obj, '_submission_count', obj.submissions.count())
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
