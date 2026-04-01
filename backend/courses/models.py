@@ -66,3 +66,65 @@ class Enrollment(models.Model):
 
     def __str__(self) -> str:
         return f"{self.student.username} enrolled in {self.course.title}"
+
+
+class Assignment(models.Model):
+    """An assignment created by a teacher for a specific course."""
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='assignments',
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    due_date = models.DateTimeField()
+    max_points = models.PositiveIntegerField(default=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-due_date']
+
+    def __str__(self) -> str:
+        return f"{self.title} ({self.course.title})"
+
+
+class Submission(models.Model):
+    """A student's submission for an assignment."""
+
+    STATUS_CHOICES = [
+        ('submitted', 'Submitted'),
+        ('graded', 'Graded'),
+    ]
+
+    assignment = models.ForeignKey(
+        Assignment,
+        on_delete=models.CASCADE,
+        related_name='submissions',
+    )
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='submissions',
+    )
+    content = models.TextField(blank=True, default='')
+    file = models.FileField(
+        upload_to='submissions/%Y/%m/',
+        null=True,
+        blank=True,
+    )
+    status = models.CharField(
+        max_length=15, choices=STATUS_CHOICES, default='submitted',
+    )
+    grade = models.PositiveIntegerField(null=True, blank=True)
+    feedback = models.TextField(blank=True, default='')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    graded_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('assignment', 'student')
+        ordering = ['-submitted_at']
+
+    def __str__(self) -> str:
+        return f"{self.student.username} - {self.assignment.title}"

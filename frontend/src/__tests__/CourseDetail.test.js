@@ -19,6 +19,7 @@ jest.mock('../api/axiosConfig', () => {
     get: jest.fn(),
     post: jest.fn(),
     delete: jest.fn(),
+    patch: jest.fn(),
   };
   mock.getResults = (data) => (Array.isArray(data) ? data : data?.results ?? data);
   return { __esModule: true, default: mock, getResults: mock.getResults };
