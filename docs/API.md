@@ -376,6 +376,284 @@ Delete a user account.
 
 ---
 
+## Assignment Endpoints
+
+### GET `/courses/:course_id/assignments/`
+
+List all assignments for a course.
+
+**Access:** Enrolled students or course staff (teacher/admin)
+
+**Success Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "course": 1,
+    "course_title": "Introduction to Python",
+    "title": "Homework 1",
+    "description": "Complete the exercises in chapter 3.",
+    "due_date": "2026-12-31T23:59:00Z",
+    "max_points": 100,
+    "submission_count": 5,
+    "created_at": "2026-03-20T10:00:00Z",
+    "updated_at": "2026-03-20T10:00:00Z"
+  }
+]
+```
+
+---
+
+### POST `/courses/:course_id/assignments/`
+
+Create a new assignment for a course.
+
+**Access:** Course owner (teacher) or Admin
+
+**Request Body:**
+```json
+{
+  "title": "Homework 1",
+  "description": "Complete the exercises in chapter 3.",
+  "due_date": "2026-12-31T23:59:00Z",
+  "max_points": 100
+}
+```
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| title | string | Yes | Max 200 characters |
+| description | string | Yes | Assignment details |
+| due_date | datetime | Yes | ISO 8601 format |
+| max_points | integer | No | Default: 100 |
+
+**Success Response (201 Created):** Returns the created assignment object.
+
+---
+
+### GET `/courses/:course_id/assignments/:id/`
+
+Get details of a specific assignment.
+
+**Access:** Enrolled students or course staff
+
+**Success Response (200 OK):** Returns the assignment object.
+
+### PATCH / PUT `/courses/:course_id/assignments/:id/`
+
+Update an existing assignment. `PATCH` supports partial updates; `PUT` expects a full assignment payload.
+
+**Access:** Course owner or admin
+
+**Request Body (JSON):**
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| title | string | No | Max 200 characters |
+| description | string | No | Assignment details |
+| due_date | datetime | No | ISO 8601 format |
+| max_points | integer | No | Default: 100 |
+
+**Success Response (200 OK):** Returns the updated assignment object.
+
+### DELETE `/courses/:course_id/assignments/:id/`
+
+Delete an existing assignment.
+
+**Access:** Course owner or admin
+
+**Success Response (204 No Content):** Assignment successfully deleted. No response body.
+
+---
+
+## Submission Endpoints
+
+### POST `/assignments/:id/submit/`
+
+Submit work for an assignment. Supports text content, file uploads, or both. Sent as `multipart/form-data`.
+
+**Access:** Student (must be enrolled in the course)
+
+**Request Body (FormData):**
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| content | string | No* | Text content of the submission |
+| file | file | No* | Uploaded file (max 10MB) |
+
+*At least one of `content` or `file` must be provided.
+
+**Success Response (201 Created):**
+```json
+{
+  "id": 1,
+  "assignment": 1,
+  "assignment_title": "Homework 1",
+  "student": 3,
+  "student_name": "johndoe",
+  "content": "My answer to the exercises.",
+  "file": null,
+  "file_url": null,
+  "status": "submitted",
+  "grade": null,
+  "feedback": "",
+  "submitted_at": "2026-03-25T14:30:00Z",
+  "graded_at": null
+}
+```
+
+**Error Responses:**
+- `400 Bad Request` — Already submitted, or no content/file provided
+- `403 Forbidden` — Not enrolled in the course
+- `404 Not Found` — Assignment not found
+
+---
+
+### GET `/assignments/:id/submissions/`
+
+List submissions for an assignment. Teachers see all submissions for their course. Students see only their own.
+
+**Access:** Authenticated
+
+**Success Response (200 OK):** Returns a list of submission objects.
+
+---
+
+### GET `/submissions/:id/`
+
+View a single submission. Students can only view their own. Teachers can view submissions for their courses.
+
+**Access:** Authenticated
+
+**Success Response (200 OK):** Returns the submission object (including `file_url` if a file was uploaded).
+
+---
+
+### PATCH `/submissions/:id/grade/`
+
+Grade a student's submission.
+
+**Access:** Course teacher or Admin
+
+**Request Body:**
+```json
+{
+  "grade": 85,
+  "feedback": "Good work! Consider adding more detail to question 3."
+}
+```
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| grade | integer | Yes | Must be 0 to max_points |
+| feedback | string | No | Written feedback for the student |
+
+**Success Response (200 OK):** Returns the updated submission with `status: "graded"` and `graded_at` timestamp.
+
+**Error Responses:**
+- `400 Bad Request` — Grade exceeds max points
+- `403 Forbidden` — Not the course teacher or admin
+
+---
+
+### GET `/my-submissions/`
+
+List all submissions by the current student across all courses.
+
+**Access:** Student only
+
+**Success Response (200 OK):** Returns a list of submission objects.
+
+---
+
+## Achievement Endpoints
+
+### GET `/achievements/`
+
+List all achievement definitions.
+
+**Access:** Authenticated
+
+**Success Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "key": "first_enrollment",
+    "name": "First Steps",
+    "description": "Enroll in your first course",
+    "icon": "school",
+    "color": "#4caf50",
+    "category": "student",
+    "sort_order": 3
+  }
+]
+```
+
+---
+
+### GET `/achievements/me/`
+
+List achievements earned by the current user.
+
+**Access:** Authenticated
+
+**Success Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "achievement": {
+      "id": 1,
+      "key": "first_enrollment",
+      "name": "First Steps",
+      "description": "Enroll in your first course",
+      "icon": "school",
+      "color": "#4caf50",
+      "category": "student",
+      "sort_order": 3
+    },
+    "earned_at": "2026-03-25T14:30:00Z"
+  }
+]
+```
+
+---
+
+### POST `/achievements/check/`
+
+Evaluate all achievement criteria for the current user and award any newly earned badges.
+
+**Access:** Authenticated
+
+**Success Response (200 OK):**
+```json
+[
+  {
+    "id": 5,
+    "achievement": {
+      "id": 2,
+      "key": "first_submission",
+      "name": "Hand It In",
+      "description": "Submit your first assignment"
+    },
+    "earned_at": "2026-03-25T14:35:00Z"
+  },
+  {
+    "id": 6,
+    "achievement": {
+      "id": 3,
+      "key": "ten_submissions",
+      "name": "On a Roll",
+      "description": "Submit ten assignments"
+    },
+    "earned_at": "2026-03-30T09:12:00Z"
+  }
+]
+```
+
+---
+
 ## Error Responses
 
 All endpoints may return the following error responses:
