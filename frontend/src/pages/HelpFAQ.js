@@ -6,7 +6,6 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   HelpOutline as HelpIcon,
-  School as SchoolIcon,
   PersonAdd as PersonAddIcon,
   MenuBook as MenuBookIcon,
   Security as SecurityIcon,

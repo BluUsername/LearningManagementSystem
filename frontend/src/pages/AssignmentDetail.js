@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container, Typography, Paper, Button, Box, CircularProgress, Alert,
   Chip, TextField, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Divider,
+  TableHead, TableRow,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,

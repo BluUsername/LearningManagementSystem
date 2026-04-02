@@ -4,7 +4,7 @@ import {
   ListItemButton, ListItemText, Drawer, AppBar, Toolbar,
   CircularProgress, Divider, Paper, Tooltip, useMediaQuery,
   useTheme, Button, Dialog, DialogTitle, DialogContent,
-  DialogActions, Chip, ListItemSecondaryAction,
+  DialogActions, Chip,
 } from '@mui/material';
 import {
   Send as SendIcon,
