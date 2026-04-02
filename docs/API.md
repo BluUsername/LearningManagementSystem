@@ -439,6 +439,31 @@ Get details of a specific assignment.
 
 **Success Response (200 OK):** Returns the assignment object.
 
+### PATCH / PUT `/courses/:course_id/assignments/:id/`
+
+Update an existing assignment. `PATCH` supports partial updates; `PUT` expects a full assignment payload.
+
+**Access:** Course owner or admin
+
+**Request Body (JSON):**
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| title | string | No | Max 200 characters |
+| description | string | No | Assignment details |
+| due_date | datetime | No | ISO 8601 format |
+| max_points | integer | No | Default: 100 |
+
+**Success Response (200 OK):** Returns the updated assignment object.
+
+### DELETE `/courses/:course_id/assignments/:id/`
+
+Delete an existing assignment.
+
+**Access:** Course owner or admin
+
+**Success Response (204 No Content):** Assignment successfully deleted. No response body.
+
 ---
 
 ## Submission Endpoints
@@ -603,20 +628,28 @@ Evaluate all achievement criteria for the current user and award any newly earne
 
 **Success Response (200 OK):**
 ```json
-{
-  "newly_earned": [
-    {
-      "id": 5,
-      "achievement": {
-        "key": "first_submission",
-        "name": "Hand It In",
-        "description": "Submit your first assignment"
-      },
-      "earned_at": "2026-03-25T14:35:00Z"
-    }
-  ],
-  "total_earned": 3
-}
+[
+  {
+    "id": 5,
+    "achievement": {
+      "id": 2,
+      "key": "first_submission",
+      "name": "Hand It In",
+      "description": "Submit your first assignment"
+    },
+    "earned_at": "2026-03-25T14:35:00Z"
+  },
+  {
+    "id": 6,
+    "achievement": {
+      "id": 3,
+      "key": "ten_submissions",
+      "name": "On a Roll",
+      "description": "Submit ten assignments"
+    },
+    "earned_at": "2026-03-30T09:12:00Z"
+  }
+]
 ```
 
 ---

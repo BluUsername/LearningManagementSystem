@@ -62,7 +62,7 @@ A full-stack Learning Management System built with **Django**, **Django REST Fra
 - Notification bell with real-time badge count
 - Editable user profile with avatar and bio
 - Leaderboard with top courses and teachers
-- Achievements & badges system with backend-driven progress tracking (12 unlockable badges)
+- Achievements & badges system with backend-driven progress tracking (10 unlockable badges)
 - Searchable Help/FAQ page with accordion categories
 - About page with mission, values, and platform statistics
 
@@ -310,23 +310,23 @@ The application follows a **client-server architecture** with a clear separation
         ├──────────────────────────────────────────────┐
         │                                              │
         ▼                                              ▼
-┌──────────────────┐       ┌──────────────┐   ┌────────────────────┐
-│ ChatConversation │       │  ChatMessage  │   │ AchievementDefn    │
-├──────────────────┤       ├──────────────┤   ├────────────────────┤
-│ user (FK)        │──────►│ conversation │   │ key (unique)       │
-│ title            │       │ role         │   │ name               │
-│ created_at       │       │ content      │   │ description        │
-│ updated_at       │       │ timestamp    │   │ icon, color        │
-└──────────────────┘       └──────────────┘   │ category           │
-                                              └────────┬───────────┘
-                                                       │
-                                              ┌────────▼───────────┐
-                                              │  UserAchievement   │
-                                              ├────────────────────┤
-                                              │ user (FK)          │
-                                              │ achievement (FK)   │
-                                              │ earned_at          │
-                                              └────────────────────┘
+┌──────────────────┐       ┌──────────────┐   ┌───────────────────────┐
+│ ChatConversation │       │  ChatMessage  │   │ AchievementDefinition │
+├──────────────────┤       ├──────────────┤   ├───────────────────────┤
+│ user (FK)        │──────►│ conversation │   │ key (unique)          │
+│ title            │       │ role         │   │ name                  │
+│ created_at       │       │ content      │   │ description           │
+│ updated_at       │       │ timestamp    │   │ icon, color           │
+└──────────────────┘       └──────────────┘   │ category              │
+                                              └───────────┬───────────┘
+                                                          │
+                                              ┌───────────▼───────────┐
+                                              │   UserAchievement     │
+                                              ├───────────────────────┤
+                                              │ user (FK)             │
+                                              │ achievement (FK)      │
+                                              │ earned_at             │
+                                              └───────────────────────┘
                                                unique_together
 ```
 
@@ -335,7 +335,7 @@ The application follows a **client-server architecture** with a clear separation
 - **Enrollment** — a join table linking students to courses (unique_together constraint prevents duplicate enrollments)
 - **Assignment** — belongs to a course with a title, description, due date, and max points
 - **Submission** — a student's work for an assignment, supporting text content and/or file uploads. Includes grade, feedback, and status tracking (unique_together on assignment + student)
-- **AchievementDefinition** — defines a badge with a key, name, description, icon, colour, and category (general, student, or teacher)
+- **AchievementDefinition** — defines a badge with a key, name, description, icon, color, and category (general, student, or teacher)
 - **UserAchievement** — tracks which users have earned which achievements (unique_together prevents duplicates)
 - **ChatConversation** — groups chat messages per user session
 - **ChatMessage** — stores individual messages with a `role` field (user or assistant)
@@ -535,12 +535,12 @@ Full API documentation is available in [docs/API.md](docs/API.md).
 | POST | `/api/courses/:id/enroll/` | Enroll in a course | Student |
 | DELETE | `/api/courses/:id/unenroll/` | Unenroll from a course | Student |
 | GET | `/api/enrollments/` | List my enrollments | Student |
-| GET | `/api/courses/:id/assignments/` | List course assignments | Enrolled, Staff |
-| POST | `/api/courses/:id/assignments/` | Create assignment | Course owner, Admin |
-| GET | `/api/courses/:id/assignments/:id/` | Get assignment details | Enrolled, Staff |
+| GET | `/api/courses/:course_id/assignments/` | List course assignments | Enrolled, Staff |
+| POST | `/api/courses/:course_id/assignments/` | Create assignment | Course owner, Admin |
+| GET | `/api/courses/:course_id/assignments/:assignment_id/` | Get assignment details | Enrolled, Staff |
 | POST | `/api/assignments/:id/submit/` | Submit assignment (text/file) | Student (enrolled) |
-| GET | `/api/assignments/:id/submissions/` | List submissions | Teacher (own course), Student (own) |
-| GET | `/api/submissions/:id/` | Get submission details | Owner, Course teacher |
+| GET | `/api/assignments/:id/submissions/` | List submissions | Teacher (own course), Student (own), Admin |
+| GET | `/api/submissions/:id/` | Get submission details | Owner, Course teacher, Admin |
 | PATCH | `/api/submissions/:id/grade/` | Grade a submission | Course teacher, Admin |
 | GET | `/api/my-submissions/` | List my submissions | Student |
 | GET | `/api/achievements/` | List all achievement definitions | Authenticated |
