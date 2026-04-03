@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
@@ -37,7 +38,7 @@ function AdminDashboard() {
     }
   };
 
-  useEffect(() => { document.title = 'Admin Dashboard | LearnHub'; }, []);
+  useDocumentTitle('Admin Dashboard');
 
   useEffect(() => {
     fetchData();

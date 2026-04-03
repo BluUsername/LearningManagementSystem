@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, Paper, Accordion, AccordionSummary,
   AccordionDetails, Chip, Grid,
@@ -106,7 +107,7 @@ const tips = [
 function HelpFAQ() {
   const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => { document.title = 'Help & FAQ | LearnHub'; }, []);
+  useDocumentTitle('Help & FAQ');
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

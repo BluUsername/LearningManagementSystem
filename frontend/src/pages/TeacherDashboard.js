@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
@@ -31,7 +32,7 @@ function TeacherDashboard() {
     }
   };
 
-  useEffect(() => { document.title = 'Dashboard | LearnHub'; }, []);
+  useDocumentTitle('Dashboard');
 
   useEffect(() => {
     fetchCourses();

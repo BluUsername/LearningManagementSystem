@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Paper, Button, Box, CircularProgress, Alert, Chip,
   List, ListItem, ListItemIcon, ListItemText, TextField, Dialog,
@@ -30,7 +31,7 @@ function CourseDetail() {
   });
   const [creating, setCreating] = useState(false);
 
-  useEffect(() => { document.title = 'Course Details | LearnHub'; }, []);
+  useDocumentTitle('Course Details');
 
   useEffect(() => {
     const fetchData = async () => {

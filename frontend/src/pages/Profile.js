@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   TextField, Avatar, Chip, Divider, Snackbar,
@@ -28,7 +29,7 @@ function Profile() {
   const [stats, setStats] = useState({ courses: 0 });
   const [statsLoading, setStatsLoading] = useState(true);
 
-  useEffect(() => { document.title = 'Profile | LearnHub'; }, []);
+  useDocumentTitle('Profile');
 
   // Populate form fields from user data
   useEffect(() => {

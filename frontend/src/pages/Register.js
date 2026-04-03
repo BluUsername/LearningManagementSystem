@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Typography, TextField, Button, Alert, Box, Link,
@@ -23,7 +24,7 @@ function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => { document.title = 'Register | LearnHub'; }, []);
+  useDocumentTitle('Register');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

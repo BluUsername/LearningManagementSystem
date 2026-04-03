@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, Paper, Grid, Button,
 } from '@mui/material';
@@ -101,7 +101,7 @@ const stats = [
 ];
 
 function About() {
-  useEffect(() => { document.title = 'About | LearnHub'; }, []);
+  useDocumentTitle('About');
 
   return (
     <Box>

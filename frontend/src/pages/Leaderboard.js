@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Paper, Avatar,
 } from '@mui/material';
@@ -21,7 +22,7 @@ function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => { document.title = 'Leaderboard | LearnHub'; }, []);
+  useDocumentTitle('Leaderboard');
 
   useEffect(() => {
     const fetchCourses = async () => {

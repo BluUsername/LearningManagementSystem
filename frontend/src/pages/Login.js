@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Typography, TextField, Button, Alert, Box, Link, Chip,
@@ -17,7 +18,7 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => { document.title = 'Sign In | LearnHub'; }, []);
+  useDocumentTitle('Sign In');
 
   const handleSubmit = async (e) => {
     e.preventDefault();

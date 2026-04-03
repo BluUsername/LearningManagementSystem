@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper, ToggleButtonGroup, ToggleButton,
 } from '@mui/material';
@@ -20,7 +21,7 @@ function StudentDashboard() {
   const [sortOrder, setSortOrder] = useState('recent');
   const { user } = useAuth();
 
-  useEffect(() => { document.title = 'Dashboard | LearnHub'; }, []);
+  useDocumentTitle('Dashboard');
 
   useEffect(() => {
     const fetchEnrollments = async () => {

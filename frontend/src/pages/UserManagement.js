@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, CircularProgress, Alert, Button, Paper,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -19,7 +20,7 @@ function UserManagement() {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => { document.title = 'User Management | LearnHub'; }, []);
+  useDocumentTitle('User Management');
 
   useEffect(() => {
     const fetchUsers = async () => {

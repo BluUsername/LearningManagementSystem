@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Paper, Button, Box, CircularProgress, Alert,
   Chip, TextField, Table, TableBody, TableCell, TableContainer,
@@ -39,7 +40,7 @@ function AssignmentDetail() {
   // Teacher grading state
   const [grading, setGrading] = useState({});
 
-  useEffect(() => { document.title = 'Assignment | LearnHub'; }, []);
+  useDocumentTitle('Assignment');
 
   useEffect(() => {
     const fetchData = async () => {

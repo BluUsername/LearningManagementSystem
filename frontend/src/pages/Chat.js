@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Box, Typography, TextField, IconButton, List, ListItem,
   ListItemButton, ListItemText, Drawer, AppBar, Toolbar,
@@ -192,7 +193,7 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => { document.title = 'Chat | LearnHub'; }, []);
+  useDocumentTitle('Chat');
 
   useEffect(() => { scrollToBottom(); }, [messages]);
 
