@@ -69,10 +69,8 @@ test('renders page heading', async () => {
 
 test('displays courses from API', async () => {
   renderCourseList();
-  await waitFor(() => {
-    expect(screen.getByText('Introduction to Python')).toBeInTheDocument();
-  });
-  expect(screen.getByText('Web Development 101')).toBeInTheDocument();
+  await screen.findByText('Introduction to Python');
+  await screen.findByText('Web Development 101');
 });
 
 test('shows search input', async () => {
