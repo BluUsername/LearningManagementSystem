@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 
 from accounts.models import User
 from courses.models import Course, Enrollment
-from .models import AchievementDefinition, UserAchievement
+from .models import UserAchievement
 from .services import check_achievements
 
 

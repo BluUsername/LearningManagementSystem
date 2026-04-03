@@ -71,8 +71,8 @@ test('displays courses from API', async () => {
   renderCourseList();
   await waitFor(() => {
     expect(screen.getByText('Introduction to Python')).toBeInTheDocument();
-    expect(screen.getByText('Web Development 101')).toBeInTheDocument();
   });
+  expect(screen.getByText('Web Development 101')).toBeInTheDocument();
 });
 
 test('shows search input', async () => {
