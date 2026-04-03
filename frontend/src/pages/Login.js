@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Typography, TextField, Button, Alert, Box, Link, Chip,
@@ -16,6 +17,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useDocumentTitle('Sign In');
 
   const handleSubmit = async (e) => {
     e.preventDefault();

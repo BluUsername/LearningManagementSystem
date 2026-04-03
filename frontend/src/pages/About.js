@@ -1,4 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, Paper, Grid, Button,
 } from '@mui/material';
@@ -100,6 +101,8 @@ const stats = [
 ];
 
 function About() {
+  useDocumentTitle('About');
+
   return (
     <Box>
       {/* ── Hero Banner ── */}

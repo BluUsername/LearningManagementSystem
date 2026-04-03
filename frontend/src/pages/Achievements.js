@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Paper, Chip,
 } from '@mui/material';
@@ -34,6 +35,8 @@ function Achievements() {
   const [loading, setLoading] = useState(true);
   const [allDefinitions, setAllDefinitions] = useState([]);
   const [earnedKeys, setEarnedKeys] = useState(new Set());
+
+  useDocumentTitle('Achievements');
 
   useEffect(() => {
     const fetchData = async () => {

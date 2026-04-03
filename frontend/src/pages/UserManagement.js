@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, CircularProgress, Alert, Button, Paper,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -18,6 +19,8 @@ function UserManagement() {
   const [error, setError] = useState('');
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
+
+  useDocumentTitle('User Management');
 
   useEffect(() => {
     const fetchUsers = async () => {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, Paper, Switch, Divider, Snackbar, Alert,
   FormControlLabel, Grid,
@@ -43,6 +44,8 @@ function Settings() {
   const { mode, toggleTheme } = useThemeMode();
   const [settings, setSettings] = useState(loadSettings);
   const [toast, setToast] = useState('');
+
+  useDocumentTitle('Settings');
 
   useEffect(() => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
