@@ -50,18 +50,18 @@ def _get_user_stats(user) -> dict:
 # Registry of check functions keyed by achievement `key`.
 # Each function receives (stats, user) and returns True if earned.
 ACHIEVEMENT_CHECKS = {
-    'first_login':       lambda stats, user: True,
-    'profile_complete':  lambda stats, user: stats['has_bio'],
-    'first_enrollment':  lambda stats, user: stats['enrollment_count'] >= 1,
-    'three_courses':     lambda stats, user: stats['enrollment_count'] >= 3,
-    'five_courses':      lambda stats, user: stats['enrollment_count'] >= 5,
-    'course_creator':    lambda stats, user: stats['course_count'] >= 1,
-    'popular_teacher':   lambda stats, user: stats['total_students'] >= 5,
-    'prolific_teacher':  lambda stats, user: stats['course_count'] >= 3,
-    'explorer':          lambda stats, user: True,
-    'community_member':  lambda stats, user: True,
-    'first_submission':  lambda stats, user: stats['submission_count'] >= 1,
-    'first_graded':      lambda stats, user: stats['graded_count'] >= 1,
+    'first_login': lambda stats, user: True,
+    'profile_complete': lambda stats, user: stats['has_bio'],
+    'first_enrollment': lambda stats, user: stats['enrollment_count'] >= 1,
+    'three_courses': lambda stats, user: stats['enrollment_count'] >= 3,
+    'five_courses': lambda stats, user: stats['enrollment_count'] >= 5,
+    'course_creator': lambda stats, user: stats['course_count'] >= 1,
+    'popular_teacher': lambda stats, user: stats['total_students'] >= 5,
+    'prolific_teacher': lambda stats, user: stats['course_count'] >= 3,
+    'explorer': lambda stats, user: True,
+    'community_member': lambda stats, user: True,
+    'first_submission': lambda stats, user: stats['submission_count'] >= 1,
+    'first_graded': lambda stats, user: stats['graded_count'] >= 1,
 }
 
 

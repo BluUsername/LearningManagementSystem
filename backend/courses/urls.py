@@ -10,7 +10,11 @@ urlpatterns = [
     path('enrollments/', views.MyEnrollmentsView.as_view(), name='my-enrollments'),
     # Assignments
     path('courses/<int:course_pk>/assignments/', views.AssignmentListCreateView.as_view(), name='assignment-list'),
-    path('courses/<int:course_pk>/assignments/<int:pk>/', views.AssignmentDetailView.as_view(), name='assignment-detail'),
+    path(
+        'courses/<int:course_pk>/assignments/<int:pk>/',
+        views.AssignmentDetailView.as_view(),
+        name='assignment-detail',
+    ),
     # Submissions
     path('assignments/<int:assignment_pk>/submit/', views.SubmissionCreateView.as_view(), name='submission-create'),
     path('assignments/<int:assignment_pk>/submissions/', views.SubmissionListView.as_view(), name='submission-list'),
