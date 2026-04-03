@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Container, Typography, Box, Paper, Grid, Button,
@@ -100,6 +101,8 @@ const stats = [
 ];
 
 function About() {
+  useEffect(() => { document.title = 'About | LearnHub'; }, []);
+
   return (
     <Box>
       {/* ── Hero Banner ── */}

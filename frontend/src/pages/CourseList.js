@@ -32,6 +32,8 @@ function CourseList() {
       }
     }, [user?.role]);
 
+  useEffect(() => { document.title = 'Courses | LearnHub'; }, []);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);

@@ -30,6 +30,8 @@ function CourseDetail() {
   });
   const [creating, setCreating] = useState(false);
 
+  useEffect(() => { document.title = 'Course Details | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

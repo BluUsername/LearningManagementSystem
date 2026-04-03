@@ -192,6 +192,8 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => { document.title = 'Chat | LearnHub'; }, []);
+
   useEffect(() => { scrollToBottom(); }, [messages]);
 
   const fetchConversations = useCallback(async () => {

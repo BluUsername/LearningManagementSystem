@@ -44,6 +44,8 @@ function Settings() {
   const [settings, setSettings] = useState(loadSettings);
   const [toast, setToast] = useState('');
 
+  useEffect(() => { document.title = 'Settings | LearnHub'; }, []);
+
   useEffect(() => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   }, [settings]);

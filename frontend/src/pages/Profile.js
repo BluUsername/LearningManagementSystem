@@ -28,6 +28,8 @@ function Profile() {
   const [stats, setStats] = useState({ courses: 0 });
   const [statsLoading, setStatsLoading] = useState(true);
 
+  useEffect(() => { document.title = 'Profile | LearnHub'; }, []);
+
   // Populate form fields from user data
   useEffect(() => {
     if (user) {

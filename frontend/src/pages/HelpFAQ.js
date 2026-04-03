@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container, Typography, Box, Paper, Accordion, AccordionSummary,
   AccordionDetails, Chip, Grid,
@@ -105,6 +105,8 @@ const tips = [
 
 function HelpFAQ() {
   const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => { document.title = 'Help & FAQ | LearnHub'; }, []);
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

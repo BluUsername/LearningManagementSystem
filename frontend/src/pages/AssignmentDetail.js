@@ -39,6 +39,8 @@ function AssignmentDetail() {
   // Teacher grading state
   const [grading, setGrading] = useState({});
 
+  useEffect(() => { document.title = 'Assignment | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

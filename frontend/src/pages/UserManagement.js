@@ -19,6 +19,8 @@ function UserManagement() {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => { document.title = 'User Management | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {

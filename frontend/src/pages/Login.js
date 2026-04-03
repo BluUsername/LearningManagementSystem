@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Typography, TextField, Button, Alert, Box, Link, Chip,
@@ -16,6 +16,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => { document.title = 'Sign In | LearnHub'; }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

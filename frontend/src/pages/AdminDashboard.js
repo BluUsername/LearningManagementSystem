@@ -37,6 +37,8 @@ function AdminDashboard() {
     }
   };
 
+  useEffect(() => { document.title = 'Admin Dashboard | LearnHub'; }, []);
+
   useEffect(() => {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

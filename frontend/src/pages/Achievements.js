@@ -35,6 +35,8 @@ function Achievements() {
   const [allDefinitions, setAllDefinitions] = useState([]);
   const [earnedKeys, setEarnedKeys] = useState(new Set());
 
+  useEffect(() => { document.title = 'Achievements | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

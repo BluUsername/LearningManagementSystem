@@ -21,6 +21,8 @@ function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  useEffect(() => { document.title = 'Leaderboard | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {

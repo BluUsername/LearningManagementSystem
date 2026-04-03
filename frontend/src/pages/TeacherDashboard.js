@@ -31,6 +31,8 @@ function TeacherDashboard() {
     }
   };
 
+  useEffect(() => { document.title = 'Dashboard | LearnHub'; }, []);
+
   useEffect(() => {
     fetchCourses();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

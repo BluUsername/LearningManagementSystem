@@ -20,6 +20,8 @@ function StudentDashboard() {
   const [sortOrder, setSortOrder] = useState('recent');
   const { user } = useAuth();
 
+  useEffect(() => { document.title = 'Dashboard | LearnHub'; }, []);
+
   useEffect(() => {
     const fetchEnrollments = async () => {
       try {
