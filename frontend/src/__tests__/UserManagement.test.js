@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import UserManagement from '../pages/UserManagement';
 
@@ -63,4 +63,80 @@ test('shows table column headers', async () => {
 test('shows Back to Dashboard button', async () => {
   renderPage();
   expect(await screen.findByText('Back to Dashboard')).toBeInTheDocument();
+});
+
+// --- INTERACTION TESTS ---
+// These test real admin actions: changing user roles and deleting users.
+
+// DO: change a user's role from "student" to "teacher" via the dropdown
+// CHECK: API PATCH is called with the new role
+//
+// MUI Select components render as a styled <div> with a popup listbox.
+// To test: 1) mouseDown to open the dropdown, 2) click the option.
+// The MenuItem text is capitalized ("Teacher") but the value is lowercase ("teacher").
+test('changing a user role sends PATCH request to API', async () => {
+  api.patch.mockResolvedValueOnce({
+    data: { ...mockUsers[2], role: 'teacher' },
+  });
+
+  renderPage();
+  await screen.findByText('student1');
+
+  // MUI Select renders a hidden <input> with the select's value.
+  // We find this native input element and simulate the change directly.
+  // This is the recommended approach for MUI Select in unit tests,
+  // since the popup portal doesn't always render fully in jsdom.
+  const selectContainer = screen.getByLabelText('Role for student1');
+  const nativeInput = selectContainer.parentElement.querySelector('input[type="hidden"]')
+    || selectContainer.querySelector('input');
+
+  // If we found the native input, change it; otherwise fire on the select itself
+  if (nativeInput) {
+    fireEvent.change(nativeInput, { target: { value: 'teacher' } });
+  }
+
+  await waitFor(() => {
+    expect(api.patch).toHaveBeenCalledWith('users/3/', { role: 'teacher' });
+  });
+});
+
+// DO: click the delete button for a user
+// CHECK: API DELETE is called after confirmation
+test('deleting a user sends DELETE request to API', async () => {
+  // Mock window.confirm to auto-accept the confirmation dialog
+  const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+  api.delete.mockResolvedValueOnce({});
+  api.get.mockResolvedValueOnce({ data: mockUsers.filter(u => u.id !== 3) }); // refetch
+
+  renderPage();
+  await screen.findByText('student1');
+
+  // Click the delete button for student1
+  fireEvent.click(screen.getByLabelText('Delete user student1'));
+
+  // Confirm dialog should have been shown
+  expect(confirmSpy).toHaveBeenCalled();
+
+  // API should be called with the correct user ID
+  await waitFor(() => {
+    expect(api.delete).toHaveBeenCalledWith('users/3/');
+  });
+
+  confirmSpy.mockRestore();
+});
+
+// DO: click delete for a user, but cancel the confirmation
+// CHECK: API DELETE is NOT called
+test('cancelling delete does not call API', async () => {
+  const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
+
+  renderPage();
+  await screen.findByText('student1');
+
+  fireEvent.click(screen.getByLabelText('Delete user student1'));
+
+  // Confirmation was shown but cancelled — API should NOT be called
+  expect(api.delete).not.toHaveBeenCalled();
+
+  confirmSpy.mockRestore();
 });

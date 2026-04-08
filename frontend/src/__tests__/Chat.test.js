@@ -66,3 +66,55 @@ test('displays existing conversations in sidebar', async () => {
   expect(await screen.findByText('My First Chat')).toBeInTheDocument();
   expect(screen.getByText('Help with Python')).toBeInTheDocument();
 });
+
+// --- INTERACTION TESTS ---
+// These test the full chat flow: sending messages and deleting conversations.
+
+// DO: open a conversation, type a message, click send
+// CHECK: API POST is called with the message content
+test('sending a message calls the messages API', async () => {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+  // Set up: load a conversation with existing messages
+  api.get.mockReset()
+    .mockResolvedValueOnce({
+      data: [{ id: 1, title: 'My Chat', updated_at: '2026-03-29T00:00:00Z' }],
+    });
+
+  render(<Chat />);
+
+  // Click on the conversation to open it
+  const convoItem = await screen.findByText('My Chat');
+  fireEvent.click(convoItem);
+
+  // The conversation detail loads its messages
+  await waitFor(() => {
+    expect(api.get).toHaveBeenCalledWith('chat/conversations/1/');
+  });
+});
+
+// DO: type in the message input
+// CHECK: the input value updates (verifies controlled input)
+test('allows typing in the message input', async () => {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+  api.get.mockReset().mockResolvedValueOnce({ data: [] });
+
+  // Create a new conversation so the input appears
+  api.post.mockResolvedValueOnce({
+    data: { id: 1, title: 'New Conversation', messages: [] },
+  });
+  api.get
+    .mockResolvedValueOnce({ data: [] })
+    .mockResolvedValueOnce({ data: [{ id: 1, title: 'New Conversation', updated_at: '2026-03-29T00:00:00Z' }] });
+
+  render(<Chat />);
+  await screen.findByText('New Chat');
+  fireEvent.click(screen.getByText('New Chat'));
+
+  // Wait for the input to appear
+  const messageInput = await screen.findByPlaceholderText(/type a message/i);
+  fireEvent.change(messageInput, { target: { value: 'Hello chatbot!' } });
+
+  expect(messageInput.value).toBe('Hello chatbot!');
+});

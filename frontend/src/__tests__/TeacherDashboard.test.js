@@ -100,3 +100,48 @@ test('submits new course via API when form is filled and submitted', async () =>
     });
   });
 });
+
+// --- MORE INTERACTION TESTS ---
+// These test the edit and delete flows that teachers use to manage courses.
+
+// DO: click Delete on a course, confirm the dialog
+// CHECK: API DELETE is called with the correct course ID
+test('deleting a course sends DELETE request after confirmation', async () => {
+  const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+  api.delete.mockResolvedValueOnce({});
+  api.get.mockResolvedValueOnce({ data: [mockCourses[1]] }); // refetch after delete
+
+  renderDashboard();
+  await screen.findByText('Python Basics');
+
+  // Find all Delete buttons and click the first one
+  const deleteButtons = screen.getAllByText('Delete');
+  fireEvent.click(deleteButtons[0]);
+
+  expect(confirmSpy).toHaveBeenCalled();
+
+  await waitFor(() => {
+    expect(api.delete).toHaveBeenCalledWith('courses/1/');
+  });
+
+  confirmSpy.mockRestore();
+});
+
+// DO: click Delete on a course, but cancel the dialog
+// CHECK: API DELETE is NOT called — course remains
+test('cancelling delete keeps the course', async () => {
+  const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
+
+  renderDashboard();
+  await screen.findByText('Python Basics');
+
+  const deleteButtons = screen.getAllByText('Delete');
+  fireEvent.click(deleteButtons[0]);
+
+  // User cancelled, so API should not be called
+  expect(api.delete).not.toHaveBeenCalled();
+  // Course should still be visible
+  expect(screen.getByText('Python Basics')).toBeInTheDocument();
+
+  confirmSpy.mockRestore();
+});
