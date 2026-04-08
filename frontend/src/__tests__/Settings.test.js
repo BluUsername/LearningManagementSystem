@@ -55,10 +55,15 @@ test('renders About LearnHub section with version info', () => {
 // CHECK: it persists to localStorage
 test('saves settings to localStorage when toggled', () => {
   render(<Settings />);
-  const toggle = screen.getByText('Email notifications for new courses')
-    .closest('[class*="Box"]')
-    ?.querySelector('input[type="checkbox"]');
-  if (toggle) fireEvent.click(toggle);
+  const emailNewCoursesToggle = screen.getByRole('switch', {
+    name: /Email notifications for new courses/i,
+  });
+  const initialSaved = JSON.parse(localStorage.getItem('learnhub_settings') || '{}');
+  const initialValue = initialSaved.emailNewCourses;
+
+  fireEvent.click(emailNewCoursesToggle);
+
   const saved = JSON.parse(localStorage.getItem('learnhub_settings') || '{}');
-  expect(saved).toBeDefined();
+  expect(saved).toHaveProperty('emailNewCourses');
+  expect(saved.emailNewCourses).not.toBe(initialValue);
 });

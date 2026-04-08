@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Typography, TextField, Button, Alert, Box, Link,
@@ -22,6 +23,8 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useDocumentTitle('Register');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { Container, Typography, Grid, Box, CircularProgress, Alert, Paper, TextField, InputAdornment, Chip } from '@mui/material';
 import { LibraryBooks as LibraryBooksIcon, Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
@@ -31,6 +32,8 @@ function CourseList() {
         setLoading(false);
       }
     }, [user?.role]);
+
+  useDocumentTitle('Courses');
 
   useEffect(() => {
     fetchData();

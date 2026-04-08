@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Paper, Button, Box, CircularProgress, Alert, Chip,
+  List, ListItem, ListItemIcon, ListItemText, TextField, Dialog,
+  DialogTitle, DialogContent, DialogActions, Divider,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon, Person as PersonIcon,
-  CalendarToday as CalendarIcon,
+  CalendarToday as CalendarIcon, Assignment as AssignmentIcon,
+  Add as AddIcon,
 } from '@mui/icons-material';
 import api, { getResults } from '../api/axiosConfig';
 import { useAuth } from '../contexts/AuthContext';
@@ -16,8 +20,18 @@ function CourseDetail() {
   const { user } = useAuth();
   const [course, setCourse] = useState(null);
   const [enrolled, setEnrolled] = useState(false);
+  const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Create assignment dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newAssignment, setNewAssignment] = useState({
+    title: '', description: '', due_date: '', max_points: 100,
+  });
+  const [creating, setCreating] = useState(false);
+
+  useDocumentTitle('Course Details');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,9 +39,21 @@ function CourseDetail() {
         const courseRes = await api.get(`courses/${id}/`);
         setCourse(courseRes.data);
 
+        let isEnrolled = false;
         if (user.role === 'student') {
           const enrollRes = await api.get('enrollments/');
-          setEnrolled(getResults(enrollRes.data).some((e) => e.course.id === parseInt(id)));
+          isEnrolled = getResults(enrollRes.data).some((e) => e.course.id === parseInt(id));
+          setEnrolled(isEnrolled);
+        }
+
+        // Load assignments if enrolled student, teacher, or admin
+        const isOwnerOrAdmin = user.role === 'admin'
+          || (user.role === 'teacher' && courseRes.data.teacher === user.id);
+        if (isEnrolled || isOwnerOrAdmin) {
+          try {
+            const assignRes = await api.get(`courses/${id}/assignments/`);
+            setAssignments(getResults(assignRes.data));
+          } catch { /* assignments not accessible */ }
         }
       } catch {
         setError('Failed to load course.');
@@ -36,14 +62,36 @@ function CourseDetail() {
       }
     };
     fetchData();
-  }, [id, user.role]);
+  }, [id, user.role, user.id]);
 
   const handleEnroll = async () => {
     try {
       await api.post(`courses/${id}/enroll/`);
       setEnrolled(true);
+      // Load assignments now that we're enrolled
+      try {
+        const assignRes = await api.get(`courses/${id}/assignments/`);
+        setAssignments(getResults(assignRes.data));
+      } catch { /* ok */ }
+      // Trigger achievement check
+      try { await api.post('achievements/check/'); } catch { /* non-critical */ }
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to enroll.');
+    }
+  };
+
+  const handleCreateAssignment = async () => {
+    setCreating(true);
+    setError('');
+    try {
+      const res = await api.post(`courses/${id}/assignments/`, newAssignment);
+      setAssignments((prev) => [res.data, ...prev]);
+      setDialogOpen(false);
+      setNewAssignment({ title: '', description: '', due_date: '', max_points: 100 });
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to create assignment.');
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -146,6 +194,129 @@ function CourseDetail() {
         </Box>
         </Box>
       </Paper>
+
+      {/* Assignments Section */}
+      {(enrolled || isOwner || isAdmin) && (
+        <Paper elevation={0} sx={{
+          mt: 3, p: 3, borderRadius: 3,
+          border: '1px solid rgba(255, 255, 255, 0.06)',
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AssignmentIcon sx={{ color: '#f57c00' }} />
+              <Typography variant="h5" component="h2" sx={{ fontWeight: 600 }}>
+                Assignments ({assignments.length})
+              </Typography>
+            </Box>
+            {(isOwner || isAdmin) && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setDialogOpen(true)}
+                sx={{
+                  background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+                  '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+                }}
+              >
+                New Assignment
+              </Button>
+            )}
+          </Box>
+
+          {assignments.length === 0 ? (
+            <Typography color="text.secondary">
+              No assignments yet.
+            </Typography>
+          ) : (
+            <List>
+              {assignments.map((a, index) => {
+                const isPastDue = new Date(a.due_date) < new Date();
+                return (
+                  <Box key={a.id}>
+                    {index > 0 && <Divider />}
+                    <ListItem
+                      component={RouterLink}
+                      to={`/courses/${id}/assignments/${a.id}`}
+                      sx={{
+                        borderRadius: 2, py: 1.5,
+                        textDecoration: 'none', color: 'inherit',
+                        '&:hover': { backgroundColor: 'rgba(255,255,255,0.04)' },
+                      }}
+                    >
+                      <ListItemIcon>
+                        <AssignmentIcon sx={{ color: isPastDue ? '#ef5350' : '#66bb6a' }} />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={a.title}
+                        secondary={`Due: ${new Date(a.due_date).toLocaleString()} | ${a.max_points} pts`}
+                      />
+                      <Chip
+                        size="small"
+                        label={isPastDue ? 'Past due' : 'Open'}
+                        sx={{
+                          backgroundColor: isPastDue
+                            ? 'rgba(239, 83, 80, 0.1)' : 'rgba(102, 187, 106, 0.1)',
+                          color: isPastDue ? '#ef9a9a' : '#a5d6a7',
+                        }}
+                      />
+                    </ListItem>
+                  </Box>
+                );
+              })}
+            </List>
+          )}
+        </Paper>
+      )}
+
+      {/* Create Assignment Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Create New Assignment</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: '16px !important' }}>
+          <TextField
+            label="Title"
+            fullWidth
+            value={newAssignment.title}
+            onChange={(e) => setNewAssignment((p) => ({ ...p, title: e.target.value }))}
+          />
+          <TextField
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            value={newAssignment.description}
+            onChange={(e) => setNewAssignment((p) => ({ ...p, description: e.target.value }))}
+          />
+          <TextField
+            label="Due Date"
+            type="datetime-local"
+            fullWidth
+            value={newAssignment.due_date}
+            onChange={(e) => setNewAssignment((p) => ({ ...p, due_date: e.target.value }))}
+            slotProps={{ inputLabel: { shrink: true } }}
+          />
+          <TextField
+            label="Max Points"
+            type="number"
+            fullWidth
+            value={newAssignment.max_points}
+            onChange={(e) => setNewAssignment((p) => ({ ...p, max_points: parseInt(e.target.value, 10) || 0 }))}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleCreateAssignment}
+            disabled={creating || !newAssignment.title || !newAssignment.description || !newAssignment.due_date}
+            sx={{
+              background: 'linear-gradient(135deg, #f57c00, #ff9800)',
+              '&:hover': { background: 'linear-gradient(135deg, #e65100, #f57c00)' },
+            }}
+          >
+            {creating ? 'Creating...' : 'Create'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

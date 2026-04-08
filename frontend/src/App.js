@@ -18,6 +18,7 @@ import Achievements from './pages/Achievements';
 import HelpFAQ from './pages/HelpFAQ';
 import Settings from './pages/Settings';
 import Chat from './pages/Chat';
+import AssignmentDetail from './pages/AssignmentDetail';
 
 // Theme configuration has been moved to contexts/ThemeContext.js
 
@@ -83,6 +84,9 @@ function AppLayout() {
           } />
           <Route path="/courses/:id" element={
             <ProtectedRoute><CourseDetail /></ProtectedRoute>
+          } />
+          <Route path="/courses/:courseId/assignments/:assignmentId" element={
+            <ProtectedRoute><AssignmentDetail /></ProtectedRoute>
           } />
           <Route path="/student" element={
             <ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Box, Paper, Accordion, AccordionSummary,
   AccordionDetails, Chip, Grid,
@@ -6,7 +7,6 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   HelpOutline as HelpIcon,
-  School as SchoolIcon,
   PersonAdd as PersonAddIcon,
   MenuBook as MenuBookIcon,
   Security as SecurityIcon,
@@ -106,6 +106,8 @@ const tips = [
 
 function HelpFAQ() {
   const [expanded, setExpanded] = useState(false);
+
+  useDocumentTitle('Help & FAQ');
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

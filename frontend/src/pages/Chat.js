@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Box, Typography, TextField, IconButton, List, ListItem,
   ListItemButton, ListItemText, Drawer, AppBar, Toolbar,
   CircularProgress, Divider, Paper, Tooltip, useMediaQuery,
   useTheme, Button, Dialog, DialogTitle, DialogContent,
-  DialogActions, Chip, ListItemSecondaryAction,
+  DialogActions, Chip,
 } from '@mui/material';
 import {
   Send as SendIcon,
@@ -191,6 +192,8 @@ export default function Chat() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useDocumentTitle('Chat');
 
   useEffect(() => { scrollToBottom(); }, [messages]);
 

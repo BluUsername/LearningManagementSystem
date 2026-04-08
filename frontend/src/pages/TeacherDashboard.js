@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import {
   Container, Typography, Grid, Box, CircularProgress, Alert, Button, Paper,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
@@ -30,6 +31,8 @@ function TeacherDashboard() {
       setLoading(false);
     }
   };
+
+  useDocumentTitle('Dashboard');
 
   useEffect(() => {
     fetchCourses();

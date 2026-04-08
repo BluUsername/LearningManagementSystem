@@ -30,11 +30,16 @@ A full-stack Learning Management System built with **Django**, **Django REST Fra
 - Browse all available courses with search, filter by teacher, and sort options
 - Enroll and unenroll from courses
 - View a personal dashboard showing enrolled courses with sorting (Recent / A–Z)
+- Submit assignments with text content, file uploads, or both
+- Track submission status and view grades with teacher feedback
 
 ### Teacher
 - Create new courses with a title and description
 - Edit and delete their own courses
 - View a dashboard with course and student enrollment stats
+- Create assignments with due dates and point values
+- Grade student submissions with scores and written feedback
+- Download student-uploaded files for review
 
 ### Admin
 - Create, edit, and delete any course
@@ -57,7 +62,7 @@ A full-stack Learning Management System built with **Django**, **Django REST Fra
 - Notification bell with real-time badge count
 - Editable user profile with avatar and bio
 - Leaderboard with top courses and teachers
-- Achievements & badges system with progress tracking
+- Achievements & badges system with backend-driven progress tracking (10 unlockable badges)
 - Searchable Help/FAQ page with accordion categories
 - About page with mission, values, and platform statistics
 
@@ -103,12 +108,19 @@ LearningManagementSystem/
 │   │   ├── urls.py                  # Auth & user URL routes
 │   │   └── tests.py                 # Auth API tests (12 tests)
 │   ├── courses/
-│   │   ├── models.py                # Course & Enrollment models
-│   │   ├── serializers.py           # Course/Enrollment serializers
-│   │   ├── views.py                 # Course CRUD & enrollment views
+│   │   ├── models.py                # Course, Enrollment, Assignment & Submission models
+│   │   ├── serializers.py           # Course/Enrollment/Assignment/Submission serializers
+│   │   ├── views.py                 # Course CRUD, enrollment, assignment & grading views
 │   │   ├── permissions.py           # Role-based permission classes
-│   │   ├── urls.py                  # Course URL routes
-│   │   └── tests.py                 # Course API tests (13 tests)
+│   │   ├── urls.py                  # Course & assignment URL routes
+│   │   └── tests.py                 # Course, assignment & submission API tests (30 tests)
+│   ├── achievements/
+│   │   ├── models.py                # AchievementDefinition & UserAchievement models
+│   │   ├── services.py              # Achievement evaluation engine & check registry
+│   │   ├── serializers.py           # Achievement serializers
+│   │   ├── views.py                 # Achievement list, earned & check views
+│   │   ├── urls.py                  # Achievement URL routes
+│   │   └── tests.py                 # Achievement API tests (10 tests)
 │   └── chat/
 │       ├── models.py                # ChatConversation & ChatMessage models
 │       ├── serializers.py           # Chat serializers
@@ -131,11 +143,12 @@ LearningManagementSystem/
         │   ├── Navbar.js            # Responsive navigation with drawer
         │   ├── ProtectedRoute.js    # Route guard with role checking
         │   └── CourseCard.js        # Reusable course display card
-        ├── pages/ (15 pages)
+        ├── pages/ (16 pages)
         │   ├── Login.js             # Split-screen login form
         │   ├── Register.js          # Registration with role selector
         │   ├── CourseList.js        # Browse courses with search & filters
-        │   ├── CourseDetail.js      # Single course view with hero image
+        │   ├── CourseDetail.js      # Single course view with assignments section
+        │   ├── AssignmentDetail.js  # Assignment view with submission & grading
         │   ├── StudentDashboard.js  # Student enrolled courses & stats
         │   ├── TeacherDashboard.js  # Teacher course management & stats
         │   ├── AdminDashboard.js    # Platform overview & management
@@ -143,11 +156,11 @@ LearningManagementSystem/
         │   ├── Profile.js           # Editable user profile with avatar
         │   ├── Leaderboard.js       # Top courses & teachers ranking
         │   ├── About.js             # Mission, values & platform stats
-        │   ├── Achievements.js      # Badges & gamification system
+        │   ├── Achievements.js      # Badges & gamification system (API-driven)
         │   ├── HelpFAQ.js           # Searchable FAQ & contact form
         │   ├── Settings.js          # Theme, notifications & preferences
         │   └── Chat.js             # AI chat assistant interface
-        └── __tests__/               # React component & interaction tests (34 tests)
+        └── __tests__/               # React component & interaction tests
 ```
 
 ---
@@ -244,7 +257,8 @@ The application follows a **client-server architecture** with a clear separation
         ▼                                               ▼
    localStorage                                   PostgreSQL
    (token, theme,                                 (Users, Courses,
-    settings)                                   Enrollments, Chat)
+    settings)                                   Enrollments, Chat,
+                                              Assignments, Achievements)
 ```
 
 1. **React Frontend** sends HTTP requests to the Django API via Axios
@@ -261,7 +275,7 @@ The application follows a **client-server architecture** with a clear separation
 
 ### Role-Based Access Control
 
-**Backend:** Custom DRF permission classes (`IsAdmin`, `IsTeacherOrAdmin`, `IsCourseOwnerOrAdmin`, `IsStudent`) enforce access rules at the API level. Even if the frontend is bypassed, the backend rejects unauthorised requests.
+**Backend:** Custom DRF permission classes (`IsAdmin`, `IsTeacherOrAdmin`, `IsCourseOwnerOrAdmin`, `IsStudent`, `IsEnrolledOrCourseStaff`, `IsAssignmentCourseOwnerOrAdmin`) enforce access rules at the API level. Even if the frontend is bypassed, the backend rejects unauthorised requests.
 
 **Frontend:** The `ProtectedRoute` component checks the user's role before rendering a page. The `Navbar` dynamically shows different navigation links based on the logged-in user's role.
 
@@ -274,25 +288,55 @@ The application follows a **client-server architecture** with a clear separation
 │ username     │       │ title        │       │ student (FK) │
 │ email        │       │ description  │       │ course  (FK) │
 │ role         │──────►│ teacher (FK) │◄──────│ enrolled_at  │
-│ display_name │       │ created_at   │       └──────────────┘
-│ bio          │       └──────────────┘        unique_together
-│ avatar_url   │
-└──────────────┘
+│ display_name │       │ max_students │       └──────────────┘
+│ bio          │       │ category     │        unique_together
+│ avatar_url   │       │ is_active    │
+└──────────────┘       │ created_at   │
+        │              └──────┬───────┘
+        │                     │
+        │              ┌──────▼───────┐       ┌──────────────┐
+        │              │  Assignment  │       │  Submission  │
+        │              ├──────────────┤       ├──────────────┤
+        │              │ course (FK)  │       │ assignment   │
+        │              │ title        │──────►│ student (FK) │
+        │              │ description  │       │ content      │
+        │              │ due_date     │       │ file         │
+        │              │ max_points   │       │ grade        │
+        │              └──────────────┘       │ feedback     │
+        │                                     │ status       │
+        │                                     └──────────────┘
+        │                                      unique_together
         │
-        ▼
-┌──────────────────┐       ┌──────────────┐
-│ ChatConversation │       │  ChatMessage  │
-├──────────────────┤       ├──────────────┤
-│ user (FK)        │──────►│ conversation │
-│ title            │       │ role         │
-│ created_at       │       │ content      │
-│ updated_at       │       │ timestamp    │
-└──────────────────┘       └──────────────┘
+        ├──────────────────────────────────────────────┐
+        │                                              │
+        ▼                                              ▼
+┌──────────────────┐       ┌──────────────┐   ┌───────────────────────┐
+│ ChatConversation │       │  ChatMessage  │   │ AchievementDefinition │
+├──────────────────┤       ├──────────────┤   ├───────────────────────┤
+│ user (FK)        │──────►│ conversation │   │ key (unique)          │
+│ title            │       │ role         │   │ name                  │
+│ created_at       │       │ content      │   │ description           │
+│ updated_at       │       │ timestamp    │   │ icon, color           │
+└──────────────────┘       └──────────────┘   │ category              │
+                                              └───────────┬───────────┘
+                                                          │
+                                              ┌───────────▼───────────┐
+                                              │   UserAchievement     │
+                                              ├───────────────────────┤
+                                              │ user (FK)             │
+                                              │ achievement (FK)      │
+                                              │ earned_at             │
+                                              └───────────────────────┘
+                                               unique_together
 ```
 
 - **User** — extends Django's `AbstractUser` with a `role` field (student, teacher, or admin), plus profile fields (display_name, bio, avatar_url)
-- **Course** — has a title, description, and a foreign key to the teacher who created it
+- **Course** — has a title, description, category, capacity limit, and a foreign key to the teacher who created it. Supports soft delete via `is_active`
 - **Enrollment** — a join table linking students to courses (unique_together constraint prevents duplicate enrollments)
+- **Assignment** — belongs to a course with a title, description, due date, and max points
+- **Submission** — a student's work for an assignment, supporting text content and/or file uploads. Includes grade, feedback, and status tracking (unique_together on assignment + student)
+- **AchievementDefinition** — defines a badge with a key, name, description, icon, color, and category (general, student, or teacher)
+- **UserAchievement** — tracks which users have earned which achievements (unique_together prevents duplicates)
 - **ChatConversation** — groups chat messages per user session
 - **ChatMessage** — stores individual messages with a `role` field (user or assistant)
 
@@ -388,12 +432,13 @@ source venv/Scripts/activate
 python manage.py test --verbosity=2
 ```
 
-**25 tests** across 2 test modules:
+**52 tests** across 3 test modules:
 
 | Module | Tests | What's Covered |
 |--------|-------|----------------|
 | `accounts` | 12 | Registration (valid, password mismatch, duplicate username), login (valid/invalid credentials), current user endpoint, unauthenticated access, admin user management permissions |
-| `courses` | 13 | Course CRUD with role-based permissions, student enrollment/unenrollment, duplicate enrollment prevention, teacher-only course creation, owner-only editing |
+| `courses` | 30 | Course CRUD with role-based permissions, student enrollment/unenrollment, duplicate enrollment prevention, assignment creation and listing, submission with text/file uploads, grading with max-points validation, teacher-scoped submission access |
+| `achievements` | 10 | Achievement definition listing, achievement checking and awarding, duplicate prevention, role-based badge isolation, earned achievements endpoint |
 
 ### Frontend Tests (React)
 
@@ -402,12 +447,13 @@ cd frontend
 npm test
 ```
 
-**95 tests** across 19 test suites — every page and component is tested:
+**102 tests** across 20 test suites — every page and component is tested:
 
 | Test Suite | Tests | What's Covered |
 |------------|-------|----------------|
 | `CourseCard` | 8 | Renders course details, truncates descriptions, enroll button callback |
-| `CourseDetail` | 5 | Course data rendering, enroll/unenroll API calls, error handling |
+| `CourseDetail` | 5 | Course data rendering, enroll/unenroll API calls, assignments section, error handling |
+| `AssignmentDetail` | 7 | Assignment details, student submission form, file upload button, FormData POST, teacher grading table, download button, submitted state |
 | `CourseList` | 5 | Loading state, renders courses from API, search filtering |
 | `Login` | 5 | Form rendering, failed login error, successful API call with credentials |
 | `Register` | 6 | Form rendering, role selector, password mismatch, API error, registration |
@@ -420,7 +466,7 @@ npm test
 | `UserManagement` | 5 | User table, emails, column headers, user count |
 | `Profile` | 5 | Username, full name, role display, save changes via API |
 | `Settings` | 6 | Theme toggle, settings sections, localStorage persistence |
-| `Achievements` | 5 | Badge unlock logic, enrollment-based achievements |
+| `Achievements` | 5 | API-driven badge display, achievement check trigger, earned/locked state rendering |
 | `Leaderboard` | 4 | Course ranking, teacher ranking, section headings |
 | `Chat` | 4 | New conversation, sidebar, empty state, create API call |
 | `HelpFAQ` | 5 | Categories, questions, accordion expand, question count |
@@ -435,7 +481,7 @@ Tests are written using **React Testing Library** which encourages testing compo
 - Uses `fireEvent` and `waitFor` to simulate realistic user interactions
 - Mocks API calls with `jest.fn()` to test components in isolation
 
-**Total: 120 tests (25 backend + 95 frontend)**
+**Total: 154 tests (52 backend + 102 frontend)**
 
 ---
 
@@ -489,6 +535,17 @@ Full API documentation is available in [docs/API.md](docs/API.md).
 | POST | `/api/courses/:id/enroll/` | Enroll in a course | Student |
 | DELETE | `/api/courses/:id/unenroll/` | Unenroll from a course | Student |
 | GET | `/api/enrollments/` | List my enrollments | Student |
+| GET | `/api/courses/:course_id/assignments/` | List course assignments | Enrolled, Staff |
+| POST | `/api/courses/:course_id/assignments/` | Create assignment | Course owner, Admin |
+| GET | `/api/courses/:course_id/assignments/:assignment_id/` | Get assignment details | Enrolled, Staff |
+| POST | `/api/assignments/:id/submit/` | Submit assignment (text/file) | Student (enrolled) |
+| GET | `/api/assignments/:id/submissions/` | List submissions | Teacher (own course), Student (own), Admin |
+| GET | `/api/submissions/:id/` | Get submission details | Owner, Course teacher, Admin |
+| PATCH | `/api/submissions/:id/grade/` | Grade a submission | Course teacher, Admin |
+| GET | `/api/my-submissions/` | List my submissions | Student |
+| GET | `/api/achievements/` | List all achievement definitions | Authenticated |
+| GET | `/api/achievements/me/` | List my earned achievements | Authenticated |
+| POST | `/api/achievements/check/` | Check & award new achievements | Authenticated |
 | GET | `/api/users/` | List all users | Admin |
 | PATCH | `/api/users/:id/` | Update a user's role | Admin |
 | DELETE | `/api/users/:id/` | Delete a user | Admin |
