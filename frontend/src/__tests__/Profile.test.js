@@ -80,3 +80,61 @@ test('saves profile changes via API', async () => {
     }));
   });
 });
+
+// --- MORE INTERACTION TESTS ---
+// These test error handling and multi-field editing flows.
+
+// DO: change bio and click Save, but API returns an error
+// CHECK: error message appears on screen
+test('shows error message when save fails', async () => {
+  api.patch.mockRejectedValueOnce({
+    response: { data: { detail: 'Failed to update profile. Please try again.' } },
+  });
+
+  renderProfile();
+  await screen.findByText(/@Tom/);
+
+  // Edit the bio
+  fireEvent.change(screen.getByLabelText(/Bio/), {
+    target: { value: 'This will fail' },
+  });
+
+  // Click Save
+  fireEvent.click(screen.getByText('Save Changes'));
+
+  // Error feedback should appear
+  expect(await screen.findByText(/failed to update profile/i)).toBeInTheDocument();
+});
+
+// DO: change first name, last name, and bio together, then save
+// CHECK: API is called with ALL updated fields
+test('saves all profile fields together', async () => {
+  api.patch.mockResolvedValueOnce({
+    data: { first_name: 'Thomas', last_name: 'Smith', bio: 'New bio text' },
+  });
+
+  renderProfile();
+  await screen.findByText(/@Tom/);
+
+  // Change multiple fields
+  fireEvent.change(screen.getByLabelText(/First Name/), {
+    target: { value: 'Thomas' },
+  });
+  fireEvent.change(screen.getByLabelText(/Last Name/), {
+    target: { value: 'Smith' },
+  });
+  fireEvent.change(screen.getByLabelText(/Bio/), {
+    target: { value: 'New bio text' },
+  });
+
+  fireEvent.click(screen.getByText('Save Changes'));
+
+  // Verify ALL fields were sent in the PATCH request
+  await waitFor(() => {
+    expect(api.patch).toHaveBeenCalledWith('auth/me/', {
+      first_name: 'Thomas',
+      last_name: 'Smith',
+      bio: 'New bio text',
+    });
+  });
+});

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import CourseList from '../pages/CourseList';
 
@@ -87,5 +87,37 @@ test('renders enroll buttons for student user', async () => {
   await waitFor(() => {
     const enrollButtons = screen.getAllByText('Enroll');
     expect(enrollButtons.length).toBe(2);
+  });
+});
+
+// --- INTERACTION TESTS ---
+// These test real user actions on the course list page:
+// searching, filtering by teacher, and enrolling in a course.
+
+// DO: type in the search box
+// CHECK: the input value updates (verifies the controlled input works)
+test('allows typing in the search input', async () => {
+  renderCourseList();
+  const searchInput = await screen.findByPlaceholderText(/search courses/i);
+
+  fireEvent.change(searchInput, { target: { value: 'Python' } });
+
+  expect(searchInput.value).toBe('Python');
+});
+
+// DO: look at the teacher filter chips
+// CHECK: "All" chip is present plus one chip per unique teacher
+// Note: teacher names appear in BOTH filter chips AND course cards,
+// so we use getAllByText and check there are at least 2 matches
+// (one in the chip, one in the card).
+test('displays teacher filter chips including All', async () => {
+  renderCourseList();
+
+  // Wait for courses to load so teacher names are extracted
+  await waitFor(() => {
+    expect(screen.getByText('All')).toBeInTheDocument();
+    // Each teacher name appears in both the filter chip AND the course card
+    expect(screen.getAllByText('Dr. Smith').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('Prof. Johnson').length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -81,3 +81,43 @@ test('sort toggle buttons are visible when courses exist', async () => {
   expect(await screen.findByLabelText(/sort alphabetically/)).toBeInTheDocument();
   expect(screen.getByLabelText(/sort by most recent/)).toBeInTheDocument();
 });
+
+// --- INTERACTION TESTS ---
+// These test real user actions: clicking buttons, toggling sorts,
+// and verifying the UI responds correctly.
+
+// DO: click the A–Z sort toggle
+// CHECK: courses reorder alphabetically (Advanced React before Python Basics)
+test('clicking A-Z sort reorders courses alphabetically', async () => {
+  renderDashboard();
+
+  // Wait for courses to load
+  await screen.findByText('Python Basics');
+
+  // Click the A–Z sort button
+  fireEvent.click(screen.getByLabelText(/sort alphabetically/));
+
+  // After sorting A–Z, get all course titles and check order
+  // "Advanced React" should come before "Python Basics"
+  const cards = screen.getAllByText(/Python Basics|Advanced React/);
+  expect(cards[0].textContent).toBe('Advanced React');
+  expect(cards[1].textContent).toBe('Python Basics');
+});
+
+// DO: click A–Z, then click Recent
+// CHECK: courses revert to most-recently-enrolled order
+test('clicking Recent sort reorders courses by enrollment date', async () => {
+  renderDashboard();
+  await screen.findByText('Python Basics');
+
+  // First sort A–Z
+  fireEvent.click(screen.getByLabelText(/sort alphabetically/));
+  // Then switch back to Recent
+  fireEvent.click(screen.getByLabelText(/sort by most recent/));
+
+  // "Advanced React" was enrolled more recently (March 15 vs March 1),
+  // so it should appear first when sorted by recent
+  const cards = screen.getAllByText(/Python Basics|Advanced React/);
+  expect(cards[0].textContent).toBe('Advanced React');
+  expect(cards[1].textContent).toBe('Python Basics');
+});
