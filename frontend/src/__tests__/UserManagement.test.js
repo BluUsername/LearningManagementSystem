@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import UserManagement from '../pages/UserManagement';
 
@@ -71,9 +71,10 @@ test('shows Back to Dashboard button', async () => {
 // DO: change a user's role from "student" to "teacher" via the dropdown
 // CHECK: API PATCH is called with the new role
 //
-// MUI Select components render as a styled <div> with a popup listbox.
-// To test: 1) mouseDown to open the dropdown, 2) click the option.
-// The MenuItem text is capitalized ("Teacher") but the value is lowercase ("teacher").
+// MUI Select doesn't use a native <select> — it renders a styled <div> with a
+// hidden <input>. In jsdom, the popup listbox doesn't render so getByRole('option')
+// can't reach menu items. Instead we fire a change event directly on the hidden
+// input, which is the recommended workaround for MUI Select in jsdom environments.
 test('changing a user role sends PATCH request to API', async () => {
   api.patch.mockResolvedValueOnce({
     data: { ...mockUsers[2], role: 'teacher' },
@@ -82,15 +83,16 @@ test('changing a user role sends PATCH request to API', async () => {
   renderPage();
   await screen.findByText('student1');
 
-  // MUI Select renders a hidden <input> with the select's value.
-  // We find this native input element and simulate the change directly.
-  // This is the recommended approach for MUI Select in unit tests,
-  // since the popup portal doesn't always render fully in jsdom.
+  // MUI Select doesn't render a native <select> — it uses a hidden input
+  // under a styled div. jsdom can't fully simulate the popup listbox, so
+  // direct node access is the recommended workaround for MUI Select tests.
+  // See: https://github.com/testing-library/eslint-plugin-testing-library/issues/697
   const selectContainer = screen.getByLabelText('Role for student1');
+  // eslint-disable-next-line testing-library/no-node-access
   const nativeInput = selectContainer.parentElement.querySelector('input[type="hidden"]')
+    // eslint-disable-next-line testing-library/no-node-access
     || selectContainer.querySelector('input');
 
-  // If we found the native input, change it; otherwise fire on the select itself
   if (nativeInput) {
     fireEvent.change(nativeInput, { target: { value: 'teacher' } });
   }

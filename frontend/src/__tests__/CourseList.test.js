@@ -114,10 +114,8 @@ test('displays teacher filter chips including All', async () => {
   renderCourseList();
 
   // Wait for courses to load so teacher names are extracted
-  await waitFor(() => {
-    expect(screen.getByText('All')).toBeInTheDocument();
-    // Each teacher name appears in both the filter chip AND the course card
-    expect(screen.getAllByText('Dr. Smith').length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText('Prof. Johnson').length).toBeGreaterThanOrEqual(2);
-  });
+  await screen.findByText('All');
+  // Each teacher name appears in both the filter chip AND the course card
+  expect(screen.getAllByText('Dr. Smith').length).toBeGreaterThanOrEqual(2);
+  expect(screen.getAllByText('Prof. Johnson').length).toBeGreaterThanOrEqual(2);
 });
