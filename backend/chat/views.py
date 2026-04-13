@@ -24,8 +24,7 @@ ASSISTANT_WELCOME = (
 )
 
 GREETING_PATTERN = re.compile(
-    r'\b(hello|hi|hey|howdy|greetings|good morning'
-    r'|good afternoon|good evening)\b'
+    r'\b(hello|hi|hey|howdy|greetings|good morning|good afternoon|good evening)\b'
 )
 
 
