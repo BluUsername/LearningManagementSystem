@@ -23,6 +23,10 @@ ASSISTANT_WELCOME = (
     "left off — even after closing the app on mobile or switching devices."
 )
 
+GREETING_PATTERN = re.compile(
+    r'\b(hello|hi|hey|howdy|greetings|good morning|good afternoon|good evening)\b'
+)
+
 
 class ConversationListCreateView(generics.ListCreateAPIView):
     """List all conversations for the current user, or start a new one."""
@@ -131,7 +135,7 @@ def _generate_bot_response(message: str, user) -> str:
     msg = message.lower().strip()
 
     # Greeting patterns
-    if re.search(r'\b(hello|hi|hey|howdy|greetings|good morning|good afternoon|good evening)\b', msg):
+    if GREETING_PATTERN.search(msg):
         return (
             f"Hey {user.first_name or user.username}! 👋 Welcome to LearnHub. "
             "How can I help you today? You can ask me about:\n\n"
