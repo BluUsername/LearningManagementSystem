@@ -131,7 +131,11 @@ def _generate_bot_response(message: str, user) -> str:
     msg = message.lower().strip()
 
     # Greeting patterns
-    if re.search(r'\b(hello|hi|hey|howdy|greetings|good morning|good afternoon|good evening)\b', msg):
+    greeting_pattern = (
+        r'\b(hello|hi|hey|howdy|greetings|good morning'
+        r'|good afternoon|good evening)\b'
+    )
+    if re.search(greeting_pattern, msg):
         return (
             f"Hey {user.first_name or user.username}! 👋 Welcome to LearnHub. "
             "How can I help you today? You can ask me about:\n\n"
