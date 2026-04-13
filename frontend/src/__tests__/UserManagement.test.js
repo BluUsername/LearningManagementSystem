@@ -71,9 +71,10 @@ test('shows Back to Dashboard button', async () => {
 // DO: change a user's role from "student" to "teacher" via the dropdown
 // CHECK: API PATCH is called with the new role
 //
-// MUI Select components render as a styled <div> with a popup listbox.
-// To test: 1) mouseDown to open the dropdown, 2) click the option.
-// The MenuItem text is capitalized ("Teacher") but the value is lowercase ("teacher").
+// MUI Select doesn't use a native <select> — it renders a styled <div> with a
+// hidden <input>. In jsdom, the popup listbox doesn't render so getByRole('option')
+// can't reach menu items. Instead we fire a change event directly on the hidden
+// input, which is the recommended workaround for MUI Select in jsdom environments.
 test('changing a user role sends PATCH request to API', async () => {
   api.patch.mockResolvedValueOnce({
     data: { ...mockUsers[2], role: 'teacher' },
