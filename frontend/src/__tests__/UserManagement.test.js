@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import UserManagement from '../pages/UserManagement';
 
@@ -82,15 +82,16 @@ test('changing a user role sends PATCH request to API', async () => {
   renderPage();
   await screen.findByText('student1');
 
-  // MUI Select renders a hidden <input> with the select's value.
-  // We find this native input element and simulate the change directly.
-  // This is the recommended approach for MUI Select in unit tests,
-  // since the popup portal doesn't always render fully in jsdom.
+  // MUI Select doesn't render a native <select> — it uses a hidden input
+  // under a styled div. jsdom can't fully simulate the popup listbox, so
+  // direct node access is the recommended workaround for MUI Select tests.
+  // See: https://github.com/testing-library/eslint-plugin-testing-library/issues/697
   const selectContainer = screen.getByLabelText('Role for student1');
+  // eslint-disable-next-line testing-library/no-node-access
   const nativeInput = selectContainer.parentElement.querySelector('input[type="hidden"]')
+    // eslint-disable-next-line testing-library/no-node-access
     || selectContainer.querySelector('input');
 
-  // If we found the native input, change it; otherwise fire on the select itself
   if (nativeInput) {
     fireEvent.change(nativeInput, { target: { value: 'teacher' } });
   }
