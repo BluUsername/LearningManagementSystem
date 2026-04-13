@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on:
   push:
@@ -7,8 +7,9 @@ on:
     branches: [master, main]
 
 jobs:
-  backend-tests:
-    name: Backend Tests (Django)
+  # ── Backend ────────────────────────────────────────────────
+  backend:
+    name: Backend (lint + tests)
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +25,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install flake8
+
+      - name: Lint with flake8
+        working-directory: ./backend
+        run: flake8 --exclude=venv,*/migrations/* --max-line-length=100 .
 
       - name: Run migrations
         working-directory: ./backend
@@ -37,8 +43,9 @@ jobs:
           DEBUG: 'True'
         run: python manage.py test --verbosity=2
 
-  frontend-tests:
-    name: Frontend Tests (React)
+  # ── Frontend ───────────────────────────────────────────────
+  frontend:
+    name: Frontend (lint + tests + build)
     runs-on: ubuntu-latest
 
     steps:
@@ -51,8 +58,16 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
+
+      - name: Lint with ESLint
+        working-directory: ./frontend
+        run: npx eslint src/
 
       - name: Run tests
         working-directory: ./frontend
         run: npm test -- --watchAll=false
+
+      - name: Build production bundle
+        working-directory: ./frontend
+        run: npm run build
