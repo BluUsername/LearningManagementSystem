@@ -201,11 +201,12 @@ class SubmissionCreateView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        content = request.data.get('content', '')
+        # Coerce to string: client may send {"content": null} or omit it entirely
+        content = (request.data.get('content') or '').strip()
         uploaded_file = request.FILES.get('file')
 
         # Must provide at least text content or a file
-        if not content.strip() and not uploaded_file:
+        if not content and not uploaded_file:
             return Response(
                 {'detail': 'Please provide text content or upload a file.'},
                 status=status.HTTP_400_BAD_REQUEST,

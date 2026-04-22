@@ -441,3 +441,13 @@ class SubmissionTests(TestCase):
             format='multipart',
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_submit_null_content_rejected_not_500(self):
+        """JSON {"content": null} must return 400, not crash with 500."""
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(
+            f'/api/assignments/{self.assignment.id}/submit/',
+            {'content': None},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
