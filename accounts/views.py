@@ -9,7 +9,12 @@ from rest_framework.authtoken.models import Token
 
 from .models import User
 from .permissions import IsAdmin
-from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
+from .serializers import (
+    CurrentUserSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +65,14 @@ class LogoutView(APIView):
 
 
 class CurrentUserView(generics.RetrieveUpdateAPIView):
-    """Return or update the currently authenticated user's profile."""
+    """Return or update the currently authenticated user's profile.
 
-    serializer_class = UserSerializer
+    Uses CurrentUserSerializer on writes to prevent self-escalation: role,
+    username, and email are read-only here. Admin user management endpoints
+    use the unrestricted UserSerializer.
+    """
+
+    serializer_class = CurrentUserSerializer
 
     def get_object(self) -> User:
         return self.request.user

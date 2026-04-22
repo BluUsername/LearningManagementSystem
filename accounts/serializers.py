@@ -7,7 +7,7 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for user profile data."""
+    """Serializer for user profile data (used by admin endpoints)."""
 
     class Meta:
         model = User
@@ -17,6 +17,20 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
         ]
         read_only_fields = ['id', 'date_joined']
+
+
+class CurrentUserSerializer(UserSerializer):
+    """Serializer for the self-service /api/auth/me/ endpoint.
+
+    Locks `role`, `username`, and `email` as read-only so an authenticated
+    user cannot escalate their own privileges or impersonate another account
+    via PATCH. Role changes must go through the admin user management API.
+    """
+
+    class Meta(UserSerializer.Meta):
+        read_only_fields = UserSerializer.Meta.read_only_fields + [
+            'role', 'username', 'email',
+        ]
 
 
 class RegisterSerializer(serializers.Serializer):

@@ -101,6 +101,38 @@ class CurrentUserTests(TestCase):
         response = client.get('/api/auth/me/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_user_cannot_escalate_role_via_self_update(self):
+        """A student PATCHing /api/auth/me/ with role=admin must not change role."""
+        response = self.client.patch('/api/auth/me/', {'role': 'admin'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.role, 'student')
+
+    def test_user_cannot_change_username_via_self_update(self):
+        """Username and email must be read-only on the self-service endpoint."""
+        response = self.client.patch(
+            '/api/auth/me/',
+            {'username': 'hacker', 'email': 'hacker@example.com'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, 'testuser')
+        self.assertEqual(self.user.email, 'test@example.com')
+
+    def test_user_can_update_safe_profile_fields(self):
+        """Safe profile fields like first_name, last_name, bio should remain editable."""
+        response = self.client.patch(
+            '/api/auth/me/',
+            {'first_name': 'Test', 'last_name': 'User', 'bio': 'Hello world'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, 'Test')
+        self.assertEqual(self.user.last_name, 'User')
+        self.assertEqual(self.user.bio, 'Hello world')
+
 
 class UserManagementTests(TestCase):
     def setUp(self):
