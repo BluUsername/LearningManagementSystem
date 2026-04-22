@@ -1,6 +1,7 @@
 import logging
 
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -143,7 +144,7 @@ class AssignmentListCreateView(generics.ListCreateAPIView):
         )
 
     def perform_create(self, serializer: AssignmentSerializer) -> None:
-        course = Course.objects.get(pk=self.kwargs['course_pk'], is_active=True)
+        course = get_object_or_404(Course, pk=self.kwargs['course_pk'], is_active=True)
         assignment = serializer.save(course=course)
         logger.info(
             f"Assignment created: '{assignment.title}' for "

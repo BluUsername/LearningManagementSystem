@@ -200,11 +200,16 @@ class AssignmentTests(TestCase):
             username='teacher', email='teacher@example.com',
             password='testpass123', role='teacher',
         )
+        self.admin = User.objects.create_user(
+            username='admin', email='admin@example.com',
+            password='testpass123', role='admin',
+        )
         self.student = User.objects.create_user(
             username='student', email='student@example.com',
             password='testpass123', role='student',
         )
         self.teacher_token = Token.objects.create(user=self.teacher)
+        self.admin_token = Token.objects.create(user=self.admin)
         self.student_token = Token.objects.create(user=self.student)
 
         self.course = Course.objects.create(
@@ -260,6 +265,16 @@ class AssignmentTests(TestCase):
             'due_date': '2026-12-31T23:59:00Z',
         })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_assignment_admin_missing_course_returns_404(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.admin_token.key}')
+        response = self.client.post('/api/courses/999999/assignments/', {
+            'title': 'Admin Assignment',
+            'description': 'Should fail for missing course',
+            'due_date': '2026-12-31T23:59:00Z',
+            'max_points': 50,
+        })
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_assignment_teacher(self):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
