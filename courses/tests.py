@@ -1,10 +1,12 @@
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
+from django.utils import timezone
 from rest_framework.test import APIClient
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from accounts.models import User
-from .models import Course, Enrollment
+from .models import Assignment, Course, Enrollment, Submission
 
 
 class CourseListTests(TestCase):
@@ -187,3 +189,240 @@ class EnrollmentTests(TestCase):
         # Paginated response: results are in response.data['results']
         results = response.data.get('results', response.data)
         self.assertEqual(len(results), 1)
+
+
+class AssignmentTests(TestCase):
+    """Tests for assignment CRUD operations."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.teacher = User.objects.create_user(
+            username='teacher', email='teacher@example.com',
+            password='testpass123', role='teacher',
+        )
+        self.student = User.objects.create_user(
+            username='student', email='student@example.com',
+            password='testpass123', role='student',
+        )
+        self.teacher_token = Token.objects.create(user=self.teacher)
+        self.student_token = Token.objects.create(user=self.student)
+
+        self.course = Course.objects.create(
+            title='Test Course', description='A test course', teacher=self.teacher,
+        )
+        Enrollment.objects.create(student=self.student, course=self.course)
+
+        self.assignment = Assignment.objects.create(
+            course=self.course, title='Homework 1',
+            description='Complete the exercises',
+            due_date=timezone.now() + timezone.timedelta(days=7),
+            max_points=100,
+        )
+
+    def test_list_assignments_teacher(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.get(f'/api/courses/{self.course.id}/assignments/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 1)
+
+    def test_list_assignments_enrolled_student(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.get(f'/api/courses/{self.course.id}/assignments/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_list_assignments_unenrolled_student_forbidden(self):
+        other_student = User.objects.create_user(
+            username='other', email='other@example.com',
+            password='testpass123', role='student',
+        )
+        other_token = Token.objects.create(user=other_student)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {other_token.key}')
+        response = self.client.get(f'/api/courses/{self.course.id}/assignments/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_assignment_teacher(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.post(f'/api/courses/{self.course.id}/assignments/', {
+            'title': 'Homework 2',
+            'description': 'Write an essay on the topic',
+            'due_date': '2026-12-31T23:59:00Z',
+            'max_points': 50,
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['course'], self.course.id)
+
+    def test_create_assignment_student_forbidden(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(f'/api/courses/{self.course.id}/assignments/', {
+            'title': 'Sneaky Assignment',
+            'description': 'Students should not create these',
+            'due_date': '2026-12-31T23:59:00Z',
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_assignment_teacher(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.delete(
+            f'/api/courses/{self.course.id}/assignments/{self.assignment.id}/'
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Assignment.objects.filter(pk=self.assignment.id).exists())
+
+
+class SubmissionTests(TestCase):
+    """Tests for submission and grading operations."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.teacher = User.objects.create_user(
+            username='teacher', email='teacher@example.com',
+            password='testpass123', role='teacher',
+        )
+        self.student = User.objects.create_user(
+            username='student', email='student@example.com',
+            password='testpass123', role='student',
+        )
+        self.teacher_token = Token.objects.create(user=self.teacher)
+        self.student_token = Token.objects.create(user=self.student)
+
+        self.course = Course.objects.create(
+            title='Test Course', description='A test course', teacher=self.teacher,
+        )
+        Enrollment.objects.create(student=self.student, course=self.course)
+        self.assignment = Assignment.objects.create(
+            course=self.course, title='Homework 1',
+            description='Complete the exercises',
+            due_date=timezone.now() + timezone.timedelta(days=7),
+            max_points=100,
+        )
+
+    def test_submit_assignment(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(f'/api/assignments/{self.assignment.id}/submit/', {
+            'content': 'Here is my completed homework.',
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['status'], 'submitted')
+
+    def test_submit_duplicate_rejected(self):
+        Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='First attempt',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(f'/api/assignments/{self.assignment.id}/submit/', {
+            'content': 'Second attempt',
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_submit_not_enrolled_forbidden(self):
+        other_student = User.objects.create_user(
+            username='other', email='other@example.com',
+            password='testpass123', role='student',
+        )
+        other_token = Token.objects.create(user=other_student)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {other_token.key}')
+        response = self.client.post(f'/api/assignments/{self.assignment.id}/submit/', {
+            'content': 'I am not enrolled.',
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_grade_submission(self):
+        submission = Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='My homework',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.patch(f'/api/submissions/{submission.id}/grade/', {
+            'grade': 85,
+            'feedback': 'Good work!',
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['grade'], 85)
+        self.assertEqual(response.data['status'], 'graded')
+        self.assertIsNotNone(response.data['graded_at'])
+
+    def test_grade_exceeds_max_rejected(self):
+        submission = Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='My homework',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.patch(f'/api/submissions/{submission.id}/grade/', {
+            'grade': 150,
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_student_cannot_grade(self):
+        submission = Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='My homework',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.patch(f'/api/submissions/{submission.id}/grade/', {
+            'grade': 100,
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_list_submissions_teacher_sees_all(self):
+        Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='My homework',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.teacher_token.key}')
+        response = self.client.get(f'/api/assignments/{self.assignment.id}/submissions/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 1)
+
+    def test_my_submissions(self):
+        Submission.objects.create(
+            assignment=self.assignment, student=self.student,
+            content='My homework',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.get('/api/my-submissions/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data.get('results', response.data)
+        self.assertEqual(len(results), 1)
+
+    @override_settings(MEDIA_ROOT='/tmp/lms_test_media/')
+    def test_submit_with_file(self):
+        """Student can submit an assignment with a file upload."""
+        test_file = SimpleUploadedFile(
+            'homework.txt', b'File content here', content_type='text/plain',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(
+            f'/api/assignments/{self.assignment.id}/submit/',
+            {'content': 'See attached file.', 'file': test_file},
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('file_url', response.data)
+        self.assertIsNotNone(response.data['file_url'])
+
+    @override_settings(MEDIA_ROOT='/tmp/lms_test_media/')
+    def test_submit_file_only(self):
+        """Student can submit with only a file (no text content)."""
+        test_file = SimpleUploadedFile(
+            'essay.pdf', b'%PDF-1.4 fake pdf content', content_type='application/pdf',
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(
+            f'/api/assignments/{self.assignment.id}/submit/',
+            {'file': test_file},
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_submit_empty_rejected(self):
+        """Submitting with no content and no file should be rejected."""
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.student_token.key}')
+        response = self.client.post(
+            f'/api/assignments/{self.assignment.id}/submit/',
+            {},
+            format='multipart',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

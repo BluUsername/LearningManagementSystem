@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'accounts',
     'courses',
+    'chat',
+    'achievements',
 ]
 
 MIDDLEWARE = [
@@ -132,7 +134,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files (user-uploaded content such as submission attachments)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Maximum upload size: 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
@@ -240,6 +253,11 @@ LOGGING = {
             'propagate': False,
         },
         'courses': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'achievements': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
