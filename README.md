@@ -92,41 +92,43 @@ LearningManagementSystem/
 │   ├── API.md                       # Full API endpoint documentation
 │   └── wireframes/                  # Front-end wireframes and screenshots
 │
-├── backend/
-│   ├── requirements.txt             # Python dependencies
-│   ├── manage.py                    # Django management script
-│   ├── Procfile                     # Heroku process configuration
-│   ├── lms_project/
-│   │   ├── settings.py              # Django configuration
-│   │   ├── urls.py                  # Root URL routing
-│   │   └── wsgi.py                  # WSGI entry point
-│   ├── accounts/
-│   │   ├── models.py                # Custom User model with roles
-│   │   ├── serializers.py           # User/Auth serializers
-│   │   ├── views.py                 # Auth & user management views
-│   │   ├── permissions.py           # IsAdmin permission class
-│   │   ├── urls.py                  # Auth & user URL routes
-│   │   └── tests.py                 # Auth API tests (12 tests)
-│   ├── courses/
-│   │   ├── models.py                # Course, Enrollment, Assignment & Submission models
-│   │   ├── serializers.py           # Course/Enrollment/Assignment/Submission serializers
-│   │   ├── views.py                 # Course CRUD, enrollment, assignment & grading views
-│   │   ├── permissions.py           # Role-based permission classes
-│   │   ├── urls.py                  # Course & assignment URL routes
-│   │   └── tests.py                 # Course, assignment & submission API tests (30 tests)
-│   ├── achievements/
-│   │   ├── models.py                # AchievementDefinition & UserAchievement models
-│   │   ├── services.py              # Achievement evaluation engine & check registry
-│   │   ├── serializers.py           # Achievement serializers
-│   │   ├── views.py                 # Achievement list, earned & check views
-│   │   ├── urls.py                  # Achievement URL routes
-│   │   └── tests.py                 # Achievement API tests (10 tests)
-│   └── chat/
-│       ├── models.py                # ChatConversation & ChatMessage models
-│       ├── serializers.py           # Chat serializers
-│       ├── views.py                 # Chat API views + chatbot logic
-│       ├── urls.py                  # Chat URL routes
-│       └── migrations/              # Chat database migrations
+├── requirements.txt                 # Python dependencies
+├── manage.py                        # Django management script
+├── Procfile                         # Heroku process configuration
+├── Dockerfile                       # Container image for backend
+├── docker-compose.yml               # Local Postgres + backend + frontend stack
+│
+├── lms_project/
+│   ├── settings.py                  # Django configuration
+│   ├── urls.py                      # Root URL routing
+│   └── wsgi.py                      # WSGI entry point
+├── accounts/
+│   ├── models.py                    # Custom User model with roles
+│   ├── serializers.py               # User/Auth serializers
+│   ├── views.py                     # Auth & user management views
+│   ├── permissions.py               # IsAdmin permission class
+│   ├── urls.py                      # Auth & user URL routes
+│   └── tests.py                     # Auth API tests (12 tests)
+├── courses/
+│   ├── models.py                    # Course, Enrollment, Assignment & Submission models
+│   ├── serializers.py               # Course/Enrollment/Assignment/Submission serializers
+│   ├── views.py                     # Course CRUD, enrollment, assignment & grading views
+│   ├── permissions.py               # Role-based permission classes
+│   ├── urls.py                      # Course & assignment URL routes
+│   └── tests.py                     # Course, assignment & submission API tests (30 tests)
+├── achievements/
+│   ├── models.py                    # AchievementDefinition & UserAchievement models
+│   ├── services.py                  # Achievement evaluation engine & check registry
+│   ├── serializers.py               # Achievement serializers
+│   ├── views.py                     # Achievement list, earned & check views
+│   ├── urls.py                      # Achievement URL routes
+│   └── tests.py                     # Achievement API tests (10 tests)
+├── chat/
+│   ├── models.py                    # ChatConversation & ChatMessage models
+│   ├── serializers.py               # Chat serializers
+│   ├── views.py                     # Chat API views + chatbot logic
+│   ├── urls.py                      # Chat URL routes
+│   └── migrations/                  # Chat database migrations
 │
 └── frontend/
     ├── package.json                 # Node dependencies
@@ -359,7 +361,6 @@ git clone https://github.com/BluUsername/LearningManagementSystem.git
 cd LearningManagementSystem
 
 # Create and activate virtual environment
-cd backend
 python -m venv venv
 
 # Windows
@@ -396,7 +397,7 @@ You need **two terminal windows** — one for the backend and one for the fronte
 ### Terminal 1 — Backend (Django)
 
 ```bash
-cd backend
+# From the project root
 source venv/Scripts/activate  # or source venv/bin/activate on macOS/Linux
 python manage.py runserver
 ```
@@ -427,7 +428,7 @@ The app will open at `http://localhost:3000`.
 ### Backend Tests (Django)
 
 ```bash
-cd backend
+# From the project root
 source venv/Scripts/activate
 python manage.py test --verbosity=2
 ```
