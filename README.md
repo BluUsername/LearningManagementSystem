@@ -421,6 +421,21 @@ The app will open at `http://localhost:3000`.
 4. Log in and explore your role-specific dashboard
 5. To access the admin dashboard, log in with the superuser account you created and change its role to "admin" via the Django admin panel at `http://localhost:8000/admin/`
 
+### Docker (Optional)
+
+To run the full stack (Postgres + backend + frontend) in containers:
+
+```bash
+# 1. Copy the environment template and fill in your own secrets
+cp .env.example .env
+# then edit .env and set POSTGRES_PASSWORD and SECRET_KEY to strong random values
+
+# 2. Start all services
+docker-compose up --build
+```
+
+The `.env` file is git-ignored so your local secrets never get committed. `docker-compose` will fail fast with a clear message if `POSTGRES_PASSWORD` or `SECRET_KEY` is missing.
+
 ---
 
 ## Running Tests
