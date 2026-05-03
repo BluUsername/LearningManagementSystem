@@ -17,6 +17,8 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # Password must be URL-safe (no @ : / # % or other reserved URI chars) because
+      # it is embedded verbatim in the connection URL below.
       - DATABASE_URL=postgres://${POSTGRES_USER:-lms_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-lms_db}
       - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required — copy .env.example to .env}
       - DEBUG=${DEBUG:-True}

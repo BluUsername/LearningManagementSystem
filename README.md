@@ -428,7 +428,14 @@ To run the full stack (Postgres + backend + frontend) in containers:
 ```bash
 # 1. Copy the environment template and fill in your own secrets
 cp .env.example .env
-# then edit .env and set POSTGRES_PASSWORD and SECRET_KEY to strong random values
+# Edit .env and set POSTGRES_PASSWORD and SECRET_KEY to strong random values.
+#
+# POSTGRES_PASSWORD constraint: docker-compose embeds it directly into the
+# DATABASE_URL connection string, so use only URL-safe characters.
+# A hex string is always safe:
+#   openssl rand -hex 32
+# If your password contains a literal $, escape it as $$ in .env so that
+# docker-compose does not expand it as a variable reference.
 
 # 2. Start all services
 docker-compose up --build
